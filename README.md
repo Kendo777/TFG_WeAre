@@ -1,15 +1,15 @@
 # TFG_WeAre
-Plataforma online de generación de paginas web personalizables: We Are
+Online platform for generating customizable web pages: We Are
 
-## DESCRIPCIÓN Y JUSTIFICACIÓN DEL TEMA A TRATAR
-Desde la llegada a plataformas como Facebook, Whatsapp, Instagram y Twitter entre otras que permiten a los usuarios tener presencia en internet y crear su propio espacio en el que compartir fotos, comentarios o experiencias. Sin embargo, la mayoría de estos sitios están muy orientados para que los usuarios se dirijan a un público masivo, donde los likes y las puntuaciones son la forma de medir el progreso.
-Ante la falta de sitios específicos, algunos usuarios recurren a estas plataformas para gestionar pequeños grupos de gente reunida alrededor de una afición o un punto de encuentro común, aunque no sea su utilidad principal. Esto hace que no siempre puedan comunicarse de la forma en que les gustaría o configurar la experiencia de la manera que a ellos les resulta más útil. Como por ejemplo grupos de amigos, clubs de ocio como el deporte o la lectura entre otros muchos, o paginas como bases de datos de videojuegos, series o películas.
-Para dar solución a este problema, este proyecto propone generar una plataforma con la que usuarios puedan crear su propia pagina web sin tener conocimientos de programación. La plataforma ofrecerá una serie de componentes que podrán añadirse a la web. La web resultante será altamente personalizable y modificarla pudiendo añadir información y secciones nuevas, modificarlas, borrarlas, gestionar la privacidad.
+## DESCRIPTION AND JUSTIFICATION OF THE TOPIC TO BE TREATED
+Since the arrival of platforms such as Facebook, WhatsApp, Instagram and Twitter among others that allow users to have a presence on the internet and create their own space in which to share photos, comments or experiences. However, most of these sites are highly geared towards a mass audience, where likes and ratings are the way to measure progress.
+In the absence of specific sites, some users turn to these platforms to manage small groups of people gathered around a hobby or a common meeting point, although it is not their main use. This means that they cannot always communicate in the way they would like or configure the experience in the way that is most useful to them. Such as groups of friends, leisure clubs such as sports or reading among many others, or pages such as databases of video games, series or movies.
+To solve this problem, this project proposes to generate a platform with which users can create their own web page without having programming knowledge. The platform will offer a series of components that can be added to the web. The resulting website will be highly customizable and modified, being able to add information and new sections, modify them, delete them, manage privacy.
 
-## OBJETIVOS DEL PROYECTO
-El proyecto tiene los siguientes objetivos:
-1.	Analizar las soluciones existentes y realizar encuestas para conocer las necesidades de usuarios que desean realizar una página web.
-2.	Desarrollo de una plataforma web para la generación de sitios webs sin necesidad de programar
-    -	La plataforma web contara con un catalogo de componentes que pueden ser añadidos a la web.
-    -	La plataforma web será capaz de desplegar automáticamente la web creada.
-3.	La web resultante será altamente personalizable y con una interfaz sencilla y entendible para el usuario.
+## PROJECT OBJECTIVES
+The project has the following objectives:
+1.	Analyze existing solutions and perform surveys to find out the needs of users who want to create a web page.
+2.	Development of a web platform for the generation of websites without the need for programming
+    -	The web platform will have a catalog of components that can be added to the web.
+    -	The web platform will be able to automatically display the created web.
+3.	The resulting website will be highly customizable and with a simple and understandable interface for the user.
