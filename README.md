@@ -10,6 +10,6 @@ Para dar solución a este problema, este proyecto propone generar una plataforma
 El proyecto tiene los siguientes objetivos:
 1.	Analizar las soluciones existentes y realizar encuestas para conocer las necesidades de usuarios que desean realizar una página web.
 2.	Desarrollo de una plataforma web para la generación de sitios webs sin necesidad de programar
-a.	La plataforma web contara con un catalogo de componentes que pueden ser añadidos a la web.
-b.	La plataforma web será capaz de desplegar automáticamente la web creada.
+2.1.	La plataforma web contara con un catalogo de componentes que pueden ser añadidos a la web.
+2.2.	La plataforma web será capaz de desplegar automáticamente la web creada.
 3.	La web resultante será altamente personalizable y con una interfaz sencilla y entendible para el usuario.
