@@ -1,1 +1,0 @@
-{"name":"Marc Lozano Martinez","nickname": "","job":"Bufon Real","birthday":"1998-11-11", "discord": "kendo777#3037"}
