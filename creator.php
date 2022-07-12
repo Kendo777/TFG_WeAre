@@ -1,5 +1,52 @@
 <?php
     ob_start();
+
+    class WebData {
+        public $WebName;
+        public $WebUser;
+        public $WebDataBase;
+        public $WebPrivacity;
+
+        function __construct(string $webName, string $webUser, string $webDataBase, string $webPrivacity)
+        {
+            $this->WebName = $webName;
+            $this->WebUser = $webUser;
+            $this->WebDataBase = $webDataBase;
+            $this->WebPrivacity = $webPrivacity;
+        }
+    }
+
+    class WebStyle {
+        public $bck_Color;
+    }
+
+    class WebGallery {
+        public $enable;
+        public $type;
+
+        function __construct() {
+            $this->enable = false;
+        }
+    }
+
+    function copy_folder($src, $dst) { 
+  
+    $dir = opendir($src);   
+    while( $file = readdir($dir) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+            if (is_dir($src.DIRECTORY_SEPARATOR.$file) ) 
+            { 
+                copy_folder($src.DIRECTORY_SEPARATOR.$file, $dst.DIRECTORY_SEPARATOR.$file);
+            } 
+            else
+            {
+                copy($src.DIRECTORY_SEPARATOR.$file, $dst.DIRECTORY_SEPARATOR.$file); 
+            }
+        } 
+    } 
+  
+    closedir($dir);
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,31 +67,59 @@ if(isset($_GET["page"]))
         $page = $_GET["page"];
     }
 }
-if(isset($_POST["webName"]) && !is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"]))
+if(isset($_POST["webName"]) && !empty($_POST["webName"]) && !is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"]))
 {
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"], 0700);
+    mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"].DIRECTORY_SEPARATOR."css", 0700);
+    copy_folder("StructureScripts","WebPages".DIRECTORY_SEPARATOR.$_POST["webName"]);
+
     //IMPORT ALL BASICS SCRIPTS: PHP, CSS, JS,...
-    $webData["webName"] = $_POST["webName"];
-    $webData["webComponents"] = array();
-    //user
+
+    /*$webData["WebData"] = (object) [
+            'WebName' => $_POST["webName"],
+            'WebUser' => "Marc",
+            'WebDataBase' => $_POST["webName"],
+            'WebPrivacity' => "Public/Private/Invitation"
+            
+    ];*/
+    $webData = new WebData($_POST["webName"], "Test", $_POST["webName"], "Public");
+    $webStyle = new WebStyle();
+    $webGallery = new WebGallery();
+
     if(isset($_POST["gallery"]))
     {
-        copy("StructureScripts".DIRECTORY_SEPARATOR."gallery.php", "WebPages".DIRECTORY_SEPARATOR.$_POST["webName"].DIRECTORY_SEPARATOR."gallery.php");
-        array_push($webData["webComponents"],"gallery");
+        $webGallery->enable = true;
     }
     if(isset($_POST["posts"]))
     {
-        //copy("StructureScripts".DIRECTORY_SEPARATOR."gallery.php", "WebPages".DIRECTORY_SEPARATOR.$_POST["webName"].DIRECTORY_SEPARATOR."gallery.php");
-        array_push($webData["webComponents"],"posts");
+
     }
     if(isset($_POST["info"]))
     {
-        copy("StructureScripts".DIRECTORY_SEPARATOR."userInfo.php", "WebPages".DIRECTORY_SEPARATOR.$_POST["webName"].DIRECTORY_SEPARATOR."userInfo.php");
-        array_push($webData["webComponents"],"info");
+
     }
-    $webJSON = fopen("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"].DIRECTORY_SEPARATOR."webData.txt", "w") or die("Unable to open file!");
-    fwrite($webJSON, json_encode($webData));
+
+    $webConfig = (object) [
+        'WebData' => $webData,
+        'Style' => $webStyle,
+        'Gallery' => $webGallery
+    ];
+
+    $webJSON = fopen("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"].DIRECTORY_SEPARATOR."webConfig.txt", "w") or die("Unable to open file!");
+    fwrite($webJSON, json_encode($webConfig));
 }
+else
+{
+    if(!isset($_POST["webName"]) || empty($_POST["webName"]))
+    {
+        $errorMsg.='<p class="alert alert-danger">Web Name is not set</p>';
+    }
+    else if(is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"]))
+    {
+        $errorMsg.='<p class="alert alert-danger">Web page already exists</p>';
+    }
+}
+if(isset($errorMsg)) echo $errorMsg;
 ?>
 <head>
     <meta charset="utf-8">
