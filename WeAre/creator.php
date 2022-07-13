@@ -108,7 +108,7 @@ if(isset($_POST["webName"]) && !empty($_POST["webName"]) && !is_dir("WebPages".D
     $webJSON = fopen("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"].DIRECTORY_SEPARATOR."webConfig.txt", "w") or die("Unable to open file!");
     fwrite($webJSON, json_encode($webConfig));
 }
-else
+else if(!empty($_POST))
 {
     if(!isset($_POST["webName"]) || empty($_POST["webName"]))
     {
