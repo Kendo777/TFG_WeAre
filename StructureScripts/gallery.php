@@ -141,7 +141,7 @@ if(isset($_GET["edit"]))
 			echo '&folder='.$folder;
 		echo '&edit">
 		      <label>Nuevo nombre</label><br>
-		      <input type="text" name="newName">
+		      <input type="text" name="newName" value="'.$folder.'">
 		      <label>Descripcion carpeta</label><br>
 		      <input type="text" name="newDescription"><hr>
 		      <button type="submit" class="btn btn-primary">Send</button>

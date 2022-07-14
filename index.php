@@ -110,13 +110,16 @@
   </header><!-- End Header -->
 
   <?php
+    /**
+     * Check the current page, if exists it includes to the index
+     */
     //if($page!="login" && $page!="register")
-        //require_once("navBar.php");
-        if(file_exists($page.".php"))
-        {
-            include($page.".php");
-        }
-    ?>
+    //require_once("navBar.php");
+    if(file_exists($page.".php"))
+    {
+        include_once($page.".php");
+    }
+  ?>
 
 
   <!-- ======= Footer ======= -->

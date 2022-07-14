@@ -1,45 +1,76 @@
 <?php
-    class WebData {
-        public $WebName;
-        public $WebUser;
-        public $WebDataBase;
-        public $WebPrivacity;
 
-        function __construct(string $webName, string $webUser, string $webDataBase, string $webPrivacity)
-        {
-            $this->WebName = $webName;
-            $this->WebUser = $webUser;
-            $this->WebDataBase = $webDataBase;
-            $this->WebPrivacity = $webPrivacity;
-        }
-    }
+/**
+ * Web configuration classes and utils
+ */
 
-    class WebStyle {
-        public $bck_Color;
+  /**
+   * WebData
+   *
+   * 
+   */
+  class WebData 
+  {
+      public $web_name;
+      public $web_user;
+      public $web_database;
+      public $web_privacity;
 
-        function __construct(string $bck_Color) {
-          $this->bck_Color = $bck_Color;
+      function __construct(string $web_name, string $web_user, string $web_database, string $web_privacity)
+      {
+          $this->web_name = $web_name;
+          $this->web_user = $web_user;
+          $this->web_database = $web_database;
+          $this->web_privacity = $web_privacity;
       }
+  }
+  /**
+   * WebStyle
+   *
+   * 
+   */
+  class WebStyle 
+  {
+      public $bck_color;
+
+      function __construct(string $bck_color) {
+        $this->bck_color = $bck_color;
     }
+  }
+  /**
+   * WebGallery
+   *
+   * 
+   */
+  class WebGallery 
+  {
+      public $enable;
+      public $type;
 
-    class WebGallery {
-        public $enable;
-        public $type;
+      function __construct() {
+          $this->enable = false;
+      }
+      function set(string $type) {
+        $this->enable = true;
+        $this->type = $type;
+      }
+  }
 
-        function __construct() {
-            $this->enable = false;
-        }
-        function set(string $type) {
-          $this->enable = true;
-          $this->type = $type;
-        }
-    }
-
-    function copy_folder($src, $dst) { 
-  
+  /**
+   * Copy all files from one folder to another
+   * if is necessary it creates the remaining folders
+   * 
+   * @access public
+   * @param string $src Folder path FROM which the files will be copied
+   * @param string $dst Folder path WHERE the files will be copied
+   * @return void
+   */
+  function copy_folder($src, $dst) { 
     $dir = opendir($src);   
-    while( $file = readdir($dir) ) { 
-        if (( $file != '.' ) && ( $file != '..' )) { 
+    while( $file = readdir($dir) ) 
+    { 
+        if (( $file != '.' ) && ( $file != '..' ))
+        { 
             if (is_dir($src.DIRECTORY_SEPARATOR.$file) ) 
             { 
                 mkdir($dst.DIRECTORY_SEPARATOR.$file, 0700);
@@ -51,18 +82,22 @@
             }
         } 
     } 
-  
     closedir($dir);
-}
+  }
+/******************************************************************************/
 ?>
 
 <!DOCTYPE html>
 <html>
 <?php
-
+/**
+ * Web creation
+ */
   session_start();
   $errorMsg="";
   $page="home";
+  /*
+   * For the moment is not needed 
   if(isset($_GET["page"]))
   {
       if($_GET['page']=="logeOut")
@@ -74,49 +109,70 @@
       {
           $page = $_GET["page"];
       }
-  }
-  if(isset($_POST["webName"]) && !empty($_POST["webName"]) && !is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"]))
+  }*/
+
+  /**
+   * Creates the user page based on the selected configuration  checking that all the data entered is valid
+   * If the web page name is correct and doesn't exist already, it creates it
+   * Else it will show a error message
+   */
+  if(isset($_POST["web_name"]) && !empty($_POST["web_name"]) && !is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]))
   {
-      mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"], 0700);
-      copy_folder("StructureScripts","WebPages".DIRECTORY_SEPARATOR.$_POST["webName"]);
+    // Create web page folder
+    mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"], 0700);
+    // Import all scripts: PHP, CSS, JS,... for the structure of the web page
+    copy_folder("StructureScripts","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]);
 
-      //IMPORT ALL BASICS SCRIPTS: PHP, CSS, JS,...
+    $web_data = new WebData($_POST["web_name"], "Test", $_POST["web_name"], "Public");
+    $web_style = new WebStyle($_POST["styleBckColor"]);
+    $web_gallery = new WebGallery();
+    
+    /**
+     * Set the configuration of all the components of the result web page
+     * If gallery is enabled, set the configuration selected
+     * If...
+     */
+    if(isset($_POST["galleryEnable"]))
+    {
+        $web_gallery->set($_POST["galleryType"]);
+    }
+    if(isset($_POST["posts"]))
+    {
 
-      $webData = new WebData($_POST["webName"], "Test", $_POST["webName"], "Public");
-      $webStyle = new WebStyle($_POST["styleBckColor"]);
-      $webGallery = new WebGallery();
-
-      if(isset($_POST["galleryEnable"]))
-      {
-          $webGallery->set($_POST["galleryType"]);
-      }
-      if(isset($_POST["posts"]))
-      {
-
-      }
-
-
-      $webConfig = (object) [
-          'WebData' => $webData,
-          'Style' => $webStyle,
-          'Gallery' => $webGallery
-      ];
-
-      $webJSON = fopen("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"].DIRECTORY_SEPARATOR."webConfig.txt", "w") or die("Unable to open file!");
-      fwrite($webJSON, json_encode($webConfig));
-      $errorMsg.='<p class="alert alert-success">Web page: '.$_POST["webName"].' is created correctly</p>';
+    }
+    
+    /**
+     * JSON creation
+     * Create the php object that will be encoded as JSON and insert all the nedded data 
+     * Creates the JSON file and write the information
+     */
+    $webConfig = (object) [
+        'web_data' => $web_data,
+        'style' => $web_style,
+        'gallery' => $web_gallery
+    ];
+    file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($webConfig));
+    
+    /**
+     * Another possibility to generate the JSON 
+     * $webJSON = fopen("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."webConfig.json", "w") or die("Unable to open file!");
+     * fwrite($webJSON, json_encode($webConfig));
+    */
+    // If everything goes well, show a success message
+    $errorMsg.='<p class="alert alert-success">Web page: '.$_POST["web_name"].' is created correctly</p>';
   }
   else if(!empty($_POST))
   {
-      if(!isset($_POST["webName"]) || empty($_POST["webName"]))
+      if(!isset($_POST["web_name"]) || empty($_POST["web_name"]))
       {
           $errorMsg.='<p class="alert alert-danger">Web Name is not set</p>';
       }
-      else if(is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["webName"]))
+      else if(is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]))
       {
           $errorMsg.='<p class="alert alert-danger">Web page already exists</p>';
       }
   }
+/******************************************************************************/
 ?>
 
 <section class="d-flex align-items-center">
@@ -124,9 +180,7 @@
 
     <div class="section-header mt-5">
       <h2 data-aos="fade-up" data-aos-delay="400">Create your own web page</h2>
-      <?php
-        if(isset($errorMsg)) echo '<div data-aos="fade-up" data-aos-delay="400">'.$errorMsg.'</div>';
-      ?>
+      <?php if(isset($errorMsg)) echo '<div data-aos="fade-up" data-aos-delay="400">'.$errorMsg.'</div>'; ?>
     </div>
 
     <div class="row justify-content-center">
@@ -135,7 +189,7 @@
         <div class="form-row justify-content-center">
           <div class="form-group col-md-6">
             <label>Web Name</label>
-            <input type="text" class="form-control" name="webName">
+            <input type="text" class="form-control" name="web_name">
           </div>
           <div class="form-group col-md-6">
             <label for="inputPassword4">Password</label>
@@ -143,60 +197,11 @@
           </div>
         </div>
 
-        <fieldset class="form-group">
-          <div class="row">
-            <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-            <div class="col-sm-10">
-
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                <label class="form-check-label" for="gridRadios1">
-                  First radio
-                </label>
-              </div>
-
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                <label class="form-check-label" for="gridRadios2">
-                  Second radio
-                </label>
-              </div>
-
-              <div class="form-check disabled">
-                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
-                <label class="form-check-label" for="gridRadios3">
-                  Third disabled radio
-                </label>
-              </div>
-
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name="gallery">
-          <label class="form-check-label" for="defaultCheck1">
-            Gallery
-          </label>
-        </div> -->
-
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" name="posts">
-          <label class="form-check-label" for="defaultCheck2">
-            Posts
-          </label>
-        </div>
-
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="defaultCheck3" name="info">
-          <label class="form-check-label" for="defaultCheck3">
-            Info
-          </label>
-        </div>
-
+        <!-- ======= Configuration components ======= -->
         <section id="faq" class="faq">
           <div class="accordion accordion-flush px-xl-5" id="faqlist">
 
+            <!-- Style Configuration -->
             <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
                 <h3 class="accordion-header form-check form-switch">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1">
@@ -214,7 +219,8 @@
                   </div>
                 </div>
               </div><!-- End Component item-->
-
+              
+              <!-- Gallery Configuration -->
               <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
                 <h3 class="accordion-header form-check form-switch">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2">
@@ -250,7 +256,7 @@
               </div><!-- End Component item-->
 
           </div>
-        </section>
+        </section><!-- End Configuration components -->
 
         <div class="form-group row">
           <div class="col-sm-10">
