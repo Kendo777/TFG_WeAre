@@ -224,7 +224,7 @@
               <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
                 <h3 class="accordion-header form-check form-switch">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2">
-                      <input type="checkbox" class="form-check-input" id="galleryEnable" name="galleryEnable" value="" data-bs-toggle="collapse" data-bs-target="#faq-content-2" style="position:absolute; left: 2%; !important">
+                      <input type="checkbox" class="form-check-input" id="galleryEnable" name="galleryEnable" value="" data-bs-toggle="collapse" data-bs-target="#faq-content-2" style="position:absolute !important; left: 2% !important;">
                       <label class="form-check-label" for="galleryEnable">
                         <i class="bi bi-images question-icon"></i>
                           Gallery
@@ -236,10 +236,10 @@
                     <p>Upload your images to your web page</p>
                     <div class="form-group">
                       <div class="row">
-                        <img src="assets/img/creator/gallery-1.png" style="width:25%; !important">
-                        <img src="assets/img/creator/gallery-2.png" style="width:25%; !important">
-                        <img src="assets/img/creator/gallery-3.png" style="width:25%; !important">
-                        <img src="assets/img/creator/gallery-4.png" style="width:25%; !important">
+                        <img src="assets/img/creator/gallery-1.png" style="width:25% !important;">
+                        <img src="assets/img/creator/gallery-2.png" style="width:25% !important;">
+                        <img src="assets/img/creator/gallery-3.png" style="width:25% !important;">
+                        <img src="assets/img/creator/gallery-4.png" style="width:25% !important;">
                       </div>
                       <small class="form-text text-muted">All gallery types examples.<br><br></small>
                       <label for="galleryType" class="mb-2"><b>1. Gallery type</b></label>
