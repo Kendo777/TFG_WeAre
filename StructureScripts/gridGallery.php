@@ -85,13 +85,8 @@
       if(!is_dir($path . DIRECTORY_SEPARATOR . $file))
       {
         echo '
-        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image">
-          <img src="assets/img/gallery' . DIRECTORY_SEPARATOR . $file . '" class="img-fluid glightbox preview-link" alt="">
-          <div class="portfolio-info" style="top: 0 !important;">
-            <a href="assets/img/gallery' . DIRECTORY_SEPARATOR . $file . '" data-gallery="portfolio-gallery" class="glightbox preview-link" style="left: 45% !important;">
-              <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-            </a>
-          </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image" style="pointer-events: none !important;">
+          <img src="assets/img/gallery' . DIRECTORY_SEPARATOR . $file . '" class="img-fluid" alt="">
         </div><!-- End Portfolio Item -->
         ';
       }
@@ -101,11 +96,10 @@
         <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-folder border-warning" style="border-radius: 16px !important; border-width: 1px !important;">
           <img src="assets/img/folder.png" class="img-fluid glightbox preview-link" alt="">
           <div class="portfolio-info" style="top: 0 !important;">
-            <a href="index.php?page=gallery&folder='.$file.'" data-gallery="portfolio-gallery" class="preview-link" style="left: 30% !important; text-align: center !important;"> 
-              <h4 style="font-size: 1.5vw !important;"><i class="bi-zoom-in"> ' . $value . '</i></h4> 
-            </a>
-          </div>
-
+          <a href="index.php?page=gallery&folder='.$file.'" data-gallery="portfolio-gallery" class="preview-link" style="left: 30% !important; text-align: center !important;"> 
+            <h4 style="font-size: 1.5vw !important;"><i class="bi-zoom-in"> ' . $value . '</i></h4> 
+          </a>
+        </div>
         </div><!-- End Portfolio Item -->
         ';
       }

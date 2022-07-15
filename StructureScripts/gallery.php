@@ -2,11 +2,16 @@
 
   $json = file_get_contents('webConfig.json');
   $json_data = json_decode($json, true);
-
+  
   if($json_data["gallery"]["type"] == "Zoom Gallery View")
   {
     include_once("zoomGallery.php");
   }
+  else if($json_data["gallery"]["type"] == "Grid Gallery View")
+  {
+    include_once("gridGallery.php");
+  }
+  
 /*
 	if(!isset($_SESSION['user']))
 	{
