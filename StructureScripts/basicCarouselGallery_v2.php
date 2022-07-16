@@ -1,8 +1,3 @@
-<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
-  <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-  
 <?php
 
   $folder = "";
@@ -101,15 +96,13 @@
 </div>
 </section><!-- End Portfolio Section -->
 
+<section id="testimonials" class="testimonials" style="background: none !important; padding-top: 3% !important;">
+  <div class="container" data-aos="fade-up">
+    <div class="testimonials-slider swiper">
+      <div class="swiper-wrapper" >
 
-<div class="container">
-  <div class="col-md-12">
-      <div id="slideCarousel" class="carousel slide">
-
-        <!-- Carousel items -->
-        <div class="carousel-inner">
 <?php
-$first=true;
+
   foreach ($dir as $value) {
     if($value!="." && $value!=".." && $value!="comentario.txt")
     {
@@ -125,29 +118,25 @@ $first=true;
       if(!is_dir($path . DIRECTORY_SEPARATOR . $file))
       {
           echo '
-          <div class="item ';
-          if($first)
-          {
-            echo 'active';
-            $first = false;
-          }
-          echo '">
-            <img src="assets/img/gallery' . DIRECTORY_SEPARATOR . $file . '">
-          </div>
-          <!--/item-->';
+          <div class="swiper-slide">
+              <div class="testimonial-item">
+                <img src="assets/img/gallery' . DIRECTORY_SEPARATOR . $file . '">
+              </div>
+          </div><!-- End testimonial item -->
+          ';
       }
     }
   }
 
 ?>
           </div>
-          <!--/item-->
+          <div class="swiper-pagination"></div>
         </div>
-        <!--/carousel-inner-->
-        <a class="left carousel-control" href="#slideCarousel" data-slide="prev"><p>‹</p></a>
-
-        <a class="right carousel-control" href="#slideCarousel" data-slide="next"><p>›</p></a>
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
       </div>
-      <!--/myCarousel-->
-  </div>
-</div>
+    </section><!-- End Testimonials Section -->

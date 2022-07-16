@@ -11,6 +11,10 @@
   {
     include_once("gridGallery.php");
   }
+  else if($json_data["gallery"]["type"] == "Carousel View")
+  {
+    include_once("carouselGallery.php");
+  }
   else if($json_data["gallery"]["type"] == "Basic Carousel View")
   {
     include_once("basicCarouselGallery.php");

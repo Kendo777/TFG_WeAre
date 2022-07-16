@@ -6,9 +6,17 @@
 <?php
 
   $folder = "";
+  $columns = 3;
   if(isset($_GET["folder"]))
   {
     $folder = $_GET["folder"];
+  }
+  $json = file_get_contents('webConfig.json');
+  $json_data = json_decode($json, true);
+  
+  if(isset($json_data["gallery"]["columns"]))
+  {
+    $columns = $json_data["gallery"]["columns"];
   }
 ?>
 <section id="portfolio" class="portfolio" data-aos="fade-up" style="padding-bottom: 0 !important;">
@@ -101,15 +109,14 @@
 </div>
 </section><!-- End Portfolio Section -->
 
-
 <div class="container">
-  <div class="col-md-12">
-      <div id="slideCarousel" class="carousel slide">
+      <div id="slideCarousel" class="carousel slide" style="max-heigh: 600px;">
 
         <!-- Carousel items -->
         <div class="carousel-inner">
 <?php
 $first=true;
+$count = 0;
   foreach ($dir as $value) {
     if($value!="." && $value!=".." && $value!="comentario.txt")
     {
@@ -124,6 +131,9 @@ $first=true;
 
       if(!is_dir($path . DIRECTORY_SEPARATOR . $file))
       {
+        if($count<=0)
+        {
+          $count=$columns;
           echo '
           <div class="item ';
           if($first)
@@ -132,16 +142,27 @@ $first=true;
             $first = false;
           }
           echo '">
-            <img src="assets/img/gallery' . DIRECTORY_SEPARATOR . $file . '">
+          <div class="row align-items-center" style="margin-top: 10%">';
+        }
+        echo '
+          <div class="col-sm-3" style="margin: auto;">
+            <img src="assets/img/gallery' . DIRECTORY_SEPARATOR . $file . '" style="max-width: 300px;">
+          </div>';
+         $count--;
+        if($count<=0)
+        {
+          echo '</div>
+            <!--/row-->
           </div>
           <!--/item-->';
+        }
+
+          
       }
     }
   }
 
 ?>
-          </div>
-          <!--/item-->
         </div>
         <!--/carousel-inner-->
         <a class="left carousel-control" href="#slideCarousel" data-slide="prev"><p>‹</p></a>
@@ -150,4 +171,3 @@ $first=true;
       </div>
       <!--/myCarousel-->
   </div>
-</div>
