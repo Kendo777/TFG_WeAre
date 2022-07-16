@@ -580,7 +580,7 @@
     </section><!-- End Services Section -->
 
     <!-- ======= Testimonials Section ======= -->
-    <section id="testimonials" class="testimonials">
+    <section id="testimonials" class="testimonials testimonials-tint">
       <div class="container" data-aos="fade-up">
 
         <div class="testimonials-slider swiper">
