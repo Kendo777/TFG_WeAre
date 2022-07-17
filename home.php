@@ -961,7 +961,7 @@
                   <a href=""><i class="bi bi-twitter"></i></a>
                   <a href="#" data-toggle="tooltip" title="alu.91613@usj.es"><i class="bi bi-envelope"></i></a>
                   <a href=""><i class="bi bi-instagram"></i></a>
-                  <a href="https://github.com/Kendo777"><i class="bi bi-github"></i></a>
+                  <a href="https://github.com/Kendo777" target="_blank"><i class="bi bi-github"></i></a>
                 </div>
                 <h4>Marc Lozano</h4>
                 <span>Project Author</span>
