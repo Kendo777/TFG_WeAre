@@ -1,5 +1,5 @@
 <?php
-
+require_once("mySqli.php");
 /**
  * Web configuration classes and utils
  */
@@ -84,6 +84,13 @@
     } 
     closedir($dir);
   }
+  function create_DB($mySqli, $db_name)
+  {
+    $sql= $mySqli->prepare("CREATE DATABASE " . $db_name);
+    $sql->execute();
+
+    //create tables
+  }
 /******************************************************************************/
 ?>
 
@@ -118,10 +125,14 @@
    */
   if(isset($_POST["web_name"]) && !empty($_POST["web_name"]) && !is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]))
   {
+    //NOT FOR THE MOMENT
+    //create_DB($mySqli, $_POST["web_name"]);
     // Create web page folder
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"], 0700);
     // Import all scripts: PHP, CSS, JS,... for the structure of the web page
-    copy_folder("StructureScripts","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]);
+    copy("StructureScripts/index.php", "WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."index.php"); 
+    mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images", 0700);
+    copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
 
     $web_data = new WebData($_POST["web_name"], "Test", $_POST["web_name"], "Public");
     $web_style = new WebStyle($_POST["styleBckColor"]);

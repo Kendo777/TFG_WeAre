@@ -1,0 +1,109 @@
+html
+{
+  font-size: 100% !important;
+}
+p
+{
+	color: black !important;
+}
+.min
+{
+	font-size: 80%;
+}
+a img:hover
+{
+border: 2px solid orange;
+}
+a:hover {
+ color: orange;
+}
+img
+{
+	max-width: 400px !important;
+	max-height: 400px !important;
+}
+.card
+{
+	margin: 5px !important;
+}
+.cover
+{
+	max-width: 100% !important;
+	max-height: 100% !important;
+	width: 75% !important;
+}
+.sideBar
+{
+	max-width: 100% !important;
+	max-height: 100% !important;
+	width: 100% !important;
+}
+.subProduct
+{
+	color: rgb(211, 129, 52) !important;
+	margin-right: 10px;
+}
+.subProduct:hover
+{
+	color: rgb(213, 158, 55) !important;
+}
+.prize
+{
+	color: green !important;
+	font-size: 150%;
+}
+.miniature
+{
+	max-width: 150px !important;
+	max-height: 150px !important;
+}
+.suggestions
+{
+	margin-top: 20px;
+}
+.selected
+{
+	color: rgb(205, 176, 43) !important;
+}
+.login
+{
+	position: absolute !important;
+	right: 10px;
+}
+
+.login ul
+{
+	position: absolute;
+	display: none;
+
+}
+.login:hover ul
+{
+	display: block;
+}
+div.classificationBar
+{
+  position: sticky !important;
+  top: 0 !important;
+}
+.pages
+{
+	margin-top: 20px !important;
+	margin-right: 10px !important;
+}
+.list-group
+{
+	z-index: 5 !important;
+}
+.attribute
+{
+	font-size: medium !important;
+}
+#sidebar.active img
+{
+	display: none;
+}
+#sidebar img
+{
+	display: block;
+}

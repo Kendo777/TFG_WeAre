@@ -49,7 +49,7 @@
 </div>
 
 <?php
-  $path = __DIR__ . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "gallery";
+  $path = __DIR__ . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "gallery";
 
   if(isset($_GET["folder"]))
   {
@@ -90,7 +90,7 @@
       {
         echo '
         <div class="col-md-2 portfolio-item filter-folder">
-          <img src="assets/img/folder.png" class="img-fluid glightbox preview-link" alt="">
+          <img src="images/folder.png" class="img-fluid glightbox preview-link" alt="">
           <div class="portfolio-info" style="top: 0 !important;">
           <a href="index.php?page=gallery&folder='.$file.'" data-gallery="portfolio-gallery" class="preview-link" style="left: 0 !important;"> 
             <h4><i class="bi-zoom-in"> ' . $value . '</i></h4> 
@@ -146,7 +146,7 @@ $count = 0;
         }
         echo '
           <div class="col-sm-3" style="margin: auto;">
-            <img src="assets/img/gallery' . DIRECTORY_SEPARATOR . $file . '" style="max-width: 300px;">
+            <img src="images/gallery' . DIRECTORY_SEPARATOR . $file . '" style="max-width: 300px;">
           </div>';
          $count--;
         if($count<=0)
@@ -171,3 +171,4 @@ $count = 0;
       </div>
       <!--/myCarousel-->
   </div>
+  

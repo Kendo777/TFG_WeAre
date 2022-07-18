@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
 <?php
+
+  require_once("mySqli.php");
   ob_start();
   $page="home";
   if(isset($_GET["page"]))
