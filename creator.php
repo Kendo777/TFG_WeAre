@@ -86,10 +86,28 @@ require_once("mySqli.php");
   }
   function create_DB($mySqli, $db_name)
   {
+    $sql= $mySqli->prepare("DROP DATABASE marc");
+    $sql->execute();
+
     $sql= $mySqli->prepare("CREATE DATABASE " . $db_name);
     $sql->execute();
 
     //create tables
+    $mySqlidb = mysql_client_db($db_name);
+    
+    // sql to create table
+    $sql= $mySqlidb->prepare("CREATE TABLE blogs (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL)");
+    $sql->execute();
+
+    $sql= $mySqlidb->prepare("CREATE TABLE blog_messages (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+    content VARCHAR(2000) NOT NULL, 
+    blog_id INT(6) UNSIGNED NOT NULL, 
+    CONSTRAINT fk_id_blog FOREIGN KEY (blog_id) REFERENCES blogs(id))");
+    $sql->execute();
+
   }
 /******************************************************************************/
 ?>
@@ -126,7 +144,7 @@ require_once("mySqli.php");
   if(isset($_POST["web_name"]) && !empty($_POST["web_name"]) && !is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]))
   {
     //NOT FOR THE MOMENT
-    //create_DB($mySqli, $_POST["web_name"]);
+    create_DB($mySqli, $_POST["web_name"]);
     // Create web page folder
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"], 0700);
     // Import all scripts: PHP, CSS, JS,... for the structure of the web page
@@ -246,11 +264,172 @@ require_once("mySqli.php");
                   <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
                     <p>Upload your images to your web page</p>
                     <div class="form-group">
+                    <div class="row">
+                      <section id="portfolio" class="portfolio">
+                          <div class="container">
+                            <div class="section-header">
+                            <h2>Grid Gallery</h2>
+                            <p>Non hic nulla eum consequatur maxime ut vero memo vero totam officiis pariatur eos dolorum sed fug dolorem est possimus esse quae repudiandae. Dolorem id enim officiis sunt deserunt esse soluta consequatur quaerat</p>
+                          </div>
+                        </div>
+                        <div class="container-fluid" style="width: 50%;">
+                          <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
+                            <div class="row g-0">
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/app-1.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/product-1.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/branding-1.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/books-1.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/app-2.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/product-2.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/branding-2.jpg" class="img-fluid glightbox" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/books-2.jpg" class="img-fluid glightbox" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/app-3.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/product-3.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/branding-3.jpg" class="img-fluid" alt="">
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
+                              <img src="assets/img/portfolio/books-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                            </div><!-- End Portfolio Item -->
+                            
+                          </div><!-- End Portfolio Container -->
+                        </div>
+                      </div>
+                      </section><!-- End Portfolio Section -->
+                      </div>
                       <div class="row">
-                        <img src="assets/img/creator/gallery-1.png" style="width:25% !important;">
-                        <img src="assets/img/creator/gallery-2.png" style="width:25% !important;">
-                        <img src="assets/img/creator/gallery-3.png" style="width:25% !important;">
-                        <img src="assets/img/creator/gallery-4.png" style="width:25% !important;">
+                      <section id="portfolio" class="portfolio">
+                          <div class="container">
+                            <div class="section-header">
+                            <h2>Zoom Gallery</h2>
+                            <p>Non hic nulla eum consequatur maxime ut vero memo vero totam officiis pariatur eos dolorum sed fug dolorem est possimus esse quae repudiandae. Dolorem id enim officiis sunt deserunt esse soluta consequatur quaerat</p>
+                          </div>
+
+                        </div>
+                        <div class="container-fluid"  style="width: 50%;">
+                          <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
+                            <div class="row g-0">
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/app-1.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/app-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/product-1.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/product-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/branding-1.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/branding-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/books-1.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/books-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/app-2.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/app-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/product-2.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/product-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/branding-2.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/branding-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/books-2.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/books-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/app-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/app-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/product-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/product-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/branding-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/branding-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
+                              <img src="assets/img/portfolio/books-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <div class="portfolio-info" style="top: 0 !important;">
+                                <a href="assets/img/portfolio/books-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                                </a>
+                              </div>
+                            </div><!-- End Portfolio Item -->
+                            
+                          </div><!-- End Portfolio Container -->
+                        </div>
+                      </div>
+                      </section><!-- End Portfolio Section -->
                       </div>
                       <small class="form-text text-muted">All gallery types examples.<br><br></small>
                       <label for="galleryType" class="mb-2"><b>1. Gallery type</b></label>
@@ -279,3 +458,5 @@ require_once("mySqli.php");
     </div>
   </div>
 </section>
+
+

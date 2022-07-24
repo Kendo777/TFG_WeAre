@@ -15,4 +15,8 @@ function mysql_fix_string($mysqli,$string)
 	}
 	return $mysqli->real_escape_string($string);
 }
+function mysql_client_db($db)
+{
+	return new mysqli($GLOBALS['hostname'],$GLOBALS['user'],$GLOBALS['pwd'],$db);
+}
 ?>
