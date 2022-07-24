@@ -43,6 +43,16 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+<?php
+
+  $json = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'webConfig.json');
+  $json_data = json_decode($json, true);
+?>
+  <style>
+    body {
+        background-color: <?php echo $json_data["style"]["bck_color"] ?>;
+    }
+  </style>
 </head>
 
 <body>
