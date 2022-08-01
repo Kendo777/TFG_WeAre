@@ -59,7 +59,7 @@ function create_grid_gallery($path, $columns)
       if(!is_dir($path . DIRECTORY_SEPARATOR . "images/gallery" . DIRECTORY_SEPARATOR . $file))
       {
         $grid_gallery_code.= '
-        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image" style="pointer-events: none !important;">
+        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image" style="pointer-events: none !important; padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">
           <img src="images/gallery' . DIRECTORY_SEPARATOR . $file . '" class="img-fluid" alt="">
         </div><!-- End Portfolio Item -->
         ';

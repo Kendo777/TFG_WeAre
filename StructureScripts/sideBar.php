@@ -17,13 +17,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <a href="index.php?page=gallery">
                         <i class="fas fa-cogs"></i>
-                        Products
+                        Gallery
                     </a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li><a href="#">1</a></li>
-                    </ul>
                 </li>
                 <li>
                     <a href="index.php?page=user">
@@ -32,10 +29,26 @@
                     </a>
                 </li>
                 <li>
-                    <a href="index.php?page=shoppingCart">
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-shopping-cart"></i>
-                        Cart 
+                        Blog 
                     </a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <?php
+                            $sqlBar= $mySqli_db->prepare("SELECT * FROM blogs");
+                            $sqlBar->execute();
+                            $resultBar=$sqlBar->get_result();
+                            if(!$resultBar)
+                            {
+                            die($mySqli->error);
+                            }
+                            for($i=0; $i<$resultBar->num_rows; $i++)
+                            {
+                                $rowBar=$resultBar->fetch_assoc();
+                                echo'<li><a href="index.php?page=blog&blog='.$rowBar['name'].'">'.$rowBar['name'].'</a></li>';
+                            }
+                        ?>
+                    </ul>
                 </li>
             </ul>
         </nav>

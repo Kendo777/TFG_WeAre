@@ -79,7 +79,7 @@ function create_zoom_gallery($path, $columns)
       if(!is_dir($path . DIRECTORY_SEPARATOR . "images/gallery" . DIRECTORY_SEPARATOR . $file))
       {
         $zoom_gallery_code.= '
-        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image">
+        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image" style="padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">
           <img src="images/gallery' . DIRECTORY_SEPARATOR . $file . '" class="img-fluid glightbox preview-link" alt="">
           <div class="portfolio-info" style="top: 0 !important;">
             <a href="images/gallery' . DIRECTORY_SEPARATOR . $file . '" data-gallery="portfolio-gallery" class="glightbox preview-link" style="left: 45% !important;">

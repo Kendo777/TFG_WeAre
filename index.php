@@ -4,6 +4,7 @@
 
   require_once("mySqli.php");
   ob_start();
+  session_start();
   $page="home";
   if(isset($_GET["page"]))
   {
@@ -103,7 +104,16 @@
             </ul>
           </li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="index.php?page=creator">Get Started</a></li>
+          <?php
+            if(!isset($_SESSION['user']))
+            {
+              echo '<li><a class="getstarted scrollto" href="index.php?page=login">Get Started</a></li>';
+            }
+            else
+            {
+              echo '<li><a class="getstarted scrollto" href="index.php?page=creator">Get Started</a></li>';
+            }
+          ?>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

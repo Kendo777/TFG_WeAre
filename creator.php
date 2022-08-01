@@ -38,6 +38,35 @@ require_once("mySqli.php");
     }
   }
   /**
+   * WebNabBar
+   *
+   * 
+   */
+  class WebNavBar 
+  {
+      public $tabs;
+
+      function __construct() {
+        
+    }
+  }
+  /**
+   * WebBlog
+   *
+   * 
+   */
+  class WebBlog
+  {
+      public $enable;
+
+      function __construct() {
+          $this->enable = false;
+      }
+      function set() {
+        $this->enable = true;
+      }
+  }
+  /**
    * WebGallery
    *
    * 
@@ -86,6 +115,7 @@ require_once("mySqli.php");
   }
   function create_DB($mySqli, $db_name)
   {
+    $db_name = mysql_fix_string($mySqli, $db_name);
     $sql= $mySqli->prepare("DROP DATABASE marc");
     $sql->execute();
 
@@ -108,6 +138,31 @@ require_once("mySqli.php");
     CONSTRAINT fk_id_blog FOREIGN KEY (blog_id) REFERENCES blogs(id))");
     $sql->execute();
 
+    if(isset($_POST["blog_enable"]) && isset($_POST["blog_title"]))
+    {
+      foreach($_POST["blog_title"] as $blog_title)
+      {
+        if(!empty($blog_title))
+        {
+          $blog_title = mysql_fix_string($mySqlidb, $blog_title);
+          $sql= $mySqlidb->prepare("INSERT INTO `blogs` (`name`) VALUES (?)");
+          $sql->bind_param("s", $blog_title);
+          $sql->execute();
+        }
+      }
+    }
+
+    $sql= $mySqlidb->prepare("CREATE TABLE galleries (
+      id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(50) NOT NULL)");
+      $sql->execute();
+  
+      $sql= $mySqlidb->prepare("CREATE TABLE gallery_tags (
+      id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+      name VARCHAR(50) NOT NULL, 
+      gallery_id INT(6) UNSIGNED NOT NULL, 
+      CONSTRAINT fk_id_gallery FOREIGN KEY (gallery_id) REFERENCES galleries(id))");
+      $sql->execute();
   }
 /******************************************************************************/
 ?>
@@ -118,7 +173,6 @@ require_once("mySqli.php");
 /**
  * Web creation
  */
-  session_start();
   $errorMsg="";
   $page="home";
   /*
@@ -152,22 +206,24 @@ require_once("mySqli.php");
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images", 0700);
     copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
 
-    $web_data = new WebData($_POST["web_name"], "Test", $_POST["web_name"], "Public");
-    $web_style = new WebStyle($_POST["styleBckColor"]);
+    $web_data = new WebData($_POST["web_name"], $_SESSION["user"], $_POST["web_name"], $_POST["web_privacity"]);
+    $web_style = new WebStyle($_POST["style_bck_color"]);
     $web_gallery = new WebGallery();
+    $web_blog = new WebBlog();
+       
     
     /**
      * Set the configuration of all the components of the result web page
      * If gallery is enabled, set the configuration selected
      * If...
      */
-    if(isset($_POST["galleryEnable"]))
+    if(isset($_POST["gallery_enable"]))
     {
-        $web_gallery->set($_POST["galleryType"]);
+        $web_gallery->set($_POST["gallery_type"]);
     }
-    if(isset($_POST["posts"]))
+    if(isset($_POST["blog_enable"]))
     {
-
+      $web_blog->set();
     }
     
     /**
@@ -178,7 +234,8 @@ require_once("mySqli.php");
     $webConfig = (object) [
         'web_data' => $web_data,
         'style' => $web_style,
-        'gallery' => $web_gallery
+        'gallery' => $web_gallery,
+        'blog' => $web_blog,
     ];
     file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($webConfig));
     
@@ -204,6 +261,13 @@ require_once("mySqli.php");
 /******************************************************************************/
 ?>
 
+<header>
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="StructureScripts\assets\js\dynamicForm.js"></script>
+
+</header>
+
 <section class="d-flex align-items-center">
   <div class="container" data-aos="fade-up">
 
@@ -215,36 +279,86 @@ require_once("mySqli.php");
     <div class="row justify-content-center">
 
       <form action='index.php?page=creator' method="post">
-        <div class="form-row justify-content-center">
-          <div class="form-group col-md-6">
-            <label>Web Name</label>
-            <input type="text" class="form-control" name="web_name">
-          </div>
-          <div class="form-group col-md-6">
-            <label for="inputPassword4">Password</label>
-            <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
-          </div>
-        </div>
-
         <!-- ======= Configuration components ======= -->
         <section id="faq" class="faq">
           <div class="accordion accordion-flush px-xl-5" id="faqlist">
 
+          <!-- General Configuration -->
+          <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="accordion-header form-check form-switch">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#general">
+                      <i class="bi bi-images question-icon"></i>
+                        General
+                    </button>
+                </h3>
+                <div id="general" class="accordion-collapse collapse show"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
+                  <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
+                    <label><b>1. Web Name<b></label>
+                    <input type="text" class="form-control" name="web_name">
+                    <br>
+                    <label for="web_privacity" class="mb-2"><b>2. Privacity</b></label>
+                      <select class="form-control mb-2" id="web_privacity" name="web_privacity">
+                        <option>Public</option>
+                        <option>Private</option>
+                        <option>Invitation</option>
+                      </select>
+                  </div>
+                </div>
+              </div><!-- End Component item-->
+
             <!-- Style Configuration -->
             <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
                 <h3 class="accordion-header form-check form-switch">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#style">
                       <i class="bi bi-images question-icon"></i>
                         Style
                     </button>
                 </h3>
-                <div id="faq-content-1" class="accordion-collapse collapse"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
+                <div id="style" class="accordion-collapse collapse show"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
                   <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
                     <p>Web page style: colors,...</p>
                     <div class="form-group">
-                      <label for="bckColor" class="mb-2"><b>1. Background Color picker</b></label>
-                      <input type="color" class="form-control form-control-color" id="bckColor" name="styleBckColor" value="#563d7c" title="Choose your color">
+                      <label for="style_bck_color" class="mb-2"><b>1. Background Color picker</b></label>
+                      <input type="color" class="form-control form-control-color" id="style_bck_color" name="style_bck_color" value="#563d7c" title="Choose your color">
                     </div>
+                  </div>
+                </div>
+              </div><!-- End Component item-->
+
+              <!-- Navbar Configuration -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="accordion-header form-check form-switch">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navBar">
+                      <i class="bi bi-images question-icon"></i>
+                        Navigation Bar
+                    </button>
+                </h3>
+                <div id="navBar" class="accordion-collapse collapse"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
+                  <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
+                    <label for="navBar_type" class="mb-2"><b>1. Navigation bar type</b></label>
+                    <select class="form-control mb-2" id="navBar_type" name="navBar_type">
+                      <option>Clasic Navigation Bar</option>
+                      <option>Side Collapsed Bar</option>
+                    </select>
+                    <div id="inputFormRow">
+                        <div class="input-group mb-3">
+                          <div class="col-sm-2">
+                            <select class="form-control" id="navBar_tab_type" name="navBar_tab_type">
+                              <option>Blog</option>
+                              <option>Gallery</option>
+                            </select>
+                          </div>
+                          <div class="col-sm-2">
+                            <input type="number" name="navBar_tab_target[]" class="form-control m-input" placeholder="Tab target">
+                          </div>
+                          <input type="text" name="navBar_tab[]" class="form-control m-input" placeholder="Tab name" autocomplete="off">
+                          <div class="input-group-append">
+                              <button id="removeRow" type="button" class="btn btn-danger">Remove</button>
+                          </div>
+                        </div>
+                    </div>
+                    <div id="nabBarnewRow"></div>
+                    <button onclick="addNavBarRow()" type="button" class="btn btn-info">Add Row</button>
                   </div>
                 </div>
               </div><!-- End Component item-->
@@ -252,15 +366,15 @@ require_once("mySqli.php");
               <!-- Gallery Configuration -->
               <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
                 <h3 class="accordion-header form-check form-switch">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2">
-                      <input type="checkbox" class="form-check-input" id="galleryEnable" name="galleryEnable" value="" data-bs-toggle="collapse" data-bs-target="#faq-content-2" style="position:absolute !important; left: 2% !important;">
-                      <label class="form-check-label" for="galleryEnable">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gallery">
+                      <input type="checkbox" class="form-check-input" id="gallery_enable" name="gallery_enable" value="" data-bs-toggle="collapse" data-bs-target="#gallery" style="position:absolute !important; left: 2% !important;">
+                      <label class="form-check-label" for="gallery_enable">
                         <i class="bi bi-images question-icon"></i>
                           Gallery
                       </label>
                     </button>
                 </h3>
-                <div id="faq-content-2" class="accordion-collapse collapse"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
+                <div id="gallery" class="accordion-collapse collapse"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
                   <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
                     <p>Upload your images to your web page</p>
                     <div class="form-group">
@@ -432,14 +546,45 @@ require_once("mySqli.php");
                       </section><!-- End Portfolio Section -->
                       </div>
                       <small class="form-text text-muted">All gallery types examples.<br><br></small>
-                      <label for="galleryType" class="mb-2"><b>1. Gallery type</b></label>
-                      <select class="form-control mb-2" id="galleryType" name="galleryType">
+                      <label for="gallery_type" class="mb-2"><b>1. Gallery type</b></label>
+                      <select class="form-control mb-2" id="gallery_type" name="gallery_type">
                         <option>Grid Gallery View</option>
                         <option>Zoom Gallery View</option>
                         <option>Basic Carousel View</option>
                         <option>Carousel View</option>
                       </select>
                       <small class="form-text text-muted">Choose type of gallery.</small>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End Component item-->
+
+              <!-- Blog Configuration -->
+              <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="accordion-header form-check form-switch">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#blog">
+                      <input type="checkbox" class="form-check-input" id="blog_enable" name="blog_enable" value="" data-bs-toggle="collapse" data-bs-target="#blog" style="position:absolute !important; left: 2% !important;">
+                      <label class="form-check-label" for="blog_enable">
+                        <i class="bi bi-images question-icon"></i>
+                          Blog
+                      </label>
+                    </button>
+                </h3>
+                <div id="blog" class="accordion-collapse collapse"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
+                  <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div id="inputFormRow">
+                            <div class="input-group mb-3">
+                            <button name="$blog_id[]" class="btn btn-info disabled">0</button>                                <input type="text" name="blog_title[]" class="form-control m-input" placeholder="blog title" autocomplete="off">
+                                <div class="input-group-append">
+                                    <button id="removeRow" type="button" class="btn btn-danger">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="blognewRow"></div>
+                        <button onclick="addBlogRow()" type="button" class="btn btn-info">Add Row</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -458,5 +603,7 @@ require_once("mySqli.php");
     </div>
   </div>
 </section>
+
+
 
 
