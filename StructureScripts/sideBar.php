@@ -1,12 +1,13 @@
 <?php 
-    //require_once("mySqli.php");
+    $json = file_get_contents($_SESSION["path"].DIRECTORY_SEPARATOR.'webConfig.json');
+    $json_data = json_decode($json, true);
 ?>
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar" class="active">
             <div class="sidebar-header">
-                <a href="index.php"><h3>Steampunk Age of Steam</h3>
-                <strong>SP</strong></a>
+                <a href="index.php"><h3><?php echo $json_data["web_data"]["web_name"] ?></h3>
+                <strong>WE</strong></a>
             </div>
 
             <ul class="list-unstyled components">
@@ -20,6 +21,12 @@
                     <a href="index.php?page=gallery">
                         <i class="fas fa-cogs"></i>
                         Gallery
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?page=forum">
+                        <i class="fas fa-user"></i>
+                        Forum
                     </a>
                 </li>
                 <li>

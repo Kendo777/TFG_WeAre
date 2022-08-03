@@ -115,6 +115,13 @@ require_once("mySqli.php");
   }
   function create_DB($mySqli, $db_name)
   {
+    $user_id = $_SESSION["user"]["id"];
+    $user = $_SESSION["user"]["user"];
+    $email = $_SESSION["user"]["email"];
+    $password = $_SESSION["user"]["password"];
+    $rol = "admin";
+    $valid = 0;
+
     $db_name = mysql_fix_string($mySqli, $db_name);
     $sql= $mySqli->prepare("DROP DATABASE marc");
     $sql->execute();
@@ -126,15 +133,29 @@ require_once("mySqli.php");
     $mySqlidb = mysql_client_db($db_name);
     
     // sql to create table
-    $sql= $mySqlidb->prepare("CREATE TABLE blogs (
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL)");
+    $sql= $mySqlidb->prepare("CREATE TABLE users (
+    user VARCHAR(60) NOT NULL UNIQUE PRIMARY KEY,
+    email VARCHAR(60) NOT NULL UNIQUE,
+    password VARCHAR(60) NOT NULL,
+    rol VARCHAR(60) NOT NULL,
+    valid INT(4) NOT NULL)");
     $sql->execute();
 
-    $sql= $mySqlidb->prepare("CREATE TABLE blog_messages (
+    $sql= $mySqlidb->prepare("INSERT INTO `users`(`user`, `email`, `password`, `rol`, `valid`) VALUES (?,?,?,?,?)");
+    $sql->bind_param("ssssi", $user, $email, $password, $rol, $valid);
+    $sql->execute();
+
+    $sql= $mySqlidb->prepare("CREATE TABLE blogs (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50) NOT NULL)");
+    
+    $sql->execute();
+
+    $sql= $mySqlidb->prepare("CREATE TABLE blog_posts (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
     content VARCHAR(2000) NOT NULL, 
-    blog_id INT(6) UNSIGNED NOT NULL, 
+    blog_id INT(6) UNSIGNED NOT NULL,
+    date DATETIME DEFAULT CURRENT_TIMESTAMP, 
     CONSTRAINT fk_id_blog FOREIGN KEY (blog_id) REFERENCES blogs(id))");
     $sql->execute();
 
@@ -147,6 +168,57 @@ require_once("mySqli.php");
           $blog_title = mysql_fix_string($mySqlidb, $blog_title);
           $sql= $mySqlidb->prepare("INSERT INTO `blogs` (`name`) VALUES (?)");
           $sql->bind_param("s", $blog_title);
+          $sql->execute();
+        }
+      }
+    }
+    $sql= $mySqlidb->prepare("CREATE TABLE forums (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
+    user VARCHAR(60) NOT NULL,
+    CONSTRAINT fk_user_forum FOREIGN KEY (user) REFERENCES users(user))");
+    $sql->execute();
+
+    $sql= $mySqlidb->prepare("CREATE TABLE forum_categories (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL)");
+    $sql->execute();
+
+    $sql= $mySqlidb->prepare("CREATE TABLE forum_categories_relation (
+    forum_id INT(6) UNSIGNED NOT NULL,
+    forum_category_id INT(6) UNSIGNED NOT NULL,
+    CONSTRAINT fk_forum_id_category FOREIGN KEY (forum_id) REFERENCES forums(id),
+    CONSTRAINT fk_forum_category_id FOREIGN KEY (forum_category_id) REFERENCES forum_categories(id))");
+    $sql->execute();
+  
+    $sql= $mySqlidb->prepare("CREATE TABLE forum_posts (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+    content VARCHAR(2000) NOT NULL,
+    date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    forum_id INT(6) UNSIGNED NOT NULL, 
+    user VARCHAR(60) NOT NULL,
+    CONSTRAINT fk_user_forum_posts FOREIGN KEY (user) REFERENCES users(user),
+    CONSTRAINT fk_id_forum_posts FOREIGN KEY (forum_id) REFERENCES forums(id))");
+    $sql->execute();
+
+    $sql= $mySqlidb->prepare("CREATE TABLE forum_responses (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+    content VARCHAR(2000) NOT NULL, 
+    forum_post_id INT(6) UNSIGNED NOT NULL, 
+    user VARCHAR(60) NOT NULL,
+    CONSTRAINT fk_user_forum_responses FOREIGN KEY (user) REFERENCES users(user),
+    CONSTRAINT fk_id_forum_posts_responses FOREIGN KEY (forum_post_id) REFERENCES forum_posts(id))");
+    $sql->execute();
+
+    if(isset($_POST["forum_enable"]) && isset($_POST["forum_title"]))
+    {
+      foreach($_POST["forum_title"] as $forum_title)
+      {
+        if(!empty($forum_title))
+        {
+          $forum_title = mysql_fix_string($mySqlidb, $forum_title);
+          $sql= $mySqlidb->prepare("INSERT INTO `forums` (`name`, `user`) VALUES (?,?)");
+          $sql->bind_param("si", $forum_title, $user);
           $sql->execute();
         }
       }
@@ -206,7 +278,7 @@ require_once("mySqli.php");
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images", 0700);
     copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
 
-    $web_data = new WebData($_POST["web_name"], $_SESSION["user"], $_POST["web_name"], $_POST["web_privacity"]);
+    $web_data = new WebData($_POST["web_name"], $_SESSION["user"]["user"], $_POST["web_name"], $_POST["web_privacity"]);
     $web_style = new WebStyle($_POST["style_bck_color"]);
     $web_gallery = new WebGallery();
     $web_blog = new WebBlog();
@@ -294,7 +366,7 @@ require_once("mySqli.php");
                 <div id="general" class="accordion-collapse collapse show"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
                   <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
                     <label><b>1. Web Name<b></label>
-                    <input type="text" class="form-control" name="web_name">
+                    <input type="text" class="form-control" name="web_name" required>
                     <br>
                     <label for="web_privacity" class="mb-2"><b>2. Privacity</b></label>
                       <select class="form-control mb-2" id="web_privacity" name="web_privacity">

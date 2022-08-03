@@ -2,7 +2,7 @@
 
 if(isset($_GET["blog"]))
 {
-  $sql= $mySqli_db->prepare("SELECT * FROM blog_messages WHERE blog_id = ?");
+  $sql= $mySqli_db->prepare("SELECT * FROM blog_post WHERE blog_id = ?");
   $sql->bind_param("i",$_GET["blog"]);
   $sql->execute();
   $result=$sql->get_result();
@@ -22,7 +22,7 @@ else
   for($i=0; $i<$result->num_rows; $i++)
   {
     $row=$result->fetch_assoc();
-    echo '<a href="index.php?page=blog&blog=' . $row["id"] . '">' . $row["name"] . '</a><br>';
+    echo '<a href="index.php?page=blog&blog=' . $row["id"] . '">' . $row["title"] . '</a><br>';
   }
 }
 

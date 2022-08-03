@@ -20,7 +20,7 @@ if(isset($_POST['user']) && isset($_POST['password']))
 		   
         if($row['valid']==0)
 		    {
-		        $_SESSION['user']=$row['user'];
+		        $_SESSION['user']=$row;
 		        header('location:index.php');
 		    }
 		    else
