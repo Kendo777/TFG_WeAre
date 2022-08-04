@@ -1,6 +1,6 @@
 <?php
 
-function create_grid_gallery($path, $columns)
+function create_grid_gallery($columns)
 {
   $grid_gallery_code = "";
 
@@ -32,7 +32,7 @@ function create_grid_gallery($path, $columns)
   $grid_gallery_code.= '</div>
     </div>';
 
-  $dir = scandir($path . DIRECTORY_SEPARATOR . "images/gallery" . DIRECTORY_SEPARATOR . $folder);
+  $dir = scandir("images/gallery" . DIRECTORY_SEPARATOR . $folder);
 
   $grid_gallery_code.= '<div class="container-fluid" data-aos="fade-up" data-aos-delay="200">
     <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
@@ -56,7 +56,7 @@ function create_grid_gallery($path, $columns)
         $file = $value;
       }
 
-      if(!is_dir($path . DIRECTORY_SEPARATOR . "images/gallery" . DIRECTORY_SEPARATOR . $file))
+      if(!is_dir("images/gallery" . DIRECTORY_SEPARATOR . $file))
       {
         $grid_gallery_code.= '
         <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image" style="pointer-events: none !important; padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">

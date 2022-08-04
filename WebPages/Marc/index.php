@@ -63,6 +63,7 @@
     require_once("../../mySqli.php");
     session_start();
     $mySqli_db = mysql_client_db(strtolower(basename(__DIR__)));
+    $errorMsg='';
     ob_start();
     if(!isset($_SESSION["path"]))
     {

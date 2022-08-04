@@ -103,11 +103,11 @@
             <a href="javascript:void(0)" class="card-link">';
       if(file_exists("images/profileImg/".$row["user"]))
       {
-        echo '<img src="images/profileImg/' . $row["user"] . '" class="rounded-circle" width="50" alt="User">';
+        echo '<img src="images/profile/' . $row["user"] . '" class="rounded-circle" width="50" alt="User">';
       }
       else
       {
-        echo '<img src="../../StructureScripts/assets/img/default/userDefault.jpg" class="rounded-circle" width="50" alt="User">';
+        echo '<img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">';
       }
       
       echo '</a>

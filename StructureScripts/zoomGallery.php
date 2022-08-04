@@ -1,6 +1,6 @@
 <?php
 
-function create_zoom_gallery($path, $columns)
+function create_zoom_gallery($columns)
 {
   $zoom_gallery_code = "";
 
@@ -49,7 +49,7 @@ function create_zoom_gallery($path, $columns)
     }
   }
 
-  $dir = scandir($path . DIRECTORY_SEPARATOR . "images/gallery" . DIRECTORY_SEPARATOR . $folder);
+  $dir = scandir("images/gallery" . DIRECTORY_SEPARATOR . $folder);
 
   $zoom_gallery_code.= '
   <div class="container-fluid" data-aos="fade-up" data-aos-delay="200">

@@ -7,3 +7,6 @@
 .card {
   border: none !important;
 }
+.profile_picture{
+  max-width: 200px;
+}

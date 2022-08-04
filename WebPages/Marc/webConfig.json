@@ -1,1 +1,1 @@
-{"web_data":{"web_name":"Marc","web_user":"Marc","web_database":"Marc","web_privacity":"Public"},"style":{"bck_color":"#563d7c"},"gallery":{"enable":false,"type":null},"blog":{"enable":true}}
+{"web_data":{"web_name":"Marc","web_user":"Marc","web_database":"marc","web_privacity":"Public"},"style":{"bck_color":"#563d7c"},"user":{"enable":true},"gallery":{"enable":true,"type":"Grid Gallery View"},"blog":{"enable":true}}

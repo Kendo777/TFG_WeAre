@@ -1,17 +1,13 @@
 <?php
-
-  $json = file_get_contents($_SESSION["path"].DIRECTORY_SEPARATOR.'webConfig.json');
-  $json_data = json_decode($json, true);
-  
   if($json_data["gallery"]["type"] == "Zoom Gallery View")
   {
     require_once("zoomGallery.php");
-	echo create_zoom_gallery($_SESSION["path"], 0);
+	echo create_zoom_gallery(0);
   }
   else if($json_data["gallery"]["type"] == "Grid Gallery View")
   {
     require_once("gridGallery.php");
-	echo create_grid_gallery($_SESSION["path"], 0);
+	echo create_grid_gallery(0);
   }
   else if($json_data["gallery"]["type"] == "Carousel View")
   {

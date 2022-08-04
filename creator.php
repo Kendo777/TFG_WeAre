@@ -115,12 +115,21 @@ require_once("mySqli.php");
   }
   function create_DB($mySqli, $db_name)
   {
-    $user_id = $_SESSION["user"]["id"];
-    $user = $_SESSION["user"]["user"];
-    $email = $_SESSION["user"]["email"];
-    $password = $_SESSION["user"]["password"];
+    $sql= $mySqli->prepare("SELECT * FROM users WHERE user = ?");
+    $sql->bind_param("i",$_SESSION["user"]);
+    $sql->execute();
+    $result=$sql->get_result();
+    $row=$result->fetch_assoc();
+
+    $user = $row["user"];
+    $email = $row["email"];
+    $password = $row["password"];
     $rol = "admin";
     $valid = 0;
+
+    $sql= $mySqli->prepare("INSERT INTO `web_pages`(`web_name`, `web_user`) VALUES (?, ?)");
+    $sql->bind_param("ss", $db_name, $_SESSION["user"]);
+    $sql->execute();
 
     $db_name = mysql_fix_string($mySqli, $db_name);
     $sql= $mySqli->prepare("DROP DATABASE marc");
@@ -136,6 +145,7 @@ require_once("mySqli.php");
     $sql= $mySqlidb->prepare("CREATE TABLE users (
     user VARCHAR(60) NOT NULL UNIQUE PRIMARY KEY,
     email VARCHAR(60) NOT NULL UNIQUE,
+    user_name VARCHAR(60) NOT NULL,
     password VARCHAR(60) NOT NULL,
     rol VARCHAR(60) NOT NULL,
     valid INT(4) NOT NULL)");
@@ -176,7 +186,7 @@ require_once("mySqli.php");
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
     user VARCHAR(60) NOT NULL,
-    CONSTRAINT fk_user_forum FOREIGN KEY (user) REFERENCES users(user))");
+    CONSTRAINT fk_user_forum FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE)");
     $sql->execute();
 
     $sql= $mySqlidb->prepare("CREATE TABLE forum_categories (
@@ -187,8 +197,8 @@ require_once("mySqli.php");
     $sql= $mySqlidb->prepare("CREATE TABLE forum_categories_relation (
     forum_id INT(6) UNSIGNED NOT NULL,
     forum_category_id INT(6) UNSIGNED NOT NULL,
-    CONSTRAINT fk_forum_id_category FOREIGN KEY (forum_id) REFERENCES forums(id),
-    CONSTRAINT fk_forum_category_id FOREIGN KEY (forum_category_id) REFERENCES forum_categories(id))");
+    CONSTRAINT fk_forum_id_category FOREIGN KEY (forum_id) REFERENCES forums(id) ON DELETE CASCADE,
+    CONSTRAINT fk_forum_category_id FOREIGN KEY (forum_category_id) REFERENCES forum_categories(id) ON DELETE CASCADE)");
     $sql->execute();
   
     $sql= $mySqlidb->prepare("CREATE TABLE forum_posts (
@@ -197,8 +207,8 @@ require_once("mySqli.php");
     date DATETIME DEFAULT CURRENT_TIMESTAMP,
     forum_id INT(6) UNSIGNED NOT NULL, 
     user VARCHAR(60) NOT NULL,
-    CONSTRAINT fk_user_forum_posts FOREIGN KEY (user) REFERENCES users(user),
-    CONSTRAINT fk_id_forum_posts FOREIGN KEY (forum_id) REFERENCES forums(id))");
+    CONSTRAINT fk_user_forum_posts FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE,
+    CONSTRAINT fk_id_forum_posts FOREIGN KEY (forum_id) REFERENCES forums(id) ON DELETE CASCADE)");
     $sql->execute();
 
     $sql= $mySqlidb->prepare("CREATE TABLE forum_responses (
@@ -206,8 +216,8 @@ require_once("mySqli.php");
     content VARCHAR(2000) NOT NULL, 
     forum_post_id INT(6) UNSIGNED NOT NULL, 
     user VARCHAR(60) NOT NULL,
-    CONSTRAINT fk_user_forum_responses FOREIGN KEY (user) REFERENCES users(user),
-    CONSTRAINT fk_id_forum_posts_responses FOREIGN KEY (forum_post_id) REFERENCES forum_posts(id))");
+    CONSTRAINT fk_user_forum_responses FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE,
+    CONSTRAINT fk_id_forum_posts_responses FOREIGN KEY (forum_post_id) REFERENCES forum_posts(id) ON DELETE CASCADE)");
     $sql->execute();
 
     if(isset($_POST["forum_enable"]) && isset($_POST["forum_title"]))
@@ -278,7 +288,7 @@ require_once("mySqli.php");
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images", 0700);
     copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
 
-    $web_data = new WebData($_POST["web_name"], $_SESSION["user"]["user"], $_POST["web_name"], $_POST["web_privacity"]);
+    $web_data = new WebData($_POST["web_name"], $_SESSION["user"], strtolower($_POST["web_name"]), $_POST["web_privacity"]);
     $web_style = new WebStyle($_POST["style_bck_color"]);
     $web_gallery = new WebGallery();
     $web_blog = new WebBlog();
