@@ -52,6 +52,10 @@
   <style>
     body {
         background-color: <?php echo $json_data["style"]["bck_color"] ?>;
+        color: <?php echo $json_data["style"]["primary_color"] ?>;
+    }
+    #sidebar {
+      background-color: <?php echo $json_data["style"]["secundary_color"] ?>;
     }
   </style>
 </head>

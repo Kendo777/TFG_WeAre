@@ -32,9 +32,12 @@ require_once("mySqli.php");
   class WebStyle 
   {
       public $bck_color;
-
-      function __construct(string $bck_color) {
+      public $primary_color;
+      public $secundary_color;
+      function __construct(string $bck_color, string $primary_color, string $secundary_color) {
         $this->bck_color = $bck_color;
+        $this->primary_color = $primary_color;
+        $this->secundary_color = $secundary_color;
     }
   }
   /**
@@ -289,7 +292,7 @@ require_once("mySqli.php");
     copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
 
     $web_data = new WebData($_POST["web_name"], $_SESSION["user"], strtolower($_POST["web_name"]), $_POST["web_privacity"]);
-    $web_style = new WebStyle($_POST["style_bck_color"]);
+    $web_style = new WebStyle($_POST["style_bck_color"], $_POST["style_primary_color"], $_POST["style_secundary_color"]);
     $web_gallery = new WebGallery();
     $web_blog = new WebBlog();
        
@@ -401,7 +404,11 @@ require_once("mySqli.php");
                     <p>Web page style: colors,...</p>
                     <div class="form-group">
                       <label for="style_bck_color" class="mb-2"><b>1. Background Color picker</b></label>
-                      <input type="color" class="form-control form-control-color" id="style_bck_color" name="style_bck_color" value="#563d7c" title="Choose your color">
+                      <input type="color" class="form-control form-control-color" id="style_bck_color" name="style_bck_color" value="#FFFFFF" title="Choose your color">
+                      <label for="style_bck_color" class="mb-2"><b>1. Primary Color picker</b><small>Text color</small></label>
+                      <input type="color" class="form-control form-control-color" id="style_primary_color" name="style_primary_color" value="#000000" title="Choose your color">
+                      <label for="style_bck_color" class="mb-2"><b>1. Secundary Color picker</b><small>Borders color,...</small></label>
+                      <input type="color" class="form-control form-control-color" id="style_secundary_color" name="style_secundary_color" value="#000000" title="Choose your color">
                     </div>
                   </div>
                 </div>

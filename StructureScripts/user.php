@@ -6,17 +6,17 @@ if(!isset($_SESSION['user']))
 
 if(isset($_POST['name']) && !empty($_POST['name']))
 {
-  $post = mysql_fix_string($mySqli_db,$_POST['name']);
+  $post = mysql_fix_string($mySqli_db, $_POST['name']);
   $sql= $mySqli_db->prepare("UPDATE `users` SET `user_name`=? WHERE user=?");
-  $sql->bind_param("ss",$post,$_SESSION['user']);
+  $sql->bind_param("ss", $post, $_SESSION['user']);
   $sql->execute();
 }
 
 if(isset($_POST['email']) && !empty($_POST['email']))
 {
-    $post = mysql_fix_string($mySqli_db,$_POST['email']);
+    $post = mysql_fix_string($mySqli_db, $_POST['email']);
     $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=? AND email=?");
-    $sql->bind_param("ss",$_SESSION['user'],$post);
+    $sql->bind_param("ss", $_SESSION['user'], $post);
     $sql->execute();
      $result=$sql->get_result();
 
@@ -27,7 +27,7 @@ if(isset($_POST['email']) && !empty($_POST['email']))
     else
     {
       $sql= $mySqli_db->prepare("UPDATE users SET email=? WHERE user=?");
-      $sql->bind_param("ss",$post,$_SESSION['user']);
+      $sql->bind_param("ss", $post, $_SESSION['user']);
       $sql->execute();
       $result=$sql->get_result();
 
@@ -44,9 +44,9 @@ if(isset($_POST['email']) && !empty($_POST['email']))
 }
 if(isset($_POST['user']) && !empty($_POST['user']))
 {
-    $post = mysql_fix_string($mySqli_db,$_POST['user']);
+    $post = mysql_fix_string($mySqli_db, $_POST['user']);
     $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=?");
-    $sql->bind_param("s",$post);
+    $sql->bind_param("s", $post);
     $sql->execute();
     $result=$sql->get_result();
 
@@ -57,7 +57,7 @@ if(isset($_POST['user']) && !empty($_POST['user']))
     else
     {
       $sql= $mySqli_db->prepare("UPDATE users SET user=? WHERE user=?");
-      $sql->bind_param("ss",$post,$_SESSION['user']);
+      $sql->bind_param("ss", $post, $_SESSION['user']);
       $sql->execute();
       $result=$sql->get_result();
       rename("images".DIRECTORY_SEPARATOR."profile".DIRECTORY_SEPARATOR.$_SESSION['user'].".png", "images".DIRECTORY_SEPARATOR."profile".DIRECTORY_SEPARATOR.$post.".png");
@@ -67,13 +67,13 @@ if(isset($_POST['user']) && !empty($_POST['user']))
 }
 if(isset($_POST["password"]) && !empty($_POST["password"]) && isset($_POST["password2"]) && !empty($_POST["password2"]))
 {
-  $password = mysql_fix_string($mySqli_db,$_POST['password']);
-  $password2 = mysql_fix_string($mySqli_db,$_POST['password2']);
+  $password = mysql_fix_string($mySqli_db, $_POST['password']);
+  $password2 = mysql_fix_string($mySqli_db, $_POST['password2']);
   if($password==$password2)
     {
       $password = password_hash($password, PASSWORD_DEFAULT);
       $sql= $mySqli_db->prepare("UPDATE users SET password=? WHERE user=?");
-      $sql->bind_param("ss",$password,$_SESSION['user']);
+      $sql->bind_param("ss", $password, $_SESSION['user']);
       $sql->execute();
       header('location:index.php?page=user&edit');
     }
@@ -83,10 +83,26 @@ if(isset($_POST["password"]) && !empty($_POST["password"]) && isset($_POST["pass
       $passwordChange=true;
     }
 }
+if(isset($_POST["user_edit"]))
+{
+  foreach($_POST as $key => $value) {
+    if($key != "user_edit")
+    {
+      $column_name = mysql_fix_string($mySqli_db, $key);
+      $column_value = mysql_fix_string($mySqli_db, $value);
+
+      $sql= $mySqli_db->prepare("UPDATE users SET " . $column_name . "=? WHERE user=?");
+      $sql->bind_param("ss", $column_value, $_SESSION['user']);
+      $sql->execute();
+      header('location:index.php?page=user&edit');
+    }
+    echo "POST parameter '$key' has '$value'";
+  }
+}
 if(!empty($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error']==0)
 {
   $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=?");
-  $sql->bind_param("s",$id);
+  $sql->bind_param("s", $id);
   $sql->execute();
   $result=$sql->get_result();
   $path = 'images'.DIRECTORY_SEPARATOR.'profile'.DIRECTORY_SEPARATOR;
@@ -99,7 +115,7 @@ if(!empty($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error']==0)
 if(isset($_POST['deleteImage']))
 {
   $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=?");
-  $sql->bind_param("s",$id);
+  $sql->bind_param("s", $id);
   $sql->execute();
   $result=$sql->get_result();
   $row=$result->fetch_assoc();
@@ -108,7 +124,7 @@ if(isset($_POST['deleteImage']))
 }
 
 $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=?");
-$sql->bind_param("s",$_SESSION['user']);
+$sql->bind_param("s", $_SESSION['user']);
 $sql->execute();
 $result=$sql->get_result();
 
@@ -165,7 +181,8 @@ if(isset($_GET['edit']))
 {
   echo '<div class="row justify-content-center">
   <div class="col col-lg-5">
-  <h2><u>Edit information</u></h2>
+  <div class="row">
+  <h2><u>Edit main information</u></h2>
     <form method="post" action="index.php?page=user&edit">
       <div class="input-group mb-3 mt-3">
         <div class="input-group-prepend">
@@ -189,6 +206,50 @@ if(isset($_GET['edit']))
       </div>
         <button type="submit" class="btn btn-primary">Send</button>
     </form>
+    </div>
+    <br>
+    <div class="row">
+    <h2><u>Edit user information</u></h2>
+      <form method="post" action="index.php?page=user&edit">
+      <input type="text" hidden class="form-control" name="user_edit">';
+      
+    mysqli_data_seek($result_columns, 0);
+    for($i=0; $i<$result_columns->num_rows; $i++)
+    {
+      $column=$result_columns->fetch_assoc();
+      if($column["Field"] != "user" && $column["Field"] != "email" && $column["Field"] != "user_name" && $column["Field"] != "password" && $column["Field"] != "valid" && $column["Field"] != "rol")
+      {
+        echo'<div class="input-group mb-3 mt-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">' . ucfirst($column["Field"]) . '</span>
+          </div>';
+        if($column["Type"] != "varchar(2000)")
+        {
+          if($column["Type"] == "varchar(60)")
+          {
+            echo '<input type="text" class="form-control" value="' . $row[$column["Field"]] . '" aria-label="' . ucfirst($column["Field"]) . '" aria-describedby="basic-addon1" name="' . $column["Field"] . '">';
+          }
+          else if(strpos($column["Type"], "int") !== false)
+          {
+            echo '<input type="number" class="form-control" value="' . $row[$column["Field"]] . '" aria-label="' . ucfirst($column["Field"]) . '" aria-describedby="basic-addon1" name="' . $column["Field"] . '">';
+          }
+          else if($column["Type"] == "date")
+          {
+            echo '<input type="date" value="' . $row[$column["Field"]] . '" name="' . $column["Field"] . '">';
+          }
+        }
+        else
+        {
+          echo '<textarea class="form-control" name="' . $column["Field"] . '" rows="5">' . $row[$column["Field"]] . '</textarea>';
+        }
+        echo '</div>
+        <hr>';
+      }
+    }        
+        
+ echo'<button type="submit" class="btn btn-primary">Send</button>
+      </form>
+      </div>
     </div>
     <div class="col col-lg-5">
     <div class="row">
