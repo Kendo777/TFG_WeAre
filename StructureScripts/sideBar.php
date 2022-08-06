@@ -32,18 +32,18 @@
                 </a>
             </li>
             <li>
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                    <i class="fas fa-shopping-cart"></i>
-                    Blog 
-                </a>
-                <ul class="collapse list-unstyled" id="pageSubmenu">
+              <a href="index.php?page=blog">
+                  Blog 
+              </a>
+              <div id="blog" class="accordion-collapse collapse">
+                <ul>
                     <?php
                         $sqlBar= $mySqli_db->prepare("SELECT * FROM blogs");
                         $sqlBar->execute();
                         $resultBar=$sqlBar->get_result();
                         if(!$resultBar)
                         {
-                        die($mySqli->error);
+                            die($mySqli->error);
                         }
                         for($i=0; $i<$resultBar->num_rows; $i++)
                         {
@@ -52,6 +52,7 @@
                         }
                     ?>
                 </ul>
+              </div>
             </li>
         </ul>
     </nav>

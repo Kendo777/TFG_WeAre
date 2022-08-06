@@ -2,7 +2,7 @@
 
 if(isset($_GET["blog"]))
 {
-  $sql= $mySqli_db->prepare("SELECT * FROM blog_post WHERE blog_id = ?");
+  $sql= $mySqli_db->prepare("SELECT * FROM blog_posts WHERE blog_id = ?");
   $sql->bind_param("i",$_GET["blog"]);
   $sql->execute();
   $result=$sql->get_result();
