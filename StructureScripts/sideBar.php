@@ -32,6 +32,12 @@
                 </a>
             </li>
             <li>
+                <a href="index.php?page=editor">
+                    <i class="fas fa-user"></i>
+                    Editor
+                </a>
+            </li>
+            <li>
                 <a href="index.php?page=user">
                     <i class="fas fa-user"></i>
                     User

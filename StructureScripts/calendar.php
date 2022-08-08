@@ -1,5 +1,4 @@
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="../../StructureScripts/assets/js/calendar.js"></script>
+
 <!------ Include the above in your HEAD tag ---------->
 <script type="text/javascript">
 
@@ -139,6 +138,7 @@ $(document).ready(function() {
 			}
 			
 		},
+		//FOR CON TODOS LOS EVENTOS PHP
 		events: [
 			{
 				title: 'All Day Event',
@@ -203,7 +203,7 @@ $(document).ready(function() {
 	<div style='clear:both'></div>
 </div>
 
-<!-- Modal -->
+<!-- Modal FORM PARA MANDAR PETICION SQL-->
 <div class="modal fade" id="add_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -226,7 +226,8 @@ $(document).ready(function() {
     </div>
   </div>
 </div>
-<!-- Modal -->
+
+<!-- Modal AQUI FOR CON TODOS LOS MODALS DE CADA UNO DE LOS EVENTOS -->
 <div class="modal fade" id="event_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
