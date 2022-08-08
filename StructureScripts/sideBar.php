@@ -26,6 +26,12 @@
                 </a>
             </li>
             <li>
+                <a href="index.php?page=calendar">
+                    <i class="fas fa-user"></i>
+                    Calendar
+                </a>
+            </li>
+            <li>
                 <a href="index.php?page=user">
                     <i class="fas fa-user"></i>
                     User

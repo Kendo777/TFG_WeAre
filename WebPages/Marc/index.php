@@ -18,7 +18,7 @@
   <link href="../../StructureScripts/assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="../../StructureScripts/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="../../StructureScripts/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
+  <link rel="stylesheet" href="../../StructureScripts/assets/css/calendar.css">
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -107,6 +107,7 @@
   <!-- jQuery CDN - Slim version (=without AJAX) -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
+  <script src="../../StructureScripts/assets/js/calendar.js"></script>
   <script type="text/javascript">
       $(document).ready(function () {
           $('#sidebarCollapse').on('click', function () {
