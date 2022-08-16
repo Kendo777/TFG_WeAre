@@ -15,6 +15,20 @@
             $('#blognewRow').append(html);
             blog_num++;
         };
+        function addForumCategorieRow()
+        {
+            var html = '';
+            html += '<div id="inputFormRow">';
+            html += '<div class="input-group mb-3">';
+            html += '<button class="btn btn-info disabled">#</button>';
+            html += '<input type="text" name="categorie_title[]" class="form-control m-input" placeholder="Categorie name" autocomplete="off">';
+            html += '<div class="input-group-append">';
+            html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
+            html += '</div>';
+            html += '</div>';
+
+            $('#categorienewRow').append(html);
+        };
         function addNavBarRow ()
         {
             var html = '';

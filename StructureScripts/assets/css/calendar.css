@@ -27,7 +27,7 @@ td.fc-today {
 	}
 .fc-event-inner {
 	font-family: 'Roboto', sans-serif;
-    background: #03a9f3!important;
+    /*background: #03a9f3!important;*/
     color: #FFF!important;
     font-size: 12px!important;
     font-weight: 500!important;

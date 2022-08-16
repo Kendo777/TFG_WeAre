@@ -1,33 +1,76 @@
+<?php
+if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
+{
+  if(isset($_POST["add_event_title"]))
+  {
+    $title = mysql_fix_string($mySqli_db, $_POST['add_event_title']);
+    $description = str_replace("<script", "", $_POST["add_event_description"]);
+    $description = str_replace("</script>", "", $description);
+    $description = str_replace("<style", "", $description);
+    $description = str_replace("</style>", "", $description);
+    $description = str_replace("<?php", "", $description);
+    $description = str_replace("?>", "", $description);
+    $description = mysql_fix_string($mySqli_db, $description);
+    $color = mysql_fix_string($mySqli_db, $_POST['add_event_color']);
+    $start = $_POST["add_event_start"];
+    $end = $_POST["add_event_end"];
+
+    if($start < $end)
+    {    
+      $sql= $mySqli_db->prepare("INSERT INTO `calendar_events`(`calendar_id`, `title`, `description`, `color`, `start`, `end`) VALUES (?, ?, ?, ?, ?, ?)");
+      $sql->bind_param("isssss", $_GET["calendar"], $title, $description, $color, $start, $end);
+      $sql->execute();
+    }
+    else
+    {
+      $errorMsg.='<p class="alert alert-danger">Date is not set correctly</p>';
+    }
+  }
+  if(isset($_POST["delete_event_id"]))
+  {
+    $id = $_POST["delete_event_id"];
+
+    $sql= $mySqli_db->prepare("DELETE FROM `calendar_events` WHERE id = ?");
+    $sql->bind_param("i", $id);
+    $sql->execute();
+  }
+  if(isset($_POST["edit_event_id"]))
+  {
+    $id = $_POST["edit_event_id"];
+    $title = mysql_fix_string($mySqli_db, $_POST['edit_event_title']);
+    $description = str_replace("<script", "", $_POST["edit_event_description"]);
+    $description = str_replace("</script>", "", $description);
+    $description = str_replace("<style", "", $description);
+    $description = str_replace("</style>", "", $description);
+    $description = str_replace("<?php", "", $description);
+    $description = str_replace("?>", "", $description);
+    $description = mysql_fix_string($mySqli_db, $description);
+    $color = mysql_fix_string($mySqli_db, $_POST['edit_event_color']);
+    $start = $_POST["edit_event_start"];
+    $end = $_POST["edit_event_end"];
+
+    if($start < $end)
+    {  
+    $sql= $mySqli_db->prepare("UPDATE `calendar_events` SET `title`=?,`description`=?, `color`=?, `start`=?,`end`=? WHERE id = ?");
+    $sql->bind_param("sssssi", $title, $description, $color, $start, $end, $id);
+    $sql->execute();
+    }
+    else
+    {
+      $errorMsg.='<p class="alert alert-danger">Date is not set correctly</p>';
+    }
+  }
+}
+else if(isset($_POST["add_event_title"]) || isset($_POST["edit_event_title"]))
+{
+  $errorMsg.='<p class="alert alert-danger">You do not have privileges to create or edit components, please create an account or contact the administrator of the page</p>';
+}
+  echo $errorMsg;
+?>
+
 
 <!------ Include the above in your HEAD tag ---------->
 <script type="text/javascript">
-
-function datetime_local_format(date)
-{
-	var standar_date = date.getFullYear() + "-";
-	if(date.getMonth()<10)
-	{
-		standar_date += "0";
-	}
-	standar_date += (date.getMonth() + 1) + "-";
-	if(date.getDate()<10)
-	{
-		standar_date += "0";
-	}
-	standar_date += date.getDate() + "T";
-	if(date.getHours()<10)
-	{
-		standar_date += "0";
-	}
-	standar_date += date.getHours() + ":";
-	if(date.getMinutes()<10)
-	{
-		standar_date += "0";
-	}
-	standar_date += date.getMinutes();
-	return standar_date;
-
-}
 
 $(document).ready(function() {
 	var date = new Date();
@@ -140,57 +183,35 @@ $(document).ready(function() {
 		},
 		//FOR CON TODOS LOS EVENTOS PHP
 		events: [
-			{
-				title: 'All Day Event',
-				start: new Date(y, m, 1)
-			},
-			{
-				id: 999,
-				title: 'Repeating Event',
-				start: new Date(y, m, d-3, 16, 0),
-				allDay: false,
-				className: 'info'
-			},
-			{
-				id: 999,
-				title: 'Repeating Event',
-				start: new Date(y, m, d+4, 16, 0),
-				allDay: false,
-				className: 'info'
-			},
-			{
-				title: 'Meeting',
-				start: new Date(y, m, d, 10, 30),
-				allDay: false,
-				className: 'important'
-			},
-			{
-				title: 'Lunch',
-				start: new Date(y, m, d, 12, 0),
-				end: new Date(y, m, d, 14, 0),
-				allDay: false,
-				className: 'important'
-			},
-			{
-				title: 'Birthday Party',
-				start: new Date(y, m, d+1, 19, 0),
-				end: new Date(y, m, d+1, 22, 30),
-				allDay: false,
-			},
-			{
-				title: 'Click for Google',
-				start: new Date(y, m, 28),
-				end: new Date(y, m, 29),
-				url: 'https://ccp.cloudaccess.net/aff.php?aff=5188',
-				className: 'success'
-			},
-			{
-				id: 1,
-				title: 'Test',
-				start: new Date(y, m, d, 19, 0),
-				end: new Date(y, m, d, 22, 30),
-				className: 'success'
-			}
+      <?php
+        $sql= $mySqli_db->prepare("SELECT * FROM calendar_events WHERE calendar_id = ?");
+        $sql->bind_param("i", $_GET["calendar"]);
+        $sql->execute();
+        $result=$sql->get_result();
+
+        for($i=0; $i<$result->num_rows; $i++)
+        {
+          $row=$result->fetch_assoc();
+          echo '{';
+          echo 'id: ' . $row["id"] . ", ";
+          echo 'title: "' . $row["title"] . '", ';
+          echo 'description: "' . $row["description"] . '", ';
+          echo 'color: "' . $row["color"] . '", ';
+          echo 'start: "' . $row["start"] . '", ';
+          echo 'end: "' . $row["end"] . '", ';
+          echo 'allDay: false';
+          if($i<$result->num_rows-1)
+          {
+            echo '},'.PHP_EOL;
+          }
+          else
+          {
+            echo '}';
+          }
+
+        }
+
+      ?>
 		],			
 	});
 	
@@ -213,22 +234,36 @@ $(document).ready(function() {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <input type="text" class="form-control" placeholder="Summary" aria-label="Username" aria-describedby="basic-addon1" name="user">
-        <textarea class="form-control" name="" rows="2" placeholder="Description"></textarea>
-        <input id="add_event_start" type="datetime-local" value="" name="">
-        <input id="add_event_end" type="datetime-local" value="" name="">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      <form action="<?php echo $url; ?>" method="post" role="form">
+        <div class="modal-body">
+          <input type="text" class="form-control" name="add_event_title" placeholder="Summary" aria-describedby="basic-addon1" required>
+          <textarea class="form-control" name="add_event_description" rows="4" placeholder="Description"></textarea>
+          <label for="add_event_color" class="mb-2"><b>No funciona aun</b></label>
+          <select class="form-control mb-2" id="add_event_color" name="gallery_type">
+            <option style="color: white; background-color: DeepSkyBlue;" value="DeepSkyBlue">Blue</option>
+            <option style="color: white; background-color: Cyan;" value="Cyan">Cyan</option>
+            <option style="color: white; background-color: Crimson;" value="Crimson">Red</option>
+            <option style="color: white; background-color: Orange;" value="Orange">Orange</option>
+            <option style="color: white; background-color: Gold;" value="Gold">Yellow</option>
+            <option style="color: white; background-color: HotPink;" value="HotPink">Pink</option>
+            <option style="color: white; background-color: BlueViolet;" value="BlueViolet">Purple</option>
+            <option style="color: white; background-color: LimeGreen;" value="LimeGreen">Green</option>
+            <option style="color: white; background-color: YellowGreen;" value="YellowGreen">Pistachio</option>            
+          </select>
+          <input id="add_event_start" type="datetime-local" value="" name="add_event_start" required>
+          <input id="add_event_end" type="datetime-local" value="" name="add_event_end" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" >Save changes</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
 <!-- Modal AQUI FOR CON TODOS LOS MODALS DE CADA UNO DE LOS EVENTOS -->
-<div class="modal fade" id="event_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="edit_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -237,17 +272,37 @@ $(document).ready(function() {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <input type="text" class="form-control" placeholder="Summary" aria-label="Username" aria-describedby="basic-addon1" name="user">
-        <textarea class="form-control" name="" rows="2" placeholder="Description"></textarea>
-        <input id="add_event_start" type="datetime-local" value="" name="">
-        <input id="add_event_end" type="datetime-local" value="" name="">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      <form action="<?php echo $url; ?>" method="post" role="form">
+        <div class="modal-body">
+            <input type="hidden" id="edit_event_id" name="edit_event_id">
+            <input type="text" class="form-control" id="edit_event_title"  name="edit_event_title" placeholder="Summary" aria-describedby="basic-addon1">
+            <textarea class="form-control" id="edit_event_description" name="edit_event_description" rows="4" placeholder="Description"></textarea>
+            <label for="edit_event_color" class="mb-2"><b>No funciona aun</b></label>
+            <select class="form-control mb-2" id="edit_event_color" name="edit_event_color">
+              <option style="color: white; background-color: DeepSkyBlue;" value="DeepSkyBlue">Blue</option>
+              <option style="color: white; background-color: Cyan;" value="Cyan">Cyan</option>
+              <option style="color: white; background-color: Crimson;" value="Crimson">Red</option>
+              <option style="color: white; background-color: Orange;" value="Orange">Orange</option>
+              <option style="color: white; background-color: Gold;" value="Gold">Yellow</option>
+              <option style="color: white; background-color: HotPink;" value="HotPink">Pink</option>
+              <option style="color: white; background-color: BlueViolet;" value="BlueViolet">Purple</option>
+              <option style="color: white; background-color: LimeGreen;" value="LimeGreen">Green</option>
+              <option style="color: white; background-color: YellowGreen;" value="YellowGreen">Pistachio</option>          
+            </select>
+            <input id="edit_event_start" type="datetime-local" value="" name="edit_event_start">
+            <input id="edit_event_end" type="datetime-local" value="" name="edit_event_end">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+      <form action="<?php echo $url; ?>" method="post" role="form">
+        <div class="modal-footer">
+              <input type="hidden" id="delete_event_id" name="delete_event_id">
+              <button type="submit" class="btn btn-danger">Delete event</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
-<p id="demo">HEHEHEHE</p>

@@ -150,7 +150,7 @@ require_once("mySqli.php");
     email VARCHAR(60) NOT NULL UNIQUE,
     user_name VARCHAR(60) NOT NULL,
     password VARCHAR(60) NOT NULL,
-    rol VARCHAR(60) NOT NULL,
+    rol VARCHAR(60) DEFAULT 'reader',
     valid INT(4) NOT NULL)");
     $sql->execute();
 
@@ -194,7 +194,7 @@ require_once("mySqli.php");
 
     $sql= $mySqlidb->prepare("CREATE TABLE forum_categories (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL)");
+    name VARCHAR(50) NOT NULL UNIQUE)");
     $sql->execute();
 
     $sql= $mySqlidb->prepare("CREATE TABLE forum_categories_relation (
@@ -216,7 +216,8 @@ require_once("mySqli.php");
 
     $sql= $mySqlidb->prepare("CREATE TABLE forum_responses (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-    content VARCHAR(2000) NOT NULL, 
+    content VARCHAR(2000) NOT NULL,
+    date DATETIME DEFAULT CURRENT_TIMESTAMP, 
     forum_post_id INT(6) UNSIGNED NOT NULL, 
     user VARCHAR(60) NOT NULL,
     CONSTRAINT fk_user_forum_responses FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -237,6 +238,22 @@ require_once("mySqli.php");
       }
     }
 
+    $sql= $mySqlidb->prepare("CREATE TABLE calendars (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50) NOT NULL)");
+    $sql->execute();
+
+    $sql= $mySqlidb->prepare("CREATE TABLE calendar_events (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    calendar_id INT(6) UNSIGNED NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(500) DEFAULT '',
+    color VARCHAR(15) NOT NULL,
+    start DATETIME NOT NULL,
+    end DATETIME DEFAULT NOT NULL,
+    CONSTRAINT fk_event_calendar FOREIGN KEY (calendar_id) REFERENCES calendars(id) ON DELETE CASCADE ON UPDATE CASCADE)");
+    $sql->execute();
+
     $sql= $mySqlidb->prepare("CREATE TABLE galleries (
       id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(50) NOT NULL)");
@@ -248,6 +265,11 @@ require_once("mySqli.php");
       gallery_id INT(6) UNSIGNED NOT NULL, 
       CONSTRAINT fk_id_gallery FOREIGN KEY (gallery_id) REFERENCES galleries(id))");
       $sql->execute();
+
+      $sql= $mySqlidb->prepare("CREATE TABLE blank_pages (
+        id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        content VARCHAR(10000) DEFAULT '')");
+        $sql->execute();
   }
 /******************************************************************************/
 ?>
@@ -288,8 +310,8 @@ require_once("mySqli.php");
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"], 0700);
     // Import all scripts: PHP, CSS, JS,... for the structure of the web page
     copy("StructureScripts/index.php", "WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."index.php"); 
-    mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images", 0700);
-    copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
+    mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery", 0700, true);
+    //copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
 
     $web_data = new WebData($_POST["web_name"], $_SESSION["user"], strtolower($_POST["web_name"]), $_POST["web_privacity"]);
     $web_style = new WebStyle($_POST["style_bck_color"], $_POST["style_primary_color"], $_POST["style_secundary_color"]);
@@ -665,7 +687,8 @@ require_once("mySqli.php");
                       <div class="col-lg-12">
                         <div id="inputFormRow">
                             <div class="input-group mb-3">
-                            <button name="$blog_id[]" class="btn btn-info disabled">0</button>                                <input type="text" name="blog_title[]" class="form-control m-input" placeholder="blog title" autocomplete="off">
+                            <button name="$blog_id[]" class="btn btn-info disabled">0</button>                                
+                            <input type="text" name="blog_title[]" class="form-control m-input" placeholder="blog title" autocomplete="off">
                                 <div class="input-group-append">
                                     <button id="removeRow" type="button" class="btn btn-danger">Remove</button>
                                 </div>

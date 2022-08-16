@@ -26,13 +26,13 @@
                 </a>
             </li>
             <li>
-                <a href="index.php?page=calendar">
+                <a href="index.php?page=calendar&calendar=1">
                     <i class="fas fa-user"></i>
                     Calendar
                 </a>
             </li>
             <li>
-                <a href="index.php?page=editor">
+                <a href="index.php?page=blank&blank=1">
                     <i class="fas fa-user"></i>
                     Editor
                 </a>
@@ -71,15 +71,31 @@
 
     <!-- Page Content  -->
     <div id="content">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="row d-flex w-100">
-                <div class="col m-2">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+            <div class="row justify-content-md-center">
+                <div class="col-md-auto">
                     <button type="button" id="sidebarCollapse" class="btn btn-info">
                     <i class="bi bi-list-ul"></i>
                     <span></span>
                     </button>
-                </div>                    
-            <div class="col d-flex">
+                </div> 
+                <?php
+                  if(isset($_GET["page"]))
+                  {
+                    if($_GET["page"] == "forum")
+                    {
+                        echo '<div class="col-md-auto">
+                        <div class="row">
+                            <form class="form-inline my-2 my-lg-0" method="post" action="index.php?page=forum">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </div>
+                      </div> ';
+                    }
+                  }   
+                ?>            
+              </div>
             <?php
                 if(!isset($_SESSION['user']))
                 {
@@ -101,6 +117,5 @@
                     </div>';
                 }
             ?>
-            </div>
-            </div>
+
         </nav>

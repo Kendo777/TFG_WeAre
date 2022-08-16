@@ -94,6 +94,8 @@
 				</div></div>
 			</div>
 		</main>
+		<button onclick="save_content()">button</button>
+		<div id="test">xd</div>
 		<footer>
 			<p><a href="https://ckeditor.com/ckeditor-5/" target="_blank" rel="noopener">CKEditor 5</a>
 				– Rich text editor of tomorrow, available today
@@ -104,7 +106,8 @@
 			</p>
 		</footer>
 		<script src="../build/ckeditor.js"></script>
-		<script>InlineEditor
+		<script>
+		InlineEditor
 				.create( document.querySelector( '.editor' ), {
 					
 					licenseKey: '',
@@ -114,6 +117,7 @@
 				} )
 				.then( editor => {
 					window.editor = editor;
+					window.editor.enableReadOnlyMode( 'editor' );
 			
 					
 					
@@ -125,6 +129,13 @@
 					console.warn( 'Build id: ovla453mle2q-1qxbxw3xwq5' );
 					console.error( error );
 				} );
+				
+				function elemEventHandler(){
+					console.log("delete");
+				}
+				function save_content(){
+					document.getElementById("test").innerHTML =window.editor.getData();
+				}
 		</script>
 	</body>
 </html>

@@ -37,32 +37,37 @@ function create_grid_gallery($columns)
   $grid_gallery_code.= '<div class="container-fluid" data-aos="fade-up" data-aos-delay="200">
     <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
       <ul class="portfolio-flters">
-        <li data-filter="*" class="filter-active">All</li>
-        <li data-filter=".filter-image">Images</li>
-        <li data-filter=".filter-folder">Folders</li>
-      </ul><!-- End Portfolio Filters -->
+        <li data-filter="*" class="filter-active">All</li>';
+  foreach ($dir as $value) {
+    if($value!="." && $value!=".." && $value!="No-category")
+    {
+      if(is_dir("images/gallery" . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $value))
+      {
+        $grid_gallery_code.= '<li data-filter=".filter-' . $value . '">' . ucfirst($value) . '</li>';
+      }
+    }
+  }
+
+  $grid_gallery_code.= '</ul><!-- End Portfolio Filters -->
 
       <div class="row g-0 portfolio-container">';
 
-  foreach ($dir as $value) {
-    if($value!="." && $value!=".." && $value!="comentario.txt")
+  foreach ($dir as $tag) {
+    if($tag!="." && $tag!="..")
     {
-      if(!empty($folder))
+      if(is_dir("images/gallery" . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $tag))
       {
-        $file = $folder . DIRECTORY_SEPARATOR . $value;
-      }
-      else
-      {
-        $file = $value;
-      }
-
-      if(!is_dir("images/gallery" . DIRECTORY_SEPARATOR . $file))
-      {
-        $grid_gallery_code.= '
-        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image" style="pointer-events: none !important; padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">
-          <img src="images/gallery' . DIRECTORY_SEPARATOR . $file . '" class="img-fluid" alt="">
-        </div><!-- End Portfolio Item -->
-        ';
+        $album = scandir("images/gallery" . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $tag);
+        foreach ($album as $image) {
+          if($image!="." && $image!="..")
+          {
+            $grid_gallery_code.= '
+        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-' . $tag . '" style="pointer-events: none !important; padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">
+          <img src="images/gallery' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $tag . DIRECTORY_SEPARATOR . $image . '" class="img-fluid" alt="">
+        </div><!-- End Portfolio Item -->';
+          }
+        }
+        
       }
     }
   }

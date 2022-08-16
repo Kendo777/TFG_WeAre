@@ -55,7 +55,7 @@ var defaults = {
 		day: 'dddd M/d'
 	},
 	timeFormat: { // for event elements
-		'': 'h(:mm)t' // default
+		'': 'h(:mm)TT' // default
 	},
 	
 	// locale
@@ -3000,9 +3000,11 @@ function AgendaView(element, calendar, viewName) {
 			minutes = d.getMinutes();
 			s +=
 				"<tr class='fc-slot" + i + ' ' + (!minutes ? '' : 'fc-minor') + "'>" +
-				"<th class='fc-agenda-axis " + headerClass + "'>" +
-				((!slotNormal || !minutes) ? formatDate(d, opt('axisFormat')) : ' ') +
-				"</th>" +
+				"<th class='fc-agenda-axis " + headerClass + "'>";
+        
+      
+			s +=	((!slotNormal || !minutes) ? (d.getHours() < 10) ? "0" + d.getHours() + ":00" : d.getHours() + ":00" : ' ');
+			s += "</th>" +
 				"<td class='" + contentClass + "'>" +
 				"<div style='position:relative'> </div>" +
 				"</td>" +
@@ -3984,14 +3986,53 @@ function AgendaEventRenderer() {
 				"'" +
 				"position:absolute;" +
 				"top:" + seg.top + "px;" +
-				"left:" + seg.left + "px;" +
+				"left:"; 
+    if(seg.left < 50)
+    {
+      html += 50;
+    }
+    else
+    {
+      html += seg.left;
+    }
+    html += "px;" +
 				skinCss +
 				"'" +
 			">" +
-			"<div class='fc-event-inner' data-bs-toggle='modal' data-bs-target='#edit_event_modal'> " +
-			"<div class='fc-event-time'>" +
-			htmlEscape(formatDates(event.start, event.end, opt('timeFormat'))) +
-			"</div>" +
+			"<div class='fc-event-inner' data-bs-toggle='modal' data-bs-target='#edit_event_modal' "+
+			"onclick='editEvent(" + event.id + ", \"" + event.title + "\", " + "\"" + event.description + "\", "+ "\"" + event.color + "\", " + JSON.stringify(event.start) + ", " + JSON.stringify(event.end) + ")'" +
+			"style=\"background: " + event.color + ";\">" +
+			"<div class='fc-event-time'>";
+        if(event.start.getHours() < 10)
+        {
+          html += "0";
+        }
+        html += event.start.getHours() + ":"; //formatDates(event.start, event.end, opt('timeFormat'))
+        if(event.start.getMinutes() < 10)
+        {
+          html += "0";
+        }
+        html += event.start.getMinutes();
+        html += " - ";
+        if(event.end)
+        {
+          if(event.end.getHours() < 10)
+          {
+            html += "0";
+          }
+          html += event.end.getHours() + ":"; //formatDates(event.start, event.end, opt('timeFormat'))
+          if(event.end.getMinutes() < 10)
+          {
+            html += "0";
+          }
+          html += event.end.getMinutes();
+        }
+        else
+        {
+          html += "23:59";
+        }
+
+		html += "</div>" +
 			"<div class='fc-event-title'>" +
 			htmlEscape(event.title || '') +
 			"</div>" +
@@ -5350,14 +5391,28 @@ function DayEventRenderer() {
 				skinCss +
 				"'" +
 			">" +
-			"<div class='fc-event-inner' data-bs-toggle='modal' data-bs-target='#edit_event_modal' onclick='myFunction(" + event.id + ")'>";
+			"<div class='fc-event-inner' data-bs-toggle='modal' data-bs-target='#edit_event_modal' "+
+			"onclick='editEvent(" + event.id + ", \"" + event.title + "\", " + "\"" + event.description + "\", "+ "\"" + event.color + "\", " + JSON.stringify(event.start) + ", " + JSON.stringify(event.end) + ")'" +
+			"style=\"background: " + event.color + ";\">";
 		if (!event.allDay && segment.isStart) {
-			html +=
+			/*html +=
 				"<span class='fc-event-time'>" +
 				htmlEscape(
 					formatDates(event.start, event.end, opt('timeFormat'))
 				) +
-				"</span>";
+				"</span>";*/
+        html +="<span class='fc-event-time'>";
+        if(event.start.getHours() < 10)
+        {
+          html += "0";
+        }
+        html += event.start.getHours() + ":"; //formatDates(event.start, event.end, opt('timeFormat'))
+        if(event.start.getMinutes() < 10)
+        {
+          html += "0";
+        }
+        html += event.start.getMinutes();
+        html +="</span>";
 		}
 		html +=
 			"<span class='fc-event-title'>" +
@@ -6108,7 +6163,76 @@ function HorizontalPositionCache(getElement) {
 ;;
 
 })(jQuery);
+function datetime_local_format(date)
+{
+	var standar_date = date.getFullYear() + "-";
+	if(date.getMonth()<10)
+	{
+		standar_date += "0";
+	}
+	standar_date += (date.getMonth() + 1) + "-";
+	if(date.getDate()<10)
+	{
+		standar_date += "0";
+	}
+	standar_date += date.getDate() + "T";
+	if(date.getHours()<10)
+	{
+		standar_date += "0";
+	}
+	standar_date += date.getHours() + ":";
+	if(date.getMinutes()<10)
+	{
+		standar_date += "0";
+	}
+	standar_date += date.getMinutes();
+	return standar_date;
 
-function myFunction(event) {
-	$('#event_modal_' + event).modal('show');
+}
+
+function editEvent(id, title, description, color, start, end) {
+
+	$('#edit_event_modal').modal('show');
+	document.getElementById("edit_event_id").value = id;
+	document.getElementById("delete_event_id").value = id;
+	document.getElementById("edit_event_title").value = title;
+	document.getElementById("edit_event_description").value = description;
+	document.getElementById("edit_event_color").value = color;
+
+	var date_format = start.substring(0,11);
+	var hours = (parseInt(start.substring(11,16)) + 2);
+  if(hours>=24)
+  {
+    document.getElementById("edit_event_start").value = date_format + "00:00";
+  }
+  else
+  {
+    if(hours < 10)
+    {
+      date_format += "0";
+    }
+    document.getElementById("edit_event_start").value = date_format + hours + start.substring(13,16);
+  }
+
+	if(end)
+	{
+		date_format = end.substring(0,11);
+		hours = parseInt(end.substring(11,16)) + 2;
+    if(hours>=24)
+    {
+      document.getElementById("edit_event_end").value = date_format + "23:59";
+    }
+    else
+    {
+      if(hours < 10)
+      {
+        date_format += "0";
+      }
+      document.getElementById("edit_event_end").value = date_format + hours + end.substring(13,16);
+    }
+	}
+	else
+	{
+		document.getElementById("edit_event_end").value = date_format + "23:59";
+	}
 }

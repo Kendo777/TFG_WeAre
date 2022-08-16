@@ -35,20 +35,6 @@ function create_zoom_gallery($columns)
   $zoom_gallery_code.= '</div>
     </div>';
 
-  if(isset($_GET["folder"]))
-  {
-    if(stripos($folder, DIRECTORY_SEPARATOR))
-    {
-      $zoom_gallery_code.= '<a href="index.php?page=gallery&folder=' . substr($folder, 0, strrpos($folder,DIRECTORY_SEPARATOR)) . '">
-      <button type="submit" class="btn btn-primary">Back</button></a>';
-    }
-    else
-    {
-      $zoom_gallery_code.= '<a href="index.php?page=gallery">
-      <button type="submit" class="btn btn-primary">Back</button></a>';
-    }
-  }
-
   $dir = scandir("images/gallery" . DIRECTORY_SEPARATOR . $folder);
 
   $zoom_gallery_code.= '
@@ -57,37 +43,41 @@ function create_zoom_gallery($columns)
     <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
 
       <ul class="portfolio-flters">
-        <li data-filter="*" class="filter-active">All</li>
-        <li data-filter=".filter-image">Images</li>
-        <li data-filter=".filter-folder">Folders</li>
-      </ul><!-- End Portfolio Filters -->
+        <li data-filter="*" class="filter-active">All</li>';
+    foreach ($dir as $value) {
+      if($value!="." && $value!=".." && $value!="No-category")
+      {
+        if(is_dir("images/gallery" . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $value))
+        {
+          $zoom_gallery_code.= '<li data-filter=".filter-' . $value . '">' . ucfirst($value) . '</li>';
+        }
+      }
+    }
+  $zoom_gallery_code.= '</ul><!-- End Portfolio Filters -->
 
       <div class="row g-0 portfolio-container">';
-
-  foreach ($dir as $value) {
-    if($value!="." && $value!=".." && $value!="comentario.txt")
+  foreach ($dir as $tag) {
+    if($tag!="." && $tag!="..")
     {
-      if(!empty($folder))
+      if(is_dir("images/gallery" . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $tag))
       {
-        $file = $folder . DIRECTORY_SEPARATOR . $value;
-      }
-      else
-      {
-        $file = $value;
-      }
-
-      if(!is_dir($path . DIRECTORY_SEPARATOR . "images/gallery" . DIRECTORY_SEPARATOR . $file))
-      {
-        $zoom_gallery_code.= '
-        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-image" style="padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">
-          <img src="images/gallery' . DIRECTORY_SEPARATOR . $file . '" class="img-fluid glightbox preview-link" alt="">
-          <div class="portfolio-info" style="top: 0 !important;">
-            <a href="images/gallery' . DIRECTORY_SEPARATOR . $file . '" data-gallery="portfolio-gallery" class="glightbox preview-link" style="left: 45% !important;">
-              <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-            </a>
-          </div>
-        </div><!-- End Portfolio Item -->
-        ';
+        $album = scandir("images/gallery" . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $tag);
+        foreach ($album as $image) {
+          if($image!="." && $image!="..")
+          {
+            $zoom_gallery_code.= '
+            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-' . $tag .'" style="padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">
+              <img src="images/gallery' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $tag . DIRECTORY_SEPARATOR . $image . '" class="img-fluid glightbox preview-link" alt="">
+              <div class="portfolio-info" style="top: 0 !important;">
+                <a href="images/gallery' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $tag . DIRECTORY_SEPARATOR . $image . '" data-gallery="portfolio-gallery" class="glightbox preview-link" style="left: 45% !important;">
+                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
+                </a>
+              </div>
+            </div><!-- End Portfolio Item -->
+            ';
+          }
+        }
+        
       }
     }
   }
