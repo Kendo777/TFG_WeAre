@@ -13,8 +13,8 @@
                     Home
                 </a>
             </li>
-            <li>
-                <a href="index.php?page=gallery">
+            <li><!-- CAMBIAR DINAMICO-->
+                <a href="index.php?page=gallery&album=Test">
                     <i class="fas fa-cogs"></i>
                     Gallery
                 </a>
@@ -87,6 +87,17 @@
                         echo '<div class="col-md-auto">
                         <div class="row">
                             <form class="form-inline my-2 my-lg-0" method="post" action="index.php?page=forum">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </div>
+                      </div> ';
+                    }
+                    if($_GET["page"] == "blog")
+                    {
+                        echo '<div class="col-md-auto">
+                        <div class="row">
+                            <form class="form-inline my-2 my-lg-0" method="post" action="index.php?page=blog">
                                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
                                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                             </form>

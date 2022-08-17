@@ -256,14 +256,8 @@ require_once("mySqli.php");
 
     $sql= $mySqlidb->prepare("CREATE TABLE galleries (
       id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(50) NOT NULL)");
-      $sql->execute();
-  
-      $sql= $mySqlidb->prepare("CREATE TABLE gallery_tags (
-      id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-      name VARCHAR(50) NOT NULL, 
-      gallery_id INT(6) UNSIGNED NOT NULL, 
-      CONSTRAINT fk_id_gallery FOREIGN KEY (gallery_id) REFERENCES galleries(id))");
+      name VARCHAR(50) NOT NULL,
+      description VARCHAR(500) DEFAULT '')");
       $sql->execute();
 
       $sql= $mySqlidb->prepare("CREATE TABLE blank_pages (

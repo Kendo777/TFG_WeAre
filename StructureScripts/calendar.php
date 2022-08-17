@@ -238,7 +238,7 @@ $(document).ready(function() {
         <div class="modal-body">
           <input type="text" class="form-control" name="add_event_title" placeholder="Summary" aria-describedby="basic-addon1" required>
           <textarea class="form-control" name="add_event_description" rows="4" placeholder="Description"></textarea>
-          <label for="add_event_color" class="mb-2"><b>No funciona aun</b></label>
+          <label for="add_event_color" class="mb-2">Event Color</label>
           <select class="form-control mb-2" id="add_event_color" name="gallery_type">
             <option style="color: white; background-color: DeepSkyBlue;" value="DeepSkyBlue">Blue</option>
             <option style="color: white; background-color: Cyan;" value="Cyan">Cyan</option>
@@ -277,7 +277,7 @@ $(document).ready(function() {
             <input type="hidden" id="edit_event_id" name="edit_event_id">
             <input type="text" class="form-control" id="edit_event_title"  name="edit_event_title" placeholder="Summary" aria-describedby="basic-addon1">
             <textarea class="form-control" id="edit_event_description" name="edit_event_description" rows="4" placeholder="Description"></textarea>
-            <label for="edit_event_color" class="mb-2"><b>No funciona aun</b></label>
+            <label for="edit_event_color" class="mb-2">Event Color</label>
             <select class="form-control mb-2" id="edit_event_color" name="edit_event_color">
               <option style="color: white; background-color: DeepSkyBlue;" value="DeepSkyBlue">Blue</option>
               <option style="color: white; background-color: Cyan;" value="Cyan">Cyan</option>

@@ -60,7 +60,6 @@
     $post_content = str_replace("<?php", "", $post_content);
     $post_content = str_replace("?>", "", $post_content);
     $post_content = mysql_fix_string($mySqli_db, $post_content);
-    $post_content = mysql_fix_string($mySqli_db,$post_content);
     //*************************USER*****************************
     $user = $_SESSION["user"];
     $sql= $mySqli_db->prepare("INSERT INTO `forums`(`title`, `user`) VALUES (?, ?)");
@@ -142,7 +141,7 @@
     $sql->execute();
     $result=$sql->get_result();
     $first = true;
-    echo '<a href="index.php?page=forum"><button type="submit" class="btn btn-primary">Back</button></a>';
+    //echo '<a href="index.php?page=forum"><button type="submit" class="btn btn-primary">Back</button></a>';
 
     for($i=0; $i<$result->num_rows; $i++)
     {
@@ -183,24 +182,24 @@
         if($first)
         {
           echo '<form action="index.php?page=forum" method="post" role="form">
-          <input type="hidden" name="delete_forum" value=' . $_GET["forum"] . '>
-          <button type="submit" class="btn btn-danger btn-sm position-absolute end-0"><i class="bi bi-trash-fill"></i></button>
+          <input type="hidden" name="delete_forum" value="' . $_GET["forum"] . '">
+          <button type="submit" class="btn btn-danger btn-sm position-absolute end-0" onclick="return confirm(\'You are going to delete the current forum\nAre you sure?\')"><i class="bi bi-trash-fill"></i></button>
           </form>';
         }
         else
         {
           echo '<form action="index.php?page=forum&forum=' . $_GET["forum"] . '" method="post" role="form">
-          <input type="hidden" name="delete_id" value=' . $row["id"] . '>
-          <button type="submit" class="btn btn-danger btn-sm position-absolute end-0"><i class="bi bi-trash-fill"></i></button>
+          <input type="hidden" name="delete_id" value="' . $row["id"] . '">
+          <button type="submit" class="btn btn-danger btn-sm position-absolute end-0" onclick="return confirm(\'You are going to delete the current post\nAre you sure?\')"><i class="bi bi-trash-fill"></i></button>
           </form>';
         }
       }
       if($first)
       {
-        echo '<h1 class="mt-1">' . $forum["title"] . '</h1>';
+        echo '<h1 class="mt-1">' . str_replace("\'", "'",str_replace("\\\"", "\"", $forum["title"])) . '</h1>';
       }
       echo'<div class="mt-3 font-size-sm">
-                <p>' . $row["content"] . '</p>
+                <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"])) . '</p>
               </div>';
       if($first)
       {
@@ -259,11 +258,11 @@
           $first_response = false;
         }
         $response_date = new DateTime($row_responses['date']);
-        echo '<div><small>' . $row_responses["content"] . ' - <span class="bg-info text-white">'. $row_responses["user"] .'</span> <span class="text-secondary">' . date_format($response_date, 'g:ia \o\n l jS F Y') . '</span></small>';
+        echo '<div><small>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row_responses["content"])) . ' - <span class="bg-info text-white">'. $row_responses["user"] .'</span> <span class="text-secondary">' . date_format($response_date, 'g:ia \o\n l jS F Y') . '</span></small>';
         if($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin")
         {
           echo '<form action="index.php?page=forum&forum=' . $_GET["forum"] . '" method="post" role="form">
-          <input type="hidden" name="delete_response_id" value=' . $row["id"] . '>
+          <input type="hidden" name="delete_response_id" value="' . $row["id"] . '">
           <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></button>
           </form>';
         }
@@ -293,7 +292,7 @@
     else if(isset($_GET["search"]))
     {
       $key_word = mysql_fix_string($mySqli_db, $_GET["search"]);
-      $sql= $mySqli_db->prepare("SELECT * FROM forums f WHERE title LIKE '%" . $key_word . "%'");
+      $sql= $mySqli_db->prepare("SELECT * FROM forums WHERE title LIKE '%" . $key_word . "%'");
     }
     else
     {
@@ -340,7 +339,7 @@
         <div class="row align-items-center">
         <div class="col-md-8 mb-3 mb-sm-0">
           <h5> 
-            <a href="index.php?page=forum&forum=' . $row["id"] . '" class="text-primary">' . $row["title"] . '</a>
+            <a href="index.php?page=forum&forum=' . $row["id"] . '" class="text-primary">' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["title"])) . '</a>
           </h5>
           <p class="text-sm"><span class="op-6">Posted</span>';
       echo ' ' . strtolower(time_ago($date)) . ' ';
@@ -398,7 +397,7 @@
                   <div id="categorienewRow"></div>
                   <button onclick="addForumCategorieRow()" type="button" class="btn btn-info">Add Row</button>
                 </div>
-                <div class="text-center"><button class="btn btn-primary" type="submit">Send Response</button></div>
+                <div class="text-center"><button class="btn btn-primary" type="submit">Send</button></div>
               </form>
             </div>
             </div>

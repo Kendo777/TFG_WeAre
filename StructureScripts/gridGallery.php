@@ -1,35 +1,19 @@
 <?php
 
-function create_grid_gallery($columns)
+function create_grid_gallery($columns, $album)
 {
   $grid_gallery_code = "";
 
   $folder = "";
-  if(isset($_GET["folder"]))
-  {
-    $folder = $_GET["folder"];
-  }
+  $folder = $album["name"];
+
   $grid_gallery_code.= '<section id="portfolio" class="portfolio" data-aos="fade-up">
     <div class="container">
       <div class="section-header">';
-  if(isset($_GET["folder"]))
-  {
-    if(strrpos($folder, DIRECTORY_SEPARATOR))
-    {
-      $grid_gallery_code.= '<h2>' . substr($folder, strrpos($folder, DIRECTORY_SEPARATOR) + 1) . '</h2>';
-    }
-    else
-    {
-      $grid_gallery_code.= '<h2>' . $folder . '</h2>';
-    }
-    $grid_gallery_code.= '<p>Description</p>';
-  }
-  else
-  {
-    $grid_gallery_code.= '<h2>Gallery</h2>';
-    $grid_gallery_code.= '<p>Description</p>';
-  }
-  $grid_gallery_code.= '</div>
+  
+  $grid_gallery_code.= '<h2>Gallery</h2>
+  <p>' . $album["description"] . '</p>
+  </div>
     </div>';
 
   $dir = scandir("images/gallery" . DIRECTORY_SEPARATOR . $folder);
