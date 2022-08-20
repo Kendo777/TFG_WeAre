@@ -177,7 +177,7 @@
 
 
       echo '</small>';
-      if($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin")
+      if(isset($_SESSION["user"])  && ($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin"))
       {
         if($first)
         {
@@ -213,7 +213,7 @@
           echo '<a class="text-black mr-2 text-info" href="index.php?page=forum&filter=' . $row_categories["id"] . '">#' . $row_categories["name"] . '</a>';
         }
         echo '<br><br>';
-        if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
+        if(isset($_SESSION["user"])  && (isset($_SESSION["user"]) && $session_user["rol"] != "reader"))
         {
           echo '<a href="#" class="text-muted small" data-bs-toggle="collapse" data-bs-target="#post">Reply</a>
           <div id="post" class="accordion-collapse collapse">
@@ -259,7 +259,7 @@
         }
         $response_date = new DateTime($row_responses['date']);
         echo '<div><small>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row_responses["content"])) . ' - <span class="bg-info text-white">'. $row_responses["user"] .'</span> <span class="text-secondary">' . date_format($response_date, 'g:ia \o\n l jS F Y') . '</span></small>';
-        if($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin")
+        if(isset($_SESSION["user"])  && ($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin"))
         {
           echo '<form action="index.php?page=forum&forum=' . $_GET["forum"] . '" method="post" role="form">
           <input type="hidden" name="delete_response_id" value="' . $row["id"] . '">

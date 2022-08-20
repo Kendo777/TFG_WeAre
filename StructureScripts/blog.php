@@ -146,7 +146,7 @@ if(isset($_GET["blog"]))
     }
     else
     {
-      if($_SESSION["user"] == $blog["user"] || $session_user["rol"] == "admin")
+      if(isset($_SESSION["user"])  && ($_SESSION["user"] == $blog["user"] || $session_user["rol"] == "admin"))
       {
         echo '<div class="position-absolute end-0 d-flex">
           <form action="index.php?page=blog&blog=' . $_GET["blog"] . '" method="post" role="form">
@@ -164,24 +164,27 @@ if(isset($_GET["blog"]))
     }
     echo '</div>';
     //echo '<a href="index.php?page=blog"><button type="submit" class="btn btn-primary">Back</button></a>';
-    echo '
-    <div class="text-right">
-    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#post_create">Create Post</button></div>
-        <div id="post_create" class="accordion-collapse collapse">
-          <form action="index.php?page=blog&blog=' . $_GET["blog"] . '" method="post" role="form">
-            <div class="row">
-            <div class="form-group mt-3">
-              <input type="text" class="form-control" name="post_title" placeholder="Post title" required>
-              <hr>
-              <textarea class="form-control" name="post_content" rows="5" placeholder="Write the post" required></textarea>
-            </div>
-            <div class="text-center"><button class="btn btn-primary" type="submit">Send</button></div>
-          </form>
-        </div>
-        </div>
-        <hr>
-        </div>
-        </div>';
+    if(isset($_SESSION["user"])  && ($_SESSION["user"] == $blog["user"] || $session_user["rol"] == "admin"))
+    {
+      echo '
+      <div class="text-right">
+      <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#post_create">Create Post</button></div>
+          <div id="post_create" class="accordion-collapse collapse">
+            <form action="index.php?page=blog&blog=' . $_GET["blog"] . '" method="post" role="form">
+              <div class="row">
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="post_title" placeholder="Post title" required>
+                <hr>
+                <textarea class="form-control" name="post_content" rows="5" placeholder="Write the post" required></textarea>
+              </div>
+              <div class="text-center"><button class="btn btn-primary" type="submit">Send</button></div>
+            </form>
+          </div>
+          </div>
+          <hr>
+          </div>
+          </div>';
+    }
     for($i=0; $i<$result->num_rows; $i++)
     {
       $row=$result->fetch_assoc();
@@ -229,7 +232,7 @@ if(isset($_GET["blog"]))
         <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
         <div class="card mb-2">
           <div class="card-body">';
-          if($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin")
+          if(isset($_SESSION["user"])  && ($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin"))
           {
             echo '<div class="position-absolute end-0 d-flex">
               <form action="index.php?page=blog&blog=' . $_GET["blog"] . '" method="post" role="form">

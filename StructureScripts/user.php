@@ -1,7 +1,52 @@
 <?php
+
+function cropAlign($image_path, $cropWidth, $cropHeight, $horizontalAlign = 'center', $verticalAlign = 'middle') {
+  $width = getimagesize($image_path)[0];
+  $height = getimagesize($image_path)[1];
+  $horizontalAlignPixels = calculatePixelsForAlign($width, $cropWidth, $horizontalAlign);
+  $verticalAlignPixels = calculatePixelsForAlign($height, $cropHeight, $verticalAlign);
+  switch(substr(mime_content_type($image_path), strpos(mime_content_type($image_path), "/") + 1))
+  {
+    case "jpeg":
+      $image = imagecreatefromjpeg($image_path);
+      break;
+    case "png":
+      $image = imagecreatefrompng($image_path);
+      break;
+  }
+  return imageCrop($image, [
+      'x' => $horizontalAlignPixels[0],
+      'y' => $verticalAlignPixels[0],
+      'width' => $horizontalAlignPixels[1],
+      'height' => $verticalAlignPixels[1]
+  ]);
+}
+
+function calculatePixelsForAlign($imageSize, $cropSize, $align) {
+  switch ($align) {
+      case 'left':
+      case 'top':
+          return [0, min($cropSize, $imageSize)];
+      case 'right':
+      case 'bottom':
+          return [max(0, $imageSize - $cropSize), min($cropSize, $imageSize)];
+      case 'center':
+      case 'middle':
+          return [
+              max(0, floor(($imageSize / 2) - ($cropSize / 2))),
+              min($cropSize, $imageSize),
+          ];
+      default: return [0, $imageSize];
+  }
+}
+
 if(!isset($_SESSION['user']))
 {
   header('location:index.php?page=login');
+}
+else if($_SESSION['user'] == "Guest")
+{
+  header('location:index.php');
 }
 
 if(isset($_POST['name']) && !empty($_POST['name']))
@@ -108,9 +153,30 @@ if(!empty($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error']==0)
   $path = 'images'.DIRECTORY_SEPARATOR.'profile'.DIRECTORY_SEPARATOR;
   $row=$result->fetch_assoc();
   
-  if(file_exists("images".DIRECTORY_SEPARATOR."profile".DIRECTORY_SEPARATOR.$_SESSION['user'].".png")) unlink($path.$_SESSION['user'].".png");
-
+  if(file_exists("images".DIRECTORY_SEPARATOR."profile".DIRECTORY_SEPARATOR.$_SESSION['user'].".png"))
+  {
+    unlink($path.$_SESSION['user'].".png");
+  }
   move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $path.$_SESSION['user'].".png");
+  if(getimagesize($path.$_SESSION['user'].".png")[0] != getimagesize($path.$_SESSION['user'].".png")[1])
+  {
+    imagepng(cropAlign($path.$_SESSION['user'].".png", 600, 600), $path.$_SESSION['user'].".png");
+  }
+}
+if(isset($_POST["user_rol"]))
+{
+  $user = $_POST["user_rol_id"];
+  if($_POST["user_rol"] == "reader")
+  {
+    $rol = "writer";
+  }
+  else
+  {
+    $rol = "reader";
+  }
+  $sql= $mySqli_db->prepare("UPDATE users SET rol=? WHERE user=?");
+  $sql->bind_param("ss", $rol, $user);
+  $sql->execute();
 }
 if(isset($_POST['deleteImage']))
 {
@@ -289,4 +355,56 @@ if(isset($_GET['edit']))
     </div>
     </div><br>';
 }
+if(isset($_GET["admin"]))
+{
+  if($session_user["rol"] != "admin")
+  {
+    header('location:index.php?page=user');
+  }
+  $sql= $mySqli_db->prepare("SELECT * FROM users WHERE rol!='admin'");
+  $sql->execute();
+  $result=$sql->get_result();
+  echo '<table class="table table-hover">
+      <thead>
+        <tr>
+          <th>User</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Writer</th>
+            <th>Profile picture</th>
+        </tr>
+      </thead>
+      <tbody>';
+  for($i=0; $i<$result->num_rows; $i++)
+  {
+    $row=$result->fetch_assoc();
+    echo '<tr>';
+          echo '<td>'.$row['user'].'</td>';
+          echo '<td>'.$row['user_name'].'</td>';
+          echo '<td>'.$row['email'].'</td>';
+          echo '<td><form method="post" action="index.php?page=user&admin">
+          <h3 class="form-switch">
+          <input type="text" hidden class="form-control" name="user_rol_id" value="' . $row["user"] . '">
+          <input type="text" hidden class="form-control" name="user_rol" value="' . $row["rol"] . '">
+          <input type="checkbox" class="form-check-input" onChange="this.form.submit()" ';
+          if($row["rol"] == "writer")
+          {
+            echo 'checked';
+          }
+          echo '></h3>
+          </form></td>';
+          if(file_exists("images/profile/".$row['user'].".png"))
+          {
+            echo '<td><img src="images/profile/'.$row['user'].'.png" class="profile_picture rounded-circle"></td>';
+          }
+          else
+          {
+            echo '<td><img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="profile_picture rounded-circle"></td>';
+          }
+          echo '</tr>';
+  }
+  echo '</tbody>
+  </table>';
+}
 ?>
+

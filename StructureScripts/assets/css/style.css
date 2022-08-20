@@ -10,6 +10,9 @@
 .profile_picture{
   max-width: 200px;
 }
+.rounded-circle{
+  max-height: 200px;
+}
 
 #editor{
   background-color: white;

@@ -97,7 +97,7 @@
 
     require_once("../../mySqli.php");
     session_start();
-    $mySqli_db = mysql_client_db(strtolower(basename(__DIR__)));
+    $mySqli_db = mysql_client_db($json_data["web_data"]["web_database"]);
     $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=?");
     $sql->bind_param("s", $_SESSION["user"]);
     $sql->execute();
@@ -105,9 +105,9 @@
     $session_user=$result->fetch_assoc();
     $errorMsg='';
     ob_start();
-    if(!isset($_SESSION["path"]))
+    if(isset($_SESSION["user"]) && $session_user["rol"] == "admin" && isset($_GET["admin"]) && isset($_GET["web"]))
     {
-        $_SESSION["path"] = __DIR__;
+      header('location:..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'index.php?page=create&edit='. $json_data["web_data"]["web_name"]);
     }
     $page="home";
     include_once("../../StructureScripts/sideBar.php");
@@ -125,7 +125,18 @@
     }
     if(file_exists("../../StructureScripts/".$page.".php"))
     {
+      if(isset($json_data[$page]) && $json_data[$page]["enable"])
+      {
         include_once("../../StructureScripts/".$page.".php");
+      }
+      else if(!isset($json_data[$page]))
+      {
+        include_once("../../StructureScripts/".$page.".php");
+      }
+      else
+      {
+        header('location:index.php');
+      }
     }
     //include_once("../../StructureScripts/footer.php");
     ob_end_flush();

@@ -4,14 +4,13 @@ function create_grid_gallery($columns, $album)
 {
   $grid_gallery_code = "";
 
-  $folder = "";
   $folder = $album["name"];
 
   $grid_gallery_code.= '<section id="portfolio" class="portfolio" data-aos="fade-up">
     <div class="container">
       <div class="section-header">';
   
-  $grid_gallery_code.= '<h2>Gallery</h2>
+  $grid_gallery_code.= '<h2>' . $folder . '</h2>
   <p>' . $album["description"] . '</p>
   </div>
     </div>';

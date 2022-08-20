@@ -184,8 +184,16 @@ $(document).ready(function() {
 		//FOR CON TODOS LOS EVENTOS PHP
 		events: [
       <?php
+        if(isset($_GET["calendar"]))
+        {
+          $calendar_id = $_GET["calendar"];
+        }
+        else
+        {
+          $calendar_id = 1;
+        }
         $sql= $mySqli_db->prepare("SELECT * FROM calendar_events WHERE calendar_id = ?");
-        $sql->bind_param("i", $_GET["calendar"]);
+        $sql->bind_param("i", $calendar_id);
         $sql->execute();
         $result=$sql->get_result();
 
@@ -219,6 +227,21 @@ $(document).ready(function() {
 });
 </script>
 
+<div class="row mt-4">
+    <div data-aos="fade-up" data-aos-delay="200">
+    <div class="section-header">
+<?php
+  $sql= $mySqli_db->prepare("SELECT * FROM calendars WHERE id = ?");
+  $sql->bind_param("i", $calendar_id);
+  $sql->execute();
+  $result=$sql->get_result();
+  $calendar=$result->fetch_assoc();
+  echo '<h2><i>' . str_replace("\'", "'",str_replace("\\\"", "\"", $calendar["title"])) . '</i></h2>
+  <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $calendar["description"])) . '</p>';
+?>
+</div>
+</div>
+</div>
 <div id='wrap'>
 	<div id='calendar'></div>
 	<div style='clear:both'></div>
@@ -239,7 +262,7 @@ $(document).ready(function() {
           <input type="text" class="form-control" name="add_event_title" placeholder="Summary" aria-describedby="basic-addon1" required>
           <textarea class="form-control" name="add_event_description" rows="4" placeholder="Description"></textarea>
           <label for="add_event_color" class="mb-2">Event Color</label>
-          <select class="form-control mb-2" id="add_event_color" name="gallery_type">
+          <select class="form-control mb-2" id="add_event_color" name="add_event_color">
             <option style="color: white; background-color: DeepSkyBlue;" value="DeepSkyBlue">Blue</option>
             <option style="color: white; background-color: Cyan;" value="Cyan">Cyan</option>
             <option style="color: white; background-color: Crimson;" value="Crimson">Red</option>

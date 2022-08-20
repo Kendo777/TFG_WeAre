@@ -1,9 +1,16 @@
 <?php
-if(isset($_POST['user']) && isset($_POST['password']))
+if((isset($_POST['user']) && isset($_POST['password'])) || isset($_POST["guest"]))
 {
-	$user = mysql_fix_string($mySqli_db,$_POST['user']);
-	$password = mysql_fix_string($mySqli_db,$_POST['password']);
-
+  if(isset($_POST["guest"]))
+  {
+    $user = "guest";
+    $password = mysql_fix_string($mySqli_db,$_POST['guest']);
+  }
+  else
+  {
+    $user = mysql_fix_string($mySqli_db,$_POST['user']);
+    $password = mysql_fix_string($mySqli_db,$_POST['password']);
+  }
 
 	$sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=? OR email=?");
 	$sql->bind_param("ss",$user,$user);
@@ -28,6 +35,10 @@ if(isset($_POST['user']) && isset($_POST['password']))
 		    	require_once("mail/mail.php");
 				  sendEmail($row['email'], $row['user'], "registration", $row['valid']);
 		    }
+		}
+		else if($_POST["guest"])
+		{
+			$errorMsg.='<p class="alert alert-danger">Guest key not valid</p>';
 		}
 		else
 		{
@@ -103,11 +114,25 @@ else if(isset($_POST['forgotPassword']) && $_POST['forgotPassword']!="")
         </div>
         <br>
         <button type="submit" class="btn btn-primary">Login</button>
-      </form><br><br>
-      <p class="alert alert-info">If you have not registered as user, you can do it
+      </form>
+      <?php
+        if($json_data["web_data"]["web_privacity"] == "Invitation")
+        {
+          echo '<p class="alert alert-info mt-5">If you are not a member of <b><u>' . $json_data["web_data"]["web_current_name"] . '</u></b> <br> and you have a guest key, quickly log in <br> with the <b><u>guest key</u></b></p>
+          <form method="post" action="index.php?page=login">
+            <div class="form-group">
+              <label>Guest Key</label>
+              <input type="text" class="form-control" name="guest"><br>
+            </div>
+            <button type="submit" class="btn btn-primary">Enter</button>
+          </form>';
+        }
+      ?>
+      <p class="alert alert-info mt-5">If you have not registered as user, you can do it
         <a href="index.php?page=register">here</a></p>
 
       <p class="alert alert-danger">Forgot the password? Change it <a href="index.php?page=verification">here</a></p>
-    </div>
 	</div>
+	</div>
+	
 </section>

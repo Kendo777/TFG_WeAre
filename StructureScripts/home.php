@@ -1,7 +1,7 @@
 <?php
   if(isset($_GET["edit"]) && (isset($_SESSION["user"]) && $session_user["rol"] == "reader"))
   {
-    header('location:index.php?page=blank&blank=' . $_GET["blank"]);
+    header('location:index.php?page=home');
   }
   if(isset($_POST["blank_page_content"]))
   {
@@ -15,21 +15,25 @@
     $post = mysql_fix_string($mySqli_db, $post);
     //*************************USER*****************************
     $user = $_SESSION["user"];
+    $home_id = 1;
     $sql= $mySqli_db->prepare("UPDATE `blank_pages` SET `content`=? WHERE `id`=?");
-    $sql->bind_param("si", $post, $_GET["blank"]);
+    $sql->bind_param("si", $post, $home_id);
     $sql->execute();
-  }
+  }  
+  
+  echo '<div class="section-header"><h1>' . $json_data["web_data"]["web_current_name"] . '</h1></div>';
+
   if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
   {
     if(!isset($_GET["edit"]))
     {
       echo '<div class="position-absolute end-0 d-flex mr-5">
-      <a type="button" class="btn btn-warning mb-5" href="index.php?page=blank&blank='. $_GET["blank"] .'&edit"><i class="bi bi-pencil-fill"></i></a>
+      <a type="button" class="btn btn-warning mb-5" href="index.php?page=home&edit"><i class="bi bi-pencil-fill"></i></a>
       </div>';
     }
     else
     {
-      echo '<a type="button" class="btn btn-warning mb-5" href="index.php?page=blank&blank='. $_GET["blank"] .'"  onclick="return confirm(\'You are going to return without save\nAre you sure?\')"><i class="bi bi-arrow-return-left"></i></a>';
+      echo '<a type="button" class="btn btn-warning mb-5" href="index.php?page=home"  onclick="return confirm(\'You are going to return without save\nAre you sure?\')"><i class="bi bi-arrow-return-left"></i></a>';
     }
   }
 ?>
@@ -39,16 +43,9 @@
       <div class="editor-container">
         <div class="editor" id="<?php if(!isset($_GET["edit"])) echo 'editor-off'; else echo 'editor'; ?>">
           <?php
-            if(isset($_GET["calendar"]))
-            {
-              $blank_id = $_GET["blank"];
-            }
-            else
-            {
-              $blank_id = 1;
-            }
+            $home_id = 1;
             $sql= $mySqli_db->prepare("SELECT * FROM blank_pages WHERE id = ?");
-            $sql->bind_param("i", $blank_id);
+            $sql->bind_param("i", $home_id);
             $sql->execute();
             $result=$sql->get_result();
             $blank=$result->fetch_assoc();
@@ -61,7 +58,7 @@
 <?php 
   if(isset($_GET["edit"]))
   {
-    echo'<form action="index.php?page=blank&blank='. $_GET["blank"] . ' method="post" role="form">
+    echo'<form action="index.php?page=home" method="post" role="form">
       <input type="hidden" id="blank_page_content" name="blank_page_content">
       <button type="submit" class="btn btn-primary" onclick="save_content()">Save changes</button>
     </form>';

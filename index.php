@@ -5,20 +5,6 @@
   require_once("mySqli.php");
   ob_start();
   session_start();
-  $page="home";
-  if(isset($_GET["page"]))
-  {
-      if($_GET['page']=="logout")
-      {
-          session_destroy();
-          header('location:index.php');
-      }
-      else
-      {
-          $page = $_GET["page"];
-      }
-  }
-
   
 ?>
 
@@ -95,7 +81,6 @@
                   <li><a href="#">Deep Drop Down 2</a></li>
                   <li><a href="#">Deep Drop Down 3</a></li>
                   <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
                 </ul>
               </li>
               <li><a href="#">Drop Down 2</a></li>
@@ -105,13 +90,19 @@
           </li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           <?php
-            if(!isset($_SESSION['user']))
+            if(!isset($_SESSION['weAre_user']))
             {
               echo '<li><a class="getstarted scrollto" href="index.php?page=login">Get Started</a></li>';
             }
             else
             {
-              echo '<li><a class="getstarted scrollto" href="index.php?page=creator">Get Started</a></li>';
+              echo '<li class="dropdown"><a class="getstarted scrollto" href="index.php?page=create"><i class="bi bi-person-circle"></i>Get Started</a>
+              <ul>
+                  <li><a href="index.php?page=myWebs">My Webs</a></li>
+                  <li><a href="index.php?page=create">Create web</a></li>
+                  <li><a href="index.php?page=logout">Logout</a></li>
+              </ul>
+              </li>';
             }
           ?>
         </ul>
@@ -125,8 +116,19 @@
     /**
      * Check the current page, if exists it includes to the index
      */
-    //if($page!="login" && $page!="register")
-    //require_once("navBar.php");
+    $page="home";
+    if(isset($_GET["page"]))
+    {
+        if($_GET['page']=="logout")
+        {
+            session_destroy();
+            header('location:index.php');
+        }
+        else
+        {
+          $page = $_GET["page"];
+        }
+    }
     if(file_exists($page.".php"))
     {
         include_once($page.".php");
