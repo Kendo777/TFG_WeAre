@@ -58,10 +58,12 @@
 <?php 
   if(isset($_GET["edit"]))
   {
-    echo'<form action="index.php?page=home" method="post" role="form">
+    echo'<div class="position-absolute end-0 d-flex mr-4 mt-3 pb-5">
+    <form action="index.php?page=home" method="post" role="form">
       <input type="hidden" id="blank_page_content" name="blank_page_content">
       <button type="submit" class="btn btn-primary" onclick="save_content()">Save changes</button>
-    </form>';
+    </form>
+    </div>';
   }
 ?>
 <script src="../../StructureScripts/assets/CKEditor/build/ckeditor.js"></script>

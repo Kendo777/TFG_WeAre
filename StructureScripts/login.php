@@ -1,4 +1,8 @@
 <?php
+if(isset($_SESSION["user"]))
+{
+	header('location:index.php');
+}
 if((isset($_POST['user']) && isset($_POST['password'])) || isset($_POST["guest"]))
 {
   if(isset($_POST["guest"]))

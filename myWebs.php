@@ -1,3 +1,9 @@
+<?php
+  if(!isset($_SESSION["weAre_user"]))
+  {
+    header('location:index.php');
+  }
+?>
 <section class="d-flex align-items-center">
   <div class="container" data-aos="fade-up">
   <div class="section-header mt-5">
@@ -54,7 +60,7 @@
         <div class="row align-items-center">
         <div class="col-md-4 mb-3 mb-sm-0">
           <h5> 
-            <a href="WebPages' . DIRECTORY_SEPARATOR . $row["web_name"] . DIRECTORY_SEPARATOR . 'index.php" class="text-primary">' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["web_current_name"])) . '</a>
+            <a href="WebPages' . DIRECTORY_SEPARATOR . $row["web_name"] . DIRECTORY_SEPARATOR . 'index.php?admin" class="text-primary">' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["web_current_name"])) . '</a>
           </h5>
           <p class="text-sm"><span class="op-6">Created the </span>';
       echo ' ' . $row["date_creation"] . '

@@ -45,14 +45,15 @@ function deleteDir($dirPath) {
   rmdir($dirPath);
 }
 
-if(isset($_GET["album"]))
-{
-  $album_id = $_GET["album"];
-}
-else
+if($json_data["web_data"]["web_structure"] == "basic")
 {
   $album_id = 1;
 }
+else if(isset($_GET["album"]))
+{
+  $album_id = $_GET["album"];
+}
+
 $sql= $mySqli_db->prepare("SELECT * FROM galleries WHERE id = ?");
 $sql->bind_param("i",$album_id);
 $sql->execute();

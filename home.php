@@ -642,64 +642,72 @@
     </section><!-- End Testimonials Section -->
 
     <!-- ======= Pricing Section ======= -->
-    <section id="pricing" class="pricing">
-      <div class="container" data-aos="fade-up">
+    <section id="pricing" class="pricing mt-5">
+    <div class="container" data-aos="fade-up">
 
-        <div class="section-header">
-          <h2>Our Pricing</h2>
-          <p>Creating your first website is completely free</p>
-        </div>
+      <div class="section-header">
+        <h2>Our Services</h2>
+        <p>Creating your first website is completely free</p>
+      </div>
 
-        <div class="row justify-content-center gy-4">
+      <div class="row justify-content-center gy-4">
 
-          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-            <div class="pricing-item">
+        <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+          <div class="pricing-item">
 
-              <div class="pricing-header">
-                <h3>Free Plan</h3>
-                <h4><sup>$</sup>0<span> / month</span></h4>
-              </div>
-
-              <ul>
-                <li><i class="bi bi-dot"></i> <span>1 Web Page</span></li>
-                <li><i class="bi bi-dot"></i> <span>Privacity</span></li>
-                <li><i class="bi bi-dot"></i> <span>Full access to all components</span></li>
-                <li class="na"><i class="bi bi-x"></i> <span>Users</span></li>
-              </ul>
-
-              <div class="text-center mt-auto">
-                <a href="#" class="buy-btn">Buy Now</a>
-              </div>
-
+            <div class="pricing-header">
+              <h3>Basic Web</h3>
+              <h4><sup>$</sup>0<span> / month</span></h4>
             </div>
-          </div><!-- End Pricing Item -->
 
-          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="400">
-            <div class="pricing-item featured">
+            <ul>
+              <li><i class="bi bi-dot"></i> <span>Users</span></li>
+              <li><i class="bi bi-dot"></i> <span>Privacity</span></li>
+              <li><i class="bi bi-dot"></i> <span>1 Gallery</span></li>
+              <li><i class="bi bi-dot"></i> <span>1 Calendar</span></li>
+              <li><i class="bi bi-dot"></i> <span>1 Blank page</span></li>
+              <li><i class="bi bi-dot"></i> <span>Forum</span></li>
+              <li><i class="bi bi-dot"></i> <span>Blog</span></li>
+              <li class="na"><i class="bi bi-x"></i> <span>Nav Bar personalization</span></li>
+            </ul>
 
-              <div class="pricing-header">
-                <h3>Pro Plan</h3>
-                <h4><sup>$</sup>29<span> / month</span></h4>
-              </div>
-
-              <ul>
-                <li><i class="bi bi-dot"></i> <span>1 Web Page</span></li>
-                <li><i class="bi bi-dot"></i> <span>Privacity</span></li>
-                <li><i class="bi bi-dot"></i> <span>Full access to all components</span></li>
-                <li><i class="bi bi-dot"></i> <span>Users</span></li>
-              </ul>
-
-              <div class="text-center mt-auto">
-                <a href="#" class="buy-btn">Buy Now</a>
-              </div>
-
+            <div class="text-center mt-auto">
+              <a href="index.php?page=create&form=basic" class="buy-btn">Start Now</a>
             </div>
-          </div><!-- End Pricing Item -->
 
-        </div>
+          </div>
+        </div><!-- End Pricing Item -->
+
+        <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="400">
+          <div class="pricing-item featured">
+
+            <div class="pricing-header">
+              <h3>Advanced Web</h3>
+              <h4><sup>$</sup>19<span> / month</span></h4>
+            </div>
+
+            <ul>
+              <li><i class="bi bi-dot"></i> <span>Users</span></li>
+              <li><i class="bi bi-dot"></i> <span>Privacity</span></li>
+              <li><i class="bi bi-dot"></i> <span>Unlimited Galleries</span></li>
+              <li><i class="bi bi-dot"></i> <span>Unlimited Calendars</span></li>
+              <li><i class="bi bi-dot"></i> <span>Unlimited Blank pages</span></li>
+              <li><i class="bi bi-dot"></i> <span>Forum</span></li>
+              <li><i class="bi bi-dot"></i> <span>Blog</span></li>
+              <li><i class="bi bi-dot"></i> <span>Nav Bar personalization</span></li>
+            </ul>
+
+            <div class="text-center mt-auto">
+              <a href="index.php?page=create&form=advanced" class="buy-btn">Start Now</a>
+            </div>
+
+          </div>
+        </div><!-- End Pricing Item -->
 
       </div>
-    </section><!-- End Pricing Section -->
+
+    </div>
+  </section><!-- End Pricing Section -->
 
     <!-- ======= F.A.Q Section ======= -->
     <section id="faq" class="faq">

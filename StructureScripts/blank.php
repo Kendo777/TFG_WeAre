@@ -1,7 +1,23 @@
 <?php
+  if($json_data["web_data"]["web_structure"] == "basic")
+  {
+    $blank_id = 2;
+  }
+  else if(isset($_GET["blank"]))
+  {
+    $blank_id = $_GET["blank"];
+  }
+
   if(isset($_GET["edit"]) && (isset($_SESSION["user"]) && $session_user["rol"] == "reader"))
   {
-    header('location:index.php?page=blank&blank=' . $_GET["blank"]);
+    if(isset($_GET["edit"]))
+    {
+      header('location:index.php?page=blank&blank=' . $blank_id);
+    }
+    else
+    {
+      header('location:index.php?page=blank');
+    }
   }
   if(isset($_POST["blank_page_content"]))
   {
@@ -16,7 +32,7 @@
     //*************************USER*****************************
     $user = $_SESSION["user"];
     $sql= $mySqli_db->prepare("UPDATE `blank_pages` SET `content`=? WHERE `id`=?");
-    $sql->bind_param("si", $post, $_GET["blank"]);
+    $sql->bind_param("si", $post, $blank_id);
     $sql->execute();
   }
   if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
@@ -24,12 +40,22 @@
     if(!isset($_GET["edit"]))
     {
       echo '<div class="position-absolute end-0 d-flex mr-5">
-      <a type="button" class="btn btn-warning mb-5" href="index.php?page=blank&blank='. $_GET["blank"] .'&edit"><i class="bi bi-pencil-fill"></i></a>
+      <a type="button" class="btn btn-warning mb-5" href="index.php?page=blank';
+      if(isset($_GET["blank"]))
+      {
+        echo '&blank='. $blank_id;
+      }
+      echo '&edit"><i class="bi bi-pencil-fill"></i></a>
       </div>';
     }
     else
     {
-      echo '<a type="button" class="btn btn-warning mb-5" href="index.php?page=blank&blank='. $_GET["blank"] .'"  onclick="return confirm(\'You are going to return without save\nAre you sure?\')"><i class="bi bi-arrow-return-left"></i></a>';
+      echo '<a type="button" class="btn btn-warning mb-5" href="index.php?page=blank';
+      if(isset($_GET["blank"]))
+      {
+        echo '&blank='. $blank_id;
+      }
+      echo '" onclick="return confirm(\'You are going to return without save\nAre you sure?\')"><i class="bi bi-arrow-return-left"></i></a>';
     }
   }
 ?>
@@ -39,14 +65,6 @@
       <div class="editor-container">
         <div class="editor" id="<?php if(!isset($_GET["edit"])) echo 'editor-off'; else echo 'editor'; ?>">
           <?php
-            if(isset($_GET["calendar"]))
-            {
-              $blank_id = $_GET["blank"];
-            }
-            else
-            {
-              $blank_id = 1;
-            }
             $sql= $mySqli_db->prepare("SELECT * FROM blank_pages WHERE id = ?");
             $sql->bind_param("i", $blank_id);
             $sql->execute();
@@ -61,10 +79,17 @@
 <?php 
   if(isset($_GET["edit"]))
   {
-    echo'<form action="index.php?page=blank&blank='. $_GET["blank"] . ' method="post" role="form">
+    echo'<div class="position-absolute end-0 d-flex mr-4 mt-3 pb-5">
+    <form action="index.php?page=blank';
+    if(isset($_GET["blank"]))
+    {
+      echo '&blank='. $blank_id;
+    }
+    echo '" method="post" role="form">
       <input type="hidden" id="blank_page_content" name="blank_page_content">
       <button type="submit" class="btn btn-primary" onclick="save_content()">Save changes</button>
-    </form>';
+    </form>
+    </div>';
   }
 ?>
 <script src="../../StructureScripts/assets/CKEditor/build/ckeditor.js"></script>

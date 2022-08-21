@@ -10,7 +10,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/WeLogo.PNG" rel="icon">
+  <link href="../../StructureScripts/assets/img/WeLogo.PNG" rel="icon">
 
   <!-- Vendor CSS Files -->
   <link href="../../StructureScripts/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -98,6 +98,18 @@
     require_once("../../mySqli.php");
     session_start();
     $mySqli_db = mysql_client_db($json_data["web_data"]["web_database"]);
+
+    if(isset($_GET["admin"]) && isset($_SESSION["weAre_user"]))
+    {
+      $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=? AND rol='admin'");
+      $sql->bind_param("s", $_SESSION["weAre_user"]);
+      $sql->execute();
+      $result=$sql->get_result();
+      if($result->num_rows > 0)
+      {
+        $_SESSION["user"] = $_SESSION["weAre_user"];
+      }
+    }
     $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=?");
     $sql->bind_param("s", $_SESSION["user"]);
     $sql->execute();
@@ -149,38 +161,6 @@
   <script src="../../StructureScripts/assets/js/dynamicForm.js"></script>
   <script src="../../StructureScripts/assets/js/calendar.js"></script>
   <?php
-  /*if(isset($_GET["edit"]))
-  {
-    echo '<script src="../../StructureScripts/assets/CKEditor/build/ckeditor.js"></script>
-    <script type="text/javascript">
-    InlineEditor
-            .create( document.querySelector( ".editor" ), {
-              
-              licenseKey: "",
-              
-              
-              
-            } )
-            .then( editor => {
-              window.editor = editor;
-          
-              
-              
-              
-            } )
-            .catch( error => {
-              console.error( "Oops, something went wrong!" );
-              console.error( "Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:" );
-              console.warn( "Build id: ovla453mle2q-1qxbxw3xwq5" );
-              console.error( error );
-            } );
-    
-    function save_content(){
-      document.getElementById("editor").contentEditable = "false";
-      document.getElementById("blank_page_content").value = document.getElementById("editor_content").innerHTML;
-    }
-        </script>';
-  }*/
   ?>
 </body>
 

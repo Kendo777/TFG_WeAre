@@ -93,7 +93,7 @@
                       </label>
                     </button>
                 </h3>
-                <div id="users" class="accordion-collapse collapse <?php if(isset($json_data) && !$json_data["user"]["enable"]) { echo 'show'; } ?>"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
+                <div id="users" class="accordion-collapse collapse <?php if(isset($json_data) && $json_data["user"]["enable"]) { echo 'show'; } ?>"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
                   <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
                     <div class="row">
                       <div class="col-lg-12">
@@ -138,8 +138,6 @@
                                   }
                                 }
                               }
-                              else
-                              {
                                 echo '<div id="inputFormRow">
                                 <div class="input-group mb-3">
                                   <select class="btn btn-outline-info" id="add_event_color" name="column_type[]">
@@ -154,11 +152,11 @@
                                 </div>
                                 </div>
                                 </div>';
-                              }
+                              
                               ?>
                         </div>
                         <div id="usernewRow"></div>
-                        <button onclick="addUserRow()" type="button" class="btn btn-info">Add Row</button>
+                        <button onclick="addUserRow()" type="button" class="btn btn-info">Add Attribute</button>
                       </div>
                     </div>
                   </div>

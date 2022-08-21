@@ -184,13 +184,13 @@ $(document).ready(function() {
 		//FOR CON TODOS LOS EVENTOS PHP
 		events: [
       <?php
-        if(isset($_GET["calendar"]))
-        {
-          $calendar_id = $_GET["calendar"];
-        }
-        else
+        if($json_data["web_data"]["web_structure"] == "basic")
         {
           $calendar_id = 1;
+        }
+        else if(isset($_GET["calendar"]))
+        {
+          $calendar_id = $_GET["calendar"];
         }
         $sql= $mySqli_db->prepare("SELECT * FROM calendar_events WHERE calendar_id = ?");
         $sql->bind_param("i", $calendar_id);

@@ -1,5 +1,8 @@
 <?php
-require_once("mySqli.php");
+if(isset($_SERVER["weAre_user"]))
+{
+	header('location:index.php');
+}
 if(isset($_POST['user']) && isset($_POST['password']))
 {
 	$user = mysql_fix_string($mySqli,$_POST['user']);
