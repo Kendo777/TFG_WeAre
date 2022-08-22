@@ -21,9 +21,8 @@
     for($i=0; $i<$result->num_rows; $i++)
     {
       $row=$result->fetch_assoc();
-
       $mySqlidb = mysql_client_db($row["web_database"]);
-
+      
       $sql= $mySqlidb->prepare("SELECT COUNT(*) AS count FROM forums");
       $sql->execute();
       $result_count=$sql->get_result();

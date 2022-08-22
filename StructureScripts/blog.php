@@ -250,16 +250,20 @@ if(isset($_GET["blog"]))
               <a class="card-link">';
         if(file_exists("images/profile/". $row["user"] . ".png"))
         {
-          echo '<img src="images/profile/' . $row["user"] . '.png" class="rounded-circle" width="50" alt="User">';
+          echo '<a href="index.php?page=user&user=' . $row["user"] . '">
+          <img src="images/profile/' . $row["user"] . '.png" class="rounded-circle" width="50" alt="User">
+          </a>';
         }
         else
         {
-          echo '<img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">';
+          echo 'href="index.php?page=user&user=' . $row["user"] . '">
+          <img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">
+          </a>';
         }
         
         echo '</a>
               <div class="media-body ml-3"> 
-                <a class="text-secondary">' . $row["user"] . '</a><br>
+                <a class="text-secondary" href="index.php?page=user&user=' . $row["user"] . '">' . $row["user"] . '</a><br>
                 <small class="text-muted">' . substr($row['date'], 0, strpos($row["date"], " ")) . '</small>';
         echo '<div class="mt-4 font-size-sm">
               <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"])) . '</p>
@@ -330,16 +334,29 @@ if(isset($_GET["blog"]))
           <a class="card-link mr-2">';
         if(file_exists("images/profile/". $row["user"] . ".png"))
         {
-          echo '<img src="images/profile/' . $row["user"] . '.png" class="rounded-circle" width="50" alt="User">';
+          echo '<a href="index.php?page=user&user=' . $row["user"] . '">
+          <img src="images/profile/' . $row["user"] . '.png" class="rounded-circle" width="50" alt="User">
+          </a>';
+        }
+        else if($row["user"] == "Guest")
+        {
+          echo '<img src="../../StructureScripts/assets/defaultImg/Guest.png" class="rounded-circle" width="50" alt="User">';
         }
         else
         {
-          echo '<img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">';
+          echo '<a href="index.php?page=user&user=' . $row["user"] . '">
+          <img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">
+          </a>';
         }
         
         echo '</a>
 
-                <a class="text-secondary">' . $row["user"] . '</a>
+                <a class="text-secondary"';
+        if($row["user"] != "Guest")
+        {
+          echo 'href="index.php?page=user&user=' . $row["user"] . '"';
+        }
+        echo '>' . $row["user"] . '</a>
                 <small class="text-muted">' . substr($date, 0, strpos($date, " ")) . '</small>
           </div>
           <p class="card-text my-3">' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["description"])) . '</p>

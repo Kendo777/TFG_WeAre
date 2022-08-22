@@ -161,16 +161,29 @@
             <a class="card-link">';
       if(file_exists("images/profile/". $row["user"] . ".png"))
       {
-        echo '<img src="images/profile/' . $row["user"] . '.png" class="rounded-circle" width="50" alt="User">';
+        echo '<a href="index.php?page=user&user=' . $row["user"] . '">
+        <img src="images/profile/' . $row["user"] . '.png" class="rounded-circle" width="50" alt="User">
+        </a>';
+      }
+      else if($row["user"] == "Guest")
+      {
+        echo '<img src="../../StructureScripts/assets/defaultImg/Guest.png" class="rounded-circle" width="50" alt="User">';
       }
       else
       {
-        echo '<img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">';
+        echo '<a href="index.php?page=user&user=' . $row["user"] . '">
+        <img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">
+        </a>';
       }
       
       echo '</a>
             <div class="media-body ml-3"> 
-              <a class="text-secondary">' . $row["user"] . '</a> 
+              <a class="text-secondary" ';
+      if($row["user"] != "Guest")
+      {
+        echo 'href="index.php?page=user&user=' . $row["user"] . '"';
+      }
+      echo '>' . $row["user"] . '</a> 
               <small class="text-muted ml-2">';
 
       echo time_ago($row['date']);
@@ -343,7 +356,12 @@
           </h5>
           <p class="text-sm"><span class="op-6">Posted</span>';
       echo ' ' . strtolower(time_ago($date)) . ' ';
-      echo '<a class="text-black" href="#">by ' . $row["user"] . '</a>
+      echo '<a class="text-black"';
+      if($row["user"] != "Guest")
+      {
+        echo 'href="index.php?page=user&user=' . $row["user"] . '"';
+      } 
+      echo '>by ' . $row["user"] . '</a>
           </p>
           <div class="text-sm op-5">';
       for($j=0; $j<$result_categories->num_rows; $j++)
@@ -394,8 +412,8 @@
                           </div>
                       </div>
                   </div>
-                  <div id="categorienewRow"></div>
-                  <button onclick="addForumCategorieRow()" type="button" class="btn btn-info">Add Row</button>
+                  <div id="categorienewRow_1"></div>
+                  <button onclick="addForumCategorieRow(1)" type="button" class="btn btn-info">Add Row</button>
                 </div>
                 <div class="text-center"><button class="btn btn-primary" type="submit">Send</button></div>
               </form>

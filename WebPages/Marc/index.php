@@ -88,6 +88,9 @@
     #sidebar {
       background-color: <?php echo $json_data["style"]["secundary_color"] ?>;
     }
+    #sidebar a{
+      color: <?php echo $json_data["style"]["primary_color"] ?>;
+    }
   </style>
 </head>
 

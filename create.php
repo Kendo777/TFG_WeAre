@@ -220,7 +220,9 @@ require_once("mySqli.php");
     $sql->bind_param("ssssi", $user, $email, $user, $password, $rol, $valid);
     $sql->execute();
     
-    $sql= $mySqlidb->prepare("INSERT INTO `users`(`user`, `email`, `password`, `rol`, `valid`) VALUES ('Guest','','','reader',0)");
+    $guest_key = password_hash($db_name . "_guest", PASSWORD_DEFAULT);
+    $sql= $mySqlidb->prepare("INSERT INTO `users`(`user`, `email`, `password`, `rol`, `valid`) VALUES ('Guest','',?,'reader',0)");
+    $sql->bind_param("s", $guest_key);
     $sql->execute();
 
     $sql= $mySqlidb->prepare("CREATE TABLE blogs (
@@ -570,6 +572,15 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
       $sql= $mySqlidb->prepare("ALTER TABLE users DROP COLUMN " . $column);
       $sql->execute();
     }
+    if(isset($_POST["rename_column"]))
+    {
+      $old_column = mysql_fix_string($mySqlidb, $_POST["rename_column"]);
+      $new_column = strtolower(mysql_fix_string($mySqlidb, $_POST["column_name"]));
+      $column_type = mysql_fix_string($mySqlidb, $_POST["column_type"]);
+  
+      $sql= $mySqlidb->prepare("ALTER TABLE users CHANGE " . $old_column . " " . $new_column . " " . $column_type);
+      $sql->execute();
+    }
   }
 
   /**********************************/
@@ -585,13 +596,13 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
       }
   }
 /******************************************************************************/
-if(isset($_GET["form"]) && $_GET["form"] == "basic")
+if((isset($_GET["form"]) && $_GET["form"] == "basic") || (isset($_GET["edit"]) && $json_data["web_data"]["web_structure"] == "basic"))
 {
   include_once("basicCreator.php");
 }
-if(isset($_GET["form"]) && $_GET["form"] == "advanced")
+if((isset($_GET["form"]) && $_GET["form"] == "advanced") || (isset($_GET["edit"]) && $json_data["web_data"]["web_structure"] == "advanced"))
 {
-  include_once("advanceCreator.php");
+  include_once("advancedCreator.php");
 }
 else
 {

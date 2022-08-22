@@ -1,4 +1,4 @@
-        var blog_num = 1;
+        var tab_id = 0;
         // add row
         function addBlogRow ()
         {
@@ -35,7 +35,7 @@
             $('#usernewRow').append(html);
             blog_num++;
         };
-        function addForumCategorieRow()
+        function addForumCategorieRow(id)
         {
             var html = '';
             html += '<div id="inputFormRow">';
@@ -47,30 +47,139 @@
             html += '</div>';
             html += '</div>';
 
-            $('#categorienewRow').append(html);
+            $('#categorienewRow_' + id).append(html);
         };
-        function addNavBarRow ()
+        function add_tab_row()
         {
             var html = '';
             html += '<div id="inputFormRow">';
             html += '<div class="input-group mb-3">';
-            html += '<div class="col-sm-2">';
-            html += '<select class="form-control" id="navBar_tab_type" name="navBar_tab_type">';
-            html += '<option>Blog</option>';
+            html += '<select class="btn btn-outline-info" name="tab_type[]" onchange="tab_type_form(this, ' + tab_id +')">';
+            html += '<option>Blank Page</option>';
             html += '<option>Gallery</option>';
+            html += '<option>Blog</option>';
+            html += '<option>Forum</option>';
+            html += '<option>Calendar</option>';
+            html += '<option>Dropdown Tab</option>';
             html += '</select>';
-            html += '</div>';
-            html += '<div class="col-sm-2">';
-            html += '<input type="number" name="navBar_tab_target[]" class="form-control m-input" placeholder="Tab target">';
-            html += '</div>';
-            html += '<input type="text" name="navBar_tab[]" class="form-control m-input" placeholder="Tab name" autocomplete="off"></input>';
+            html += '<input type="text" name="tab_name[]" class="form-control m-input" placeholder="Tab Name">';
             html += '<div class="input-group-append">';
             html += '<button id="removeRow" type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>';
             html += '</div>';
             html += '</div>';
-
-            $('#nabBarnewRow').append(html);
+            html += '<div id="tab_form_' + tab_id + '"></div>';
+            html += '<hr></div>';
+            tab_id++;
+            $('#tab_new_row').append(html);
         };
+
+        function tab_type_form(type, id)
+        {
+            switch (type.value)
+            {
+                case "Gallery":
+                    gallery_form(id);
+                    break;
+                case "Blog":
+                    blog_form(id);
+                    break;
+                case "Forum":
+                    forum_form(id);
+                    break;
+                case "Calendar":
+                    calendar_form(id);
+                    break;
+                case "Dropdown Tab":
+                    break;
+                default:
+                  document.getElementById("tab_form_" + id).innerHTML = "";
+                  break;
+            }
+        }
+        function blog_form(id)
+        {
+            var html = '';
+            html += '<div class="shadow-sm rounded">';
+            html += '<h3 class="accordion-header">';
+            html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
+            html += '<i class="bi bi-newspaper question-icon"></i>';
+            html += 'Blog ' + id;
+            html += '</button>';
+            html += '</h3>';
+            html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';
+            html += '<div class="form-group my-3">';
+            html += '<input type="text" class="form-control" name="blog_title[]" placeholder="Blog title" required>';
+            html += '<hr>';
+            html += '<textarea class="form-control" name="blog_description[]" rows="5" placeholder="Write the description" required></textarea>';
+            html += '</div></div></div>';
+            document.getElementById("tab_form_" + id).innerHTML = html;
+        }
+        function gallery_form(id)
+        {
+            var html = '';
+            html += '<div class="shadow-sm rounded">';
+            html += '<h3 class="accordion-header">';
+            html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
+            html += '<i class="bi bi-images question-icon"></i>';
+            html += 'Gallery ' + id;
+            html += '</button>';
+            html += '</h3>';
+            html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';
+            html += '<div class="form-group my-3">';
+            html += '<input type="text" class="form-control" name="gallery_title[]" placeholder="Gallery title" required>';
+            html += '<hr>';
+            html += '<textarea class="form-control" name="gallery_description[]" rows="5" placeholder="Write the description" required></textarea>';
+            html += '</div></div></div>';
+            document.getElementById("tab_form_" + id).innerHTML = html;
+        }
+        function calendar_form(id)
+        {
+            var html = '';
+            html += '<div class="shadow-sm rounded">';
+            html += '<h3 class="accordion-header">';
+            html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
+            html += '<i class="bi bi-calendar-week question-icon"></i>';
+            html += 'Calendar ' + id;
+            html += '</button>';
+            html += '</h3>';
+            html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';
+            html += '<div class="form-group my-3">';
+            html += '<input type="text" class="form-control" name="calendar_title[]" placeholder="Calendar title" required>';
+            html += '<hr>';
+            html += '<textarea class="form-control" name="calendar_description[]" rows="5" placeholder="Write the description" required></textarea>';
+            html += '</div></div></div>';
+            document.getElementById("tab_form_" + id).innerHTML = html;
+        }
+        function forum_form(id)
+        {
+            var html = '';
+            html += '<div class="shadow-sm rounded">';
+            html += '<h3 class="accordion-header">';
+            html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
+            html += '<i class="bi bi-bar-chart-steps question-icon"></i>';
+            html += 'Forum ' + id;
+            html += '</button>';
+            html += '</h3>';
+            html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';
+            html += '<div class="form-group my-3">';
+            html += '<input type="text" class="form-control" name="forum_title[]" placeholder="Forum title" required>';
+            html += '<hr>';
+            html += '<textarea class="form-control" name="post_content[]" rows="5" placeholder="Write the post" required></textarea>';
+            html += '<hr>';
+            html += '<div id="inputFormRow">';
+            html += '<div class="input-group mb-3">';
+            html += '<button class="btn btn-info disabled">#</button>';
+            html += '<input type="text" name="categorie_title[]" class="form-control m-input" placeholder="Categorie name" autocomplete="off">';
+            html += '<div class="input-group-append">';
+            html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div id="categorienewRow_' + id + '"></div>';
+            html += '<button onclick="addForumCategorieRow(' + id + ')" type="button" class="btn btn-info">Add Row</button>';
+            html += '</div></div></div>';
+            document.getElementById("tab_form_" + id).innerHTML = html;
+        }
 
         // remove row
         $(document).on('click', '#removeRow', function () {

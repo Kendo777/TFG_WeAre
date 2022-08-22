@@ -126,9 +126,17 @@
                                         break;  
                                     }
                                     echo '<div class="input-group mb-3">
-                                  <button class="btn btn-info disabled">' . $type . '</button>                                
-                                  <input type="text" class="form-control m-input" placeholder="User Attribute" value="' . ucfirst($column["Field"]) . '">
-                                      <div class="input-group-append mx-3">
+                                        <button class="btn btn-info disabled">' . $type . '</button> 
+                                        <form></form>                               
+                                        <form action="' . $url . '" method="post" role="form" style="flex: 1 1 auto;">
+                                        <div class="input-group">
+                                            <input type="text" name="column_name" class="form-control m-input" placeholder="User Attribute" value="' . ucfirst($column["Field"]) . '">
+                                            <input type="hidden" name="rename_column" value="' . $column["Field"] . '">
+                                            <input type="hidden" name="column_type" value="' . $column["Type"] . '">
+                                            <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-pencil-fill"></i></button>
+                                          </div>
+                                        </form>
+                                        <div class="input-group-append d-flex">
                                         <form action="' . $url . '" method="post" role="form">
                                           <input type="hidden" name="delete_column" value="' . $column["Field"] . '">
                                           <button type="submit" class="btn btn-danger" onclick="return confirm(\'You are going to delete a users attribute\nOnce deleted it cannot be recovered. Are you sure?\')"><i class="bi bi-trash-fill"></i></button>
@@ -148,7 +156,7 @@
                                   </select>
                                 <input type="text" name="column_name[]" class="form-control m-input" placeholder="User Attribute">
                                 <div class="input-group-append mx-3">
-                                <button id="removeRow" type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+                                  <button id="removeRow" type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
                                 </div>
                                 </div>
                                 </div>';
@@ -175,7 +183,7 @@
                     <label for="navBar_type" class="mb-2"><b>1. Navigation bar type</b></label>
                     <select class="form-control mb-2" id="navBar_type" name="navBar_type">
                       <option>Clasic Navigation Bar</option>
-                      <option>Side Collapsed Bar</option>
+                      <option>Side Collapser Bar</option>
                     </select>
                   </div>
                 </div>

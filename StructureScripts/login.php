@@ -55,7 +55,7 @@ if((isset($_POST['user']) && isset($_POST['password'])) || isset($_POST["guest"]
 		$errorMsg.='<p class="alert alert-danger">User name, email or password not valid</p>';
 	}
 }
-else if(isset($_POST['forgotPassword']) && $_POST['forgotPassword']!="")
+else if(isset($_POST['forgotPassword']) && !empty($_POST['forgotPassword']))
 {
 	$post = mysql_fix_string($mySqli_db,$_POST['forgotPassword']);
 	$sql= $mySqli_db->prepare("SELECT * FROM users WHERE email=?");

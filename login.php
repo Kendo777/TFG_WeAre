@@ -30,7 +30,7 @@ if(isset($_POST['user']) && isset($_POST['password']))
 		    {
 		    	$errorMsg.='<p class="alert alert-danger">Please verify the acount clicking in the link that we sended to your mail</p>';
 		    	require_once("mail/mail.php");
-				  sendEmail($row['email'], $row['user'], "registration", $row['valid']);
+				sendEmail($row['email'], $row['user'], "registration", $row['valid']);
 		    }
 		}
 		else

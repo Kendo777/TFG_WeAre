@@ -48,6 +48,10 @@ else if($_SESSION['user'] == "Guest")
 {
   header('location:index.php');
 }
+if(isset($_GET["edit"]) && isset($_GET["user"]))
+{
+  header('location:index.php?page=user&user=' . $_GET["user"]);
+}
 
 if(isset($_POST['name']) && !empty($_POST['name']))
 {
@@ -188,9 +192,25 @@ if(isset($_POST['deleteImage']))
   $path = 'images'.DIRECTORY_SEPARATOR.'profile'.DIRECTORY_SEPARATOR;
   if(file_exists("images".DIRECTORY_SEPARATOR."profile".DIRECTORY_SEPARATOR.$_SESSION['user'].".png")) unlink($path.$_SESSION['user'].".png");
 }
+if(isset($_POST["guest_key"]))
+{
+  $guest_key = mysql_fix_string($mySqli_db,$_POST['guest_key']);
+  $guest_key = password_hash($guest_key, PASSWORD_DEFAULT);
+  $sql= $mySqli_db->prepare("UPDATE users SET password=? WHERE user='Guest'");
+	$sql->bind_param("s",$guest_key);
+	$sql->execute();
+}
 
+if(isset($_GET["user"]))
+{
+  $user_name = mysql_fix_string($mySqli_db, $_GET["user"]);
+}
+else
+{
+  $user_name = $_SESSION["user"];
+}
 $sql= $mySqli_db->prepare("SELECT * FROM users WHERE user=?");
-$sql->bind_param("s", $_SESSION['user']);
+$sql->bind_param("s", $user_name);
 $sql->execute();
 $result=$sql->get_result();
 
@@ -203,45 +223,53 @@ if(!$result)
 }
 if(isset($errorMsg)) echo $errorMsg;
 
-  echo '
-<table class="table table-hover">
-    <thead>
-      <tr>
-        <th>User</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Profile picture</th>
-      </tr>
-    </thead>
-    <tbody>';
-          $row=$result->fetch_assoc();
-          echo '<tr>';
-          echo '<td>'.$row['user'].'</td>';
-          echo '<td>'.$row['user_name'].'</td>';
-          echo '<td>'.$row['email'].'</td>';
-          if(file_exists("images/profile/".$row['user'].".png"))
-          {
-            echo '<td><img src="images/profile/'.$row['user'].'.png" class="profile_picture rounded-circle"></td>';
-          }
-          else
-          {
-            echo '<td><img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="profile_picture rounded-circle"></td>';
-          }
-          echo '</tr>';
-
-        //$conn->close(); //close the database connection, when it is not needed anymore in the script
-    echo '</tbody>
-</table>';
-
-for($i=0; $i<$result_columns->num_rows; $i++)
+if(!isset($_GET["admin"]))
 {
-  $column=$result_columns->fetch_assoc();
-  if($column["Field"] != "user" && $column["Field"] != "email" && $column["Field"] != "user_name" && $column["Field"] != "password" && $column["Field"] != "valid")
+    echo '
+  <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>User</th>
+            <th>Name</th>';
+    if(!isset($_GET["user"]))
+    {
+      echo '<th>Email</th>';
+    }
+    echo '  <th>Profile picture</th>
+        </tr>
+      </thead>
+      <tbody>';
+            $row=$result->fetch_assoc();
+            echo '<tr>';
+            echo '<td>'.$row['user'].'</td>';
+            echo '<td>'.$row['user_name'].'</td>';
+            if(!isset($_GET["user"]))
+            {
+              echo '<td>'.$row['email'].'</td>';
+            }
+            if(file_exists("images/profile/".$row['user'].".png"))
+            {
+              echo '<td><img src="images/profile/'.$row['user'].'.png" class="profile_picture rounded-circle"></td>';
+            }
+            else
+            {
+              echo '<td><img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="profile_picture rounded-circle"></td>';
+            }
+            echo '</tr>';
+
+          //$conn->close(); //close the database connection, when it is not needed anymore in the script
+      echo '</tbody>
+  </table>';
+
+  for($i=0; $i<$result_columns->num_rows; $i++)
   {
-    echo '<b>' . ucfirst($column["Field"]) . ': </b>' . $row[$column["Field"]] . '<br>';
+    $column=$result_columns->fetch_assoc();
+    if($column["Field"] != "user" && $column["Field"] != "email" && $column["Field"] != "user_name" && $column["Field"] != "password" && $column["Field"] != "valid")
+    {
+      echo '<b>' . ucfirst($column["Field"]) . ': </b>' . $row[$column["Field"]] . '<br>';
+    }
   }
 }
-
 
 if(isset($_GET['edit']))
 {
@@ -361,6 +389,20 @@ if(isset($_GET["admin"]))
   {
     header('location:index.php?page=user');
   }
+
+  echo '<div class="col-md-5 my-5">
+    <form method="post" action="index.php?page=user&admin">
+      <h3>Change Guest Key</h3><br>
+      <input type="text" class="form-control" placeholder="New Guest Key" name="guest_key"><br>
+      <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+  </div>
+  <div class="col-md-auto">
+  <h3>' . $json_data["web_data"]["web_current_name"] . ' Users</h3>
+  <small>Click on Writer to enable or dissable the capacity to edit or post</small><br><br>
+  ';
+
+
   $sql= $mySqli_db->prepare("SELECT * FROM users WHERE rol!='admin'");
   $sql->execute();
   $result=$sql->get_result();
@@ -397,6 +439,10 @@ if(isset($_GET["admin"]))
           {
             echo '<td><img src="images/profile/'.$row['user'].'.png" class="profile_picture rounded-circle"></td>';
           }
+          else if($row["user"] == "Guest")
+          {
+            echo '<td><img src="../../StructureScripts/assets/defaultImg/Guest.png" class="profile_picture rounded-circle"></td>';
+          }
           else
           {
             echo '<td><img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="profile_picture rounded-circle"></td>';
@@ -404,7 +450,8 @@ if(isset($_GET["admin"]))
           echo '</tr>';
   }
   echo '</tbody>
-  </table>';
+  </table>
+  </div>';
 }
 ?>
 

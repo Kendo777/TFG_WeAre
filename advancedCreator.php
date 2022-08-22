@@ -74,9 +74,9 @@
                     <div class="form-group">
                       <label for="style_bck_color" class="mb-2"><b>1. Background Color picker</b></label>
                       <input type="color" class="form-control form-control-color" id="style_bck_color" name="style_bck_color" <?php if(isset($json_data)) { echo 'value="' . $json_data["style"]["bck_color"] . '"'; } else { echo 'value="#FFFFFF"'; } ?> title="Choose your color">
-                      <label for="style_bck_color" class="mb-2"><b>1. Primary Color picker</b><small>Text color</small></label>
+                      <label for="style_bck_color" class="mb-2"><b>2. Primary Color picker</b><small>Text color</small></label>
                       <input type="color" class="form-control form-control-color" id="style_primary_color" name="style_primary_color" <?php if(isset($json_data)) { echo 'value="' . $json_data["style"]["primary_color"] . '"'; } else { echo 'value="#000000"'; } ?> title="Choose your color">
-                      <label for="style_bck_color" class="mb-2"><b>1. Secundary Color picker</b><small>Borders color,...</small></label>
+                      <label for="style_bck_color" class="mb-2"><b>3. Secundary Color picker</b><small>Borders color,...</small></label>
                       <input type="color" class="form-control form-control-color" id="style_secundary_color" name="style_secundary_color" <?php if(isset($json_data)) { echo 'value="' . $json_data["style"]["secundary_color"] . '"'; } else { echo 'value="#000000"'; } ?> title="Choose your color">
                     </div>
                   </div>
@@ -126,9 +126,17 @@
                                         break;  
                                     }
                                     echo '<div class="input-group mb-3">
-                                  <button class="btn btn-info disabled">' . $type . '</button>                                
-                                  <input type="text" class="form-control m-input" placeholder="User Attribute" value="' . ucfirst($column["Field"]) . '">
-                                      <div class="input-group-append mx-3">
+                                        <button class="btn btn-info disabled">' . $type . '</button> 
+                                        <form></form>                               
+                                        <form action="' . $url . '" method="post" role="form" style="flex: 1 1 auto;">
+                                        <div class="input-group">
+                                            <input type="text" name="column_name" class="form-control m-input" placeholder="User Attribute" value="' . ucfirst($column["Field"]) . '">
+                                            <input type="hidden" name="rename_column" value="' . $column["Field"] . '">
+                                            <input type="hidden" name="column_type" value="' . $column["Type"] . '">
+                                            <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-pencil-fill"></i></button>
+                                          </div>
+                                        </form>
+                                        <div class="input-group-append d-flex">
                                         <form action="' . $url . '" method="post" role="form">
                                           <input type="hidden" name="delete_column" value="' . $column["Field"] . '">
                                           <button type="submit" class="btn btn-danger" onclick="return confirm(\'You are going to delete a users attribute\nOnce deleted it cannot be recovered. Are you sure?\')"><i class="bi bi-trash-fill"></i></button>
@@ -148,7 +156,7 @@
                                   </select>
                                 <input type="text" name="column_name[]" class="form-control m-input" placeholder="User Attribute">
                                 <div class="input-group-append mx-3">
-                                <button id="removeRow" type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+                                  <button id="removeRow" type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
                                 </div>
                                 </div>
                                 </div>';
@@ -170,270 +178,28 @@
                         Navigation Bar
                     </button>
                 </h3>
-                <div id="navBar" class="accordion-collapse collapse"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
+                <div id="navBar" class="accordion-collapse collapse show"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
                   <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
                     <label for="navBar_type" class="mb-2"><b>1. Navigation bar type</b></label>
                     <select class="form-control mb-2" id="navBar_type" name="navBar_type">
                       <option>Clasic Navigation Bar</option>
-                      <option>Side Collapsed Bar</option>
+                      <option>Side Collapser Bar</option>
                     </select>
+                    <label for="style_bck_color" class="mb-2"><b>2. Make your own custom web page</b></label>
+                    <div id="inputFormRow">
+                      <div class="input-group mb-3">
+                        <select class="btn btn-outline-info" id="add_event_color" disabled>
+                          <option>Home</option>
+                        </select>
+                        <input type="text" name="home_name" class="form-control m-input" placeholder="Home Tab">
+                      </div>
+                    </div>
+                      <div id="tab_new_row"></div>
+                      <button onclick="add_tab_row()" type="button" class="btn btn-info">Add New Tab</button>
                   </div>
                 </div>
               </div><!-- End Component item-->
               
-              <!-- Gallery Configuration -->
-              <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
-                <h3 class="accordion-header form-check form-switch">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gallery">
-                      <input type="checkbox" class="form-check-input" id="gallery_enable" name="gallery_enable" <?php if(isset($json_data) && $json_data["gallery"]["enable"]) { echo 'checked'; } ?> data-bs-toggle="collapse" data-bs-target="#gallery" style="position:absolute !important; left: 2% !important;">
-                      <label class="form-check-label" for="gallery_enable">
-                        <i class="bi bi-images question-icon"></i>
-                          Gallery
-                      </label>
-                    </button>
-                </h3>
-                <div id="gallery" class="accordion-collapse collapse <?php if(isset($json_data) && $json_data["gallery"]["enable"]) { echo 'show'; } ?>"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
-                  <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
-                    <p>Upload your images to your web page</p>
-                    <div class="form-group">
-                    <div class="row">
-                      <section id="portfolio" class="portfolio">
-                          <div class="container">
-                            <div class="section-header">
-                            <h2>Grid Gallery</h2>
-                            <p>Non hic nulla eum consequatur maxime ut vero memo vero totam officiis pariatur eos dolorum sed fug dolorem est possimus esse quae repudiandae. Dolorem id enim officiis sunt deserunt esse soluta consequatur quaerat</p>
-                          </div>
-                        </div>
-                        <div class="container-fluid" style="width: 50%;">
-                          <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
-                            <div class="row g-0">
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/app-1.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/product-1.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/branding-1.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/books-1.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/app-2.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/product-2.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/branding-2.jpg" class="img-fluid glightbox" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/books-2.jpg" class="img-fluid glightbox" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/app-3.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/product-3.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/branding-3.jpg" class="img-fluid" alt="">
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/books-3.jpg" class="img-fluid glightbox preview-link" alt="">
-                            </div><!-- End Portfolio Item -->
-                            
-                          </div><!-- End Portfolio Container -->
-                        </div>
-                      </div>
-                      </section><!-- End Portfolio Section -->
-                      </div>
-                      <div class="row">
-                      <section id="portfolio" class="portfolio">
-                          <div class="container">
-                            <div class="section-header">
-                            <h2>Zoom Gallery</h2>
-                            <p>Non hic nulla eum consequatur maxime ut vero memo vero totam officiis pariatur eos dolorum sed fug dolorem est possimus esse quae repudiandae. Dolorem id enim officiis sunt deserunt esse soluta consequatur quaerat</p>
-                          </div>
-
-                        </div>
-                        <div class="container-fluid"  style="width: 50%;">
-                          <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
-                            <div class="row g-0">
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/app-1.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/app-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/product-1.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/product-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/branding-1.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/branding-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/books-1.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/books-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/app-2.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/app-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/product-2.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/product-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/branding-2.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/branding-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/books-2.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/books-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/app-3.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/app-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/product-3.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/product-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/branding-3.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/branding-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/books-3.jpg" class="img-fluid glightbox preview-link" alt="">
-                              <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/books-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
-                                  <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
-                                </a>
-                              </div>
-                            </div><!-- End Portfolio Item -->
-                            
-                          </div><!-- End Portfolio Container -->
-                        </div>
-                      </div>
-                      </section><!-- End Portfolio Section -->
-                      </div>
-                      <small class="form-text text-muted">All gallery types examples.<br><br></small>
-                      <label for="gallery_type" class="mb-2"><b>1. Gallery type</b></label>
-                      <select class="form-control mb-2" id="gallery_type" name="gallery_type">
-                        <?php
-                        echo '<option ';
-                        if(isset($json_data) && $json_data["gallery"]["type"] == "Grid Gallery View") 
-                        {
-                          echo 'selected';
-                        }
-                          echo '>Grid Gallery View</option>
-                                <option ';
-                        if(isset($json_data) && $json_data["gallery"]["type"] == "Zoom Gallery View") 
-                        {
-                          echo 'selected';
-                        }
-                        echo '>Zoom Gallery View</option>';
-                        
-                        ?>
-                        <!-- <option>Basic Carousel View</option>
-                        <option>Carousel View</option> -->
-                      </select>
-                      <small class="form-text text-muted">Choose type of gallery.</small>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Component item-->
-
-              <!-- Blog Configuration -->
-              <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
-                <h3 class="accordion-header form-check form-switch">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#blog">
-                      <input type="checkbox" class="form-check-input" id="blog_enable" name="blog_enable" <?php if(isset($json_data) && $json_data["blog"]["enable"]) { echo 'checked'; } ?> data-bs-toggle="collapse" data-bs-target="#blog" style="position:absolute !important; left: 2% !important;">
-                      <label class="form-check-label" for="blog_enable">
-                        <i class="bi bi-newspaper question-icon"></i>
-                          Blog
-                      </label>
-                    </button>
-                </h3>
-                <div id="blog" class="accordion-collapse collapse <?php if(isset($json_data) && $json_data["blog"]["enable"]) { echo 'show'; } ?>"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
-                      </div>
-              </div><!-- End Component item-->
-
-              <!-- Forum Configuration -->
-              <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
-                <h3 class="accordion-header form-check form-switch">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forum">
-                      <input type="checkbox" class="form-check-input" id="forum_enable" name="forum_enable" <?php if(isset($json_data) && $json_data["forum"]["enable"]) { echo 'checked'; } ?> data-bs-toggle="collapse" data-bs-target="#forum" style="position:absolute !important; left: 2% !important;">
-                      <label class="form-check-label" for="forum_enable">
-                        <i class="bi bi-bar-chart-steps question-icon"></i>
-                        Forum
-                      </label>
-                    </button>
-                </h3>
-                <div id="forum" class="accordion-collapse collapse <?php if(isset($json_data) && $json_data["forum"]["enable"]) { echo 'show'; } ?>"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
-                      </div>
-              </div><!-- End Component item-->
-
-              <!-- Forum Configuration -->
-              <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
-                <h3 class="accordion-header form-check form-switch">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#calendar">
-                      <input type="checkbox" class="form-check-input" id="calendar_enable" name="calendar_enable" <?php if(isset($json_data) && $json_data["calendar"]["enable"]) { echo 'checked'; } ?> data-bs-toggle="collapse" data-bs-target="#calendar" style="position:absolute !important; left: 2% !important;">
-                      <label class="form-check-label" for="calendar_enable">
-                        <i class="bi bi-calendar-week question-icon"></i>
-                        Calendar
-                      </label>
-                    </button>
-                </h3>
-                <div id="calendar" class="accordion-collapse collapse <?php if(isset($json_data) && $json_data["calendar"]["enable"]) { echo 'show'; } ?>"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
-                </div>
-              </div><!-- End Component item-->
               <div class="form-group row mt-5">
                 <div class="col-sm-10">
                   <?php

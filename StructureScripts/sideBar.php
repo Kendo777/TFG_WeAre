@@ -54,6 +54,28 @@
                 </li>';
               }
             ?>
+            <li>
+              <a class="accordion-button collapsed dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#general" style="background: none;">
+                <i class="bi bi-globe2 question-icon"></i>
+                  General
+            </a>
+              <div id="general" class="accordion-collapse collapse">
+              <ul class="list-unstyled">
+                <li>
+                    <a href="index.php">
+                      <i class="bi bi-house-fill"></i>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php">
+                      <i class="bi bi-house-fill"></i>
+                        Home
+                    </a>
+                </li>
+              </ul>
+              </div>
+          </li>
         </ul>
     </nav>
 
