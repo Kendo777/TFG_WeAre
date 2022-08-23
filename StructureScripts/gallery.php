@@ -120,6 +120,21 @@ $album=$result->fetch_assoc();
   {
     unlink("images/gallery" . DIRECTORY_SEPARATOR . $album["name"] . DIRECTORY_SEPARATOR . $_POST['delete_img']);
   }
+  if(isset($_POST["delete_all_images"]))
+  {
+    $dir = scandir("images/gallery" . DIRECTORY_SEPARATOR . $album["name"]);
+    foreach ($dir as $value) {
+      if($value!="." && $value!="..")
+      {
+        if(is_dir("images/gallery" . DIRECTORY_SEPARATOR . $album["name"] . DIRECTORY_SEPARATOR . $value))
+        {
+          deleteDir("images/gallery" . DIRECTORY_SEPARATOR . $album["name"] . DIRECTORY_SEPARATOR . $value);
+        }
+      }
+    }
+    mkdir("images/gallery" . DIRECTORY_SEPARATOR . $album["name"] . DIRECTORY_SEPARATOR . "No-category", 0700);
+
+  }
   if(isset($_POST['delete_tag']))
   {
     copy_folder("images/gallery" . DIRECTORY_SEPARATOR . $album["name"] . DIRECTORY_SEPARATOR . $_POST["delete_tag"], "images/gallery" . DIRECTORY_SEPARATOR . $album["name"] . DIRECTORY_SEPARATOR . "No-category");
@@ -149,7 +164,7 @@ $album=$result->fetch_assoc();
 if(isset($_GET["edit"]))
 {
   echo '<a href="index.php?page=gallery&album=' . $album_id . '">
-  <button type="submit" class="btn btn-danger">Edit</button></a>';
+  <button type="submit" class="btn btn-warning">Edit</button></a>';
 }
 else if(isset($_SESSION["user"])  && $session_user["rol"] != "reader")
 {
@@ -210,7 +225,12 @@ if(isset($_GET["edit"]))
     echo'</select>            </div>
             <button type="submit" class="btn btn-primary">Send</button>
         </form>
-
+        <hr>
+        <h5>Delete all images</h5>
+        <form method="post" action="index.php?page=gallery&album=' . $album_id . '&edit">
+        <input type="hidden" name="delete_all_images">
+        <button type="submit" class="btn btn-danger" onclick="return confirm(\'You are going to delete all the images and tags in the gallery\nAre you sure?\')">Send</button>
+        </form>
 				</div>';
 		echo '<div class="col mr-4">
       <h2>Upload images</h2>
@@ -331,21 +351,21 @@ if(isset($_GET["edit"]))
 }
 else
 {
-  if($json_data["gallery"]["type"] == "Zoom Gallery View")
+  if($album["type"] == "Zoom Gallery View")
   {
     require_once("zoomGallery.php");
 	  echo create_zoom_gallery(0, $album);
   }
-  else if($json_data["gallery"]["type"] == "Grid Gallery View")
+  else if($album["type"] == "Grid Gallery View")
   {
     require_once("gridGallery.php");
 	  echo create_grid_gallery(0, $album);
   }
-  else if($json_data["gallery"]["type"] == "Carousel View")
+  else if($album["type"] == "Carousel View")
   {
     include_once("carouselGallery.php");
   }
-  else if($json_data["gallery"]["type"] == "Basic Carousel View")
+  else if($album["type"] == "Basic Carousel View")
   {
     include_once("basicCarouselGallery_v2.php");
   }

@@ -112,7 +112,7 @@
                 case "Calendar":
                     calendar_form(id);
                     break;
-                case "Dropdown Tab":
+                case "Dropdown":
                     dropdown_form(id);
                     break;
                 default:
@@ -136,7 +136,6 @@
             html += '<hr>';
             html += '<textarea class="form-control" name="blog_description[]" rows="5" placeholder="Write the description" required></textarea>';
             html += '</div></div></div>';
-            blog_id++;
             document.getElementById("tab_form_" + id).innerHTML = html;
         }
         function gallery_form(id)
@@ -155,7 +154,6 @@
             html += '<hr>';
             html += '<textarea class="form-control" name="gallery_description[]" rows="5" placeholder="Write the description" required></textarea>';
             html += '</div></div></div>';
-            gallery_id++;
             document.getElementById("tab_form_" + id).innerHTML = html;
         }
         function calendar_form(id)
@@ -174,7 +172,6 @@
             html += '<hr>';
             html += '<textarea class="form-control" name="calendar_description[]" rows="5" placeholder="Write the description" required></textarea>';
             html += '</div></div></div>';
-            calendar_id++;
             document.getElementById("tab_form_" + id).innerHTML = html;
         }
         function forum_form(id)
@@ -205,7 +202,6 @@
             html += '<div id="categorienewRow_' + id + '"></div>';
             html += '<button onclick="addForumCategorieRow(' + id + ')" type="button" class="btn btn-info">Add Row</button>';
             html += '</div></div></div>';
-            forum_id++;
             document.getElementById("tab_form_" + id).innerHTML = html;
         }
         function dropdown_form(id)
@@ -224,7 +220,6 @@
             html += '<div id="tab_new_row_' + id + '"></div>';
             html += '<button onclick="add_tab_dropdown_row(' + id + ')" type="button" class="btn btn-info">Add New Dropdown Tab</button>'
             html += '</div></div></div>';
-            dropdown_id++;
             document.getElementById("tab_form_" + id).innerHTML = html;
         }
 

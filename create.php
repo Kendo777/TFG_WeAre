@@ -67,10 +67,18 @@ require_once("mySqli.php");
    */
   class WebNavBar 
   {
+      public $type;
       public $tabs;
-
       function __construct() {
         
+    }
+    function set(string $type)
+    {
+      $this->type = $type;
+    }
+    function set_tabs($tabs)
+    {
+      $this->tabs = $tabs;
     }
   }
   /**
@@ -129,14 +137,12 @@ require_once("mySqli.php");
   class WebGallery 
   {
       public $enable;
-      public $type;
 
       function __construct() {
           $this->enable = false;
       }
-      function set(string $type) {
+      function set() {
         $this->enable = true;
-        $this->type = $type;
       }
   }
 
@@ -435,34 +441,79 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     $web_blog = new WebBlog();
     $web_forum = new WebForum();
     $web_calendar = new WebCalendar();
-       
+    $web_navBar = new WebNavBar();
     
     /**
      * Set the configuration of all the components of the result web page
      * If gallery is enabled, set the configuration selected
      * If...
-     */
+     */ 
     if(isset($_POST["users_enable"]))
     {
         $web_users->set();
     }
-    if(isset($_POST["gallery_enable"]))
+
+    if(isset($_POST["home_name"]))
     {
-        $web_gallery->set($_POST["gallery_type"]);
-    }
-    if(isset($_POST["blog_enable"]))
-    {
+      $dropdown_count = 0;
+      $nav_bar[$_POST["home_name"]] = (object)[
+        "type" => "Home"
+      ];
+      if(isset($_POST["tab_name"]))
+      {
+        foreach($_POST["tab_name"] as $index => $value)
+        {
+          if(!empty($value) && $_POST["tab_type"][$index] != "Dropdown")
+          {
+            $nav_bar[$value] = (object)[
+              "type" => $_POST["tab_type"][$index],
+              "index" => 1
+            ];
+          }
+          else if($_POST["tab_type"][$index] == "Dropdown Tab")
+          {
+            $dropdown_id = $_POST["dropdown_id"][$dropdown_count];
+            $dropdown_list = array();
+            foreach($_POST["tab_dropdown_" . $dropdown_id . "_name"] as $dd_index => $dd_value)
+            {
+              $dropdown_list[$dd_value] = (object)[
+                "type" => $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index],
+                "index" => 2
+              ];
+            }
+            $nav_bar[$value] = (object)[
+              "type" => $_POST["tab_type"][$index],
+              "dropdown" => $dropdown_list
+            ];
+          }
+        }
+      }
+      $web_navBar->set($_POST["navBar_type"]);
+      $web_navBar->set_tabs($nav_bar);
+      $web_gallery->set();
       $web_blog->set();
-    }
-    if(isset($_POST["forum_enable"]))
-    {
       $web_forum->set();
-    }
-    if(isset($_POST["calendar_enable"]))
-    {
       $web_calendar->set();
     }
-    
+    else
+    {
+      if(isset($_POST["gallery_enable"]))
+      {
+          $web_gallery->set();
+      }
+      if(isset($_POST["blog_enable"]))
+      {
+        $web_blog->set();
+      }
+      if(isset($_POST["forum_enable"]))
+      {
+        $web_forum->set();
+      }
+      if(isset($_POST["calendar_enable"]))
+      {
+        $web_calendar->set();
+      }
+    }
     /**
      * JSON creation
      * Create the php object that will be encoded as JSON and insert all the nedded data 
@@ -588,6 +639,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
 //PRUEBAS
 if(isset($_POST["home_name"]))
 {
+  $web_navBar = new WebNavBar();
   $dropdown_count = 0;
   $nav_bar[$_POST["home_name"]] = (object)[
     "type" => "Home"
@@ -621,12 +673,15 @@ if(isset($_POST["home_name"]))
       }
     }
   }
-  var_dump($nav_bar);
+  $web_navBar->set($_POST["navBar_type"]);
+  $web_navBar->set_tabs($nav_bar);
+
+  var_dump($web_navBar);
 }
 
 
   /**********************************/
-  else if(!empty($_POST) && !isset($_GET["edit"]))
+  if(!empty($_POST) && !isset($_GET["edit"]))
   {
       if(!isset($_POST["web_name"]) || empty($_POST["web_name"]))
       {
