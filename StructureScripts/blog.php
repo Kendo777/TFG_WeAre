@@ -207,7 +207,7 @@ if(isset($_GET["blog"]))
         }
         echo '</a>
               <div class="media-body ml-3"> 
-                <a class="text-secondary">' . $row["user"] . '</a><br>
+                <a>' . $row["user"] . '</a><br>
                 <small class="text-muted">' . substr($row['date'], 0, strpos($row["date"], " ")) . '</small>
                 <form action="index.php?page=blog&blog=' . $_GET["blog"] . '" method="post" role="form">
                   <div class="row">
@@ -263,7 +263,7 @@ if(isset($_GET["blog"]))
         
         echo '</a>
               <div class="media-body ml-3"> 
-                <a class="text-secondary" href="index.php?page=user&user=' . $row["user"] . '">' . $row["user"] . '</a><br>
+                <a href="index.php?page=user&user=' . $row["user"] . '">' . $row["user"] . '</a><br>
                 <small class="text-muted">' . substr($row['date'], 0, strpos($row["date"], " ")) . '</small>';
         echo '<div class="mt-4 font-size-sm">
               <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"])) . '</p>
@@ -351,7 +351,7 @@ if(isset($_GET["blog"]))
         
         echo '</a>
 
-                <a class="text-secondary"';
+                <a ';
         if($row["user"] != "Guest")
         {
           echo 'href="index.php?page=user&user=' . $row["user"] . '"';

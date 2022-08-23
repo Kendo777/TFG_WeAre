@@ -178,7 +178,7 @@
       
       echo '</a>
             <div class="media-body ml-3"> 
-              <a class="text-secondary" ';
+              <a ';
       if($row["user"] != "Guest")
       {
         echo 'href="index.php?page=user&user=' . $row["user"] . '"';
@@ -271,11 +271,11 @@
           $first_response = false;
         }
         $response_date = new DateTime($row_responses['date']);
-        echo '<div><small>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row_responses["content"])) . ' - <span class="bg-info text-white">'. $row_responses["user"] .'</span> <span class="text-secondary">' . date_format($response_date, 'g:ia \o\n l jS F Y') . '</span></small>';
+        echo '<div class="input-group"><small>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row_responses["content"])) . ' - <span class="bg-info text-white">'. $row_responses["user"] .'</span> <span class="text-secondary">' . date_format($response_date, 'g:ia \o\n l jS F Y') . '</span></small>';
         if(isset($_SESSION["user"])  && ($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin"))
         {
-          echo '<form action="index.php?page=forum&forum=' . $_GET["forum"] . '" method="post" role="form">
-          <input type="hidden" name="delete_response_id" value="' . $row["id"] . '">
+          echo '<form action="index.php?page=forum&forum=' . $_GET["forum"] . '" method="post" role="form" class="mx-3">
+          <input type="hidden" name="delete_response_id" value="' . $row_responses["id"] . '">
           <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></button>
           </form>';
         }
@@ -355,13 +355,13 @@
             <a href="index.php?page=forum&forum=' . $row["id"] . '" class="text-primary">' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["title"])) . '</a>
           </h5>
           <p class="text-sm"><span class="op-6">Posted</span>';
-      echo ' ' . strtolower(time_ago($date)) . ' ';
-      echo '<a class="text-black"';
+      echo ' ' . strtolower(time_ago($date)) . ' by';
+      echo '<a ';
       if($row["user"] != "Guest")
       {
         echo 'href="index.php?page=user&user=' . $row["user"] . '"';
       } 
-      echo '>by ' . $row["user"] . '</a>
+      echo '> ' . $row["user"] . '</a>
           </p>
           <div class="text-sm op-5">';
       for($j=0; $j<$result_categories->num_rows; $j++)

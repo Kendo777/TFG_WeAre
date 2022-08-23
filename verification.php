@@ -62,7 +62,7 @@ echo '<div class="row justify-content-md-center">
   <div class="col-md-auto">';
 if(!$passwordChange)
 {
-echo '<h3>Steampunk Age of Steam - Validation</h3>
+echo '<h3>WE ARE - Validation</h3>
 <p class="alert alert-danger">Forgot the password? Get it back:</p>
 <form method="post" action="index.php?page=login">
 	<div class="form-group">
@@ -76,7 +76,7 @@ else
 {
 	if(isset($_GET["forgot"]))
 	{
-		echo '<h3>Steampunk Age of Steam - Validation</h3>
+		echo '<h3>WE ARE - Validation</h3>
 		<p class="alert alert-danger">Forgot the password? Get it back:</p>
 		<form method="post" action="index.php?page=verification&user='.$_GET["user"].'">
 			<div class="form-group">

@@ -486,6 +486,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     */
     // If everything goes well, show a success message
     $errorMsg.='<p class="alert alert-success">Web page: '.$_POST["web_name"].' is created correctly</p>';
+    header('location:index.php?page=myWebs');
   }
 
   //EDIT WEB REGION
@@ -583,6 +584,47 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     }
   }
 
+  //var_dump($_POST);
+//PRUEBAS
+if(isset($_POST["home_name"]))
+{
+  $dropdown_count = 0;
+  $nav_bar[$_POST["home_name"]] = (object)[
+    "type" => "Home"
+  ];
+  if(isset($_POST["tab_name"]))
+  {
+    foreach($_POST["tab_name"] as $index => $value)
+    {
+      if(!empty($value) && $_POST["tab_type"][$index] != "Dropdown")
+      {
+        $nav_bar[$value] = (object)[
+          "type" => $_POST["tab_type"][$index],
+          "index" => 1
+        ];
+      }
+      else if($_POST["tab_type"][$index] == "Dropdown Tab")
+      {
+        $dropdown_id = $_POST["dropdown_id"][$dropdown_count];
+        $dropdown_list = array();
+        foreach($_POST["tab_dropdown_" . $dropdown_id . "_name"] as $dd_index => $dd_value)
+        {
+          $dropdown_list[$dd_value] = (object)[
+            "type" => $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index],
+            "index" => 2
+          ];
+        }
+        $nav_bar[$value] = (object)[
+          "type" => $_POST["tab_type"][$index],
+          "dropdown" => $dropdown_list
+        ];
+      }
+    }
+  }
+  var_dump($nav_bar);
+}
+
+
   /**********************************/
   else if(!empty($_POST) && !isset($_GET["edit"]))
   {
@@ -600,7 +642,7 @@ if((isset($_GET["form"]) && $_GET["form"] == "basic") || (isset($_GET["edit"]) &
 {
   include_once("basicCreator.php");
 }
-if((isset($_GET["form"]) && $_GET["form"] == "advanced") || (isset($_GET["edit"]) && $json_data["web_data"]["web_structure"] == "advanced"))
+else if((isset($_GET["form"]) && $_GET["form"] == "advanced") || (isset($_GET["edit"]) && $json_data["web_data"]["web_structure"] == "advanced"))
 {
   include_once("advancedCreator.php");
 }

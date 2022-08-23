@@ -1,4 +1,12 @@
 <?php
+  if($json_data["web_data"]["web_structure"] == "basic")
+  {
+    $calendar_id = 1;
+  }
+  else if(isset($_GET["calendar"]))
+  {
+    $calendar_id = $_GET["calendar"];
+  }
 if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
 {
   if(isset($_POST["add_event_title"]))
@@ -18,7 +26,7 @@ if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
     if($start < $end)
     {    
       $sql= $mySqli_db->prepare("INSERT INTO `calendar_events`(`calendar_id`, `title`, `description`, `color`, `start`, `end`) VALUES (?, ?, ?, ?, ?, ?)");
-      $sql->bind_param("isssss", $_GET["calendar"], $title, $description, $color, $start, $end);
+      $sql->bind_param("isssss", $calendar_id, $title, $description, $color, $start, $end);
       $sql->execute();
     }
     else
@@ -51,9 +59,9 @@ if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
 
     if($start < $end)
     {  
-    $sql= $mySqli_db->prepare("UPDATE `calendar_events` SET `title`=?,`description`=?, `color`=?, `start`=?,`end`=? WHERE id = ?");
-    $sql->bind_param("sssssi", $title, $description, $color, $start, $end, $id);
-    $sql->execute();
+      $sql= $mySqli_db->prepare("UPDATE `calendar_events` SET `title`=?,`description`=?, `color`=?, `start`=?,`end`=? WHERE id = ?");
+      $sql->bind_param("sssssi", $title, $description, $color, $start, $end, $id);
+      $sql->execute();
     }
     else
     {
@@ -184,14 +192,6 @@ $(document).ready(function() {
 		//FOR CON TODOS LOS EVENTOS PHP
 		events: [
       <?php
-        if($json_data["web_data"]["web_structure"] == "basic")
-        {
-          $calendar_id = 1;
-        }
-        else if(isset($_GET["calendar"]))
-        {
-          $calendar_id = $_GET["calendar"];
-        }
         $sql= $mySqli_db->prepare("SELECT * FROM calendar_events WHERE calendar_id = ?");
         $sql->bind_param("i", $calendar_id);
         $sql->execute();

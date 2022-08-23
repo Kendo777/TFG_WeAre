@@ -1,3 +1,9 @@
+<?php
+  if(!isset($_SESSION["weAre_user"]))
+  {
+    header('location:index.php');
+  }
+?>
 <header>
 
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -35,22 +41,22 @@
                     <label for="web_privacity" class="mb-2"><b>2. Privacity</b></label>
                       <select class="form-control mb-2" id="web_privacity" name="web_privacity">
                       <?php
-                        echo '<option ';
+                        echo '<option';
                         if(isset($json_data) && $json_data["web_data"]["web_privacity"] == "Public") 
                         {
-                          echo 'selected';
+                          echo ' selected';
                         }
                           echo '>Public</option>
-                          <option ';
+                          <option';
                         if(isset($json_data) && $json_data["web_data"]["web_privacity"] == "Private") 
                         {
-                          echo 'selected';
+                          echo ' selected';
                         }
                         echo '>Private</option>
                         <option';
                         if(isset($json_data) && $json_data["web_data"]["web_privacity"] == "Invitation") 
                         {
-                          echo 'selected';
+                          echo ' selected';
                         }
                         echo '>Invitation</option>';
                         
@@ -191,7 +197,7 @@
                         <select class="btn btn-outline-info" id="add_event_color" disabled>
                           <option>Home</option>
                         </select>
-                        <input type="text" name="home_name" class="form-control m-input" placeholder="Home Tab">
+                        <input type="text" name="home_name" class="form-control m-input" placeholder="Home Tab Name">
                       </div>
                     </div>
                       <div id="tab_new_row"></div>

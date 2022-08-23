@@ -35,22 +35,22 @@
                     <label for="web_privacity" class="mb-2"><b>2. Privacity</b></label>
                       <select class="form-control mb-2" id="web_privacity" name="web_privacity">
                       <?php
-                        echo '<option ';
+                        echo '<option';
                         if(isset($json_data) && $json_data["web_data"]["web_privacity"] == "Public") 
                         {
-                          echo 'selected';
+                          echo ' selected';
                         }
                           echo '>Public</option>
-                          <option ';
+                          <option';
                         if(isset($json_data) && $json_data["web_data"]["web_privacity"] == "Private") 
                         {
-                          echo 'selected';
+                          echo ' selected';
                         }
                         echo '>Private</option>
                         <option';
                         if(isset($json_data) && $json_data["web_data"]["web_privacity"] == "Invitation") 
                         {
-                          echo 'selected';
+                          echo ' selected';
                         }
                         echo '>Invitation</option>';
                         

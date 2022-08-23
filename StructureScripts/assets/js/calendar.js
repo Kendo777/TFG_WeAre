@@ -6163,6 +6163,7 @@ function HorizontalPositionCache(getElement) {
 ;;
 
 })(jQuery);
+
 function datetime_local_format(date)
 {
 	var standar_date = date.getFullYear() + "-";
@@ -6200,27 +6201,52 @@ function editEvent(id, title, description, color, start, end) {
 	document.getElementById("edit_event_color").value = color;
 
 	var date_format = start.substring(0,11);
-	var hours = (parseInt(start.substring(11,16)) + 2);
-  if(hours>=24)
-  {
-    document.getElementById("edit_event_start").value = date_format + "00:00";
-  }
-  else
-  {
+	var hours = (parseInt(start.substring(11,13)) + 2);
+
+	if(hours>=24)
+	{
+    hours -= 24;
+    var day = (parseInt(date_format.substring(8,10)) + 1);
+    date_format = date_format.substring(0, 8);
+    if(day < 10)
+    {
+      date_format += "0";
+    }
+    date_format += day + "T";
     if(hours < 10)
     {
       date_format += "0";
     }
-    document.getElementById("edit_event_start").value = date_format + hours + start.substring(13,16);
-  }
+		document.getElementById("edit_event_start").value = date_format + hours + start.substring(13,16);
+	}
+	else
+	{
+		if(hours < 10)
+		{
+		  date_format += "0";
+		}
+		document.getElementById("edit_event_start").value = date_format + hours + start.substring(13,16);
+	}
 
 	if(end)
 	{
 		date_format = end.substring(0,11);
-		hours = parseInt(end.substring(11,16)) + 2;
+		hours = (parseInt(end.substring(11,13)) + 2);
     if(hours>=24)
     {
-      document.getElementById("edit_event_end").value = date_format + "23:59";
+      hours -= 24;
+      var day = (parseInt(date_format.substring(8,10)) + 1);
+      date_format = date_format.substring(0, 8);
+      if(day < 10)
+      {
+        date_format += "0";
+      }
+      date_format += day + "T";
+      if(hours < 10)
+      {
+        date_format += "0";
+      }
+      document.getElementById("edit_event_end").value = date_format + hours + end.substring(13,16);
     }
     else
     {
