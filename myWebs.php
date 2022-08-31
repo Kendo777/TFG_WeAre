@@ -3,6 +3,48 @@
   {
     header('location:index.php');
   }
+
+  function deleteDir($dirPath) {
+    if (! is_dir($dirPath)) {
+        throw new InvalidArgumentException("$dirPath must be a directory");
+    }
+    $dir = opendir($dirPath);   
+    while( $file = readdir($dir) ) 
+    { 
+        if (( $file != '.' ) && ( $file != '..' ))
+        { 
+            if (is_dir($dirPath.DIRECTORY_SEPARATOR.$file) ) 
+            { 
+                deleteDir($dirPath.DIRECTORY_SEPARATOR.$file);
+            } 
+            else
+            {
+                unlink($dirPath.DIRECTORY_SEPARATOR.$file); 
+            }
+        } 
+    } 
+    closedir($dir);
+    rmdir($dirPath);
+  }
+
+  if(isset($_POST["delete_web"]))
+  {
+    $web_id = $_POST["delete_web"];
+    $sql= $mySqli->prepare("SELECT * FROM web_pages WHERE id = ?");
+    $sql->bind_param("i", $web_id);
+    $sql->execute();
+    $result=$sql->get_result();
+    $web=$result->fetch_assoc();
+
+    $sql= $mySqli->prepare("DROP DATABASE " . $web["web_database"]);
+    $sql->execute();
+
+    deleteDir("WebPages" . DIRECTORY_SEPARATOR . $web["web_name"]);
+
+    $sql= $mySqli->prepare("DELETE FROM `web_pages` WHERE id = ?");
+    $sql->bind_param("i", $web_id);
+    $sql->execute();
+  }
 ?>
 <section class="d-flex align-items-center">
   <div class="container" data-aos="fade-up">
@@ -97,6 +139,12 @@
             <div class="col px-1"> 
               <a href="index.php?page=create&edit='. $row["web_name"] . '">
               <button type="submit" class="btn btn-warning">Admin</button></a>
+            </div>
+            <div class="col px-1"> 
+              <form action="index.php?page=myWebs" method="post" role="form">
+                <input type="hidden" name="delete_web" value="' . $row["id"] . '">
+                <button type="submit" class="btn btn-danger" onclick="return confirm(\'You are going to delete the ' . $row["web_current_name"] . ' web page\nOnce deleted it cannot be recovered. Are you sure?\')"><i class="bi bi-trash-fill"></i></button>
+              </form>
             </div>
           </div>
         </div>

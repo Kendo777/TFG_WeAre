@@ -164,7 +164,8 @@ if(!empty($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error']==0)
   move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $path.$_SESSION['user'].".png");
   if(getimagesize($path.$_SESSION['user'].".png")[0] != getimagesize($path.$_SESSION['user'].".png")[1])
   {
-    imagepng(cropAlign($path.$_SESSION['user'].".png", 600, 600), $path.$_SESSION['user'].".png");
+    $min_size = getimagesize($path.$_SESSION['user'].".png")[0] < getimagesize($path.$_SESSION['user'].".png")[1] ? getimagesize($path.$_SESSION['user'].".png")[0] : getimagesize($path.$_SESSION['user'].".png")[1]; 
+    imagepng(cropAlign($path.$_SESSION['user'].".png", $min_size, $min_size), $path.$_SESSION['user'].".png");
   }
 }
 if(isset($_POST["user_rol"]))
@@ -394,7 +395,7 @@ if(isset($_GET["admin"]))
     <form method="post" action="index.php?page=user&admin">
       <h3>Change Guest Key</h3><br>
       <input type="text" class="form-control" placeholder="New Guest Key" name="guest_key"><br>
-      <button type="submit" class="btn btn-primary">Send</button>
+      <button type="submit" class="btn btn-primary" onclick="return confirm(\'You are going to change the Guest Key\nAre you sure?\')">Send</button>
     </form>
   </div>
   <div class="col-md-auto">
@@ -437,15 +438,15 @@ if(isset($_GET["admin"]))
           </form></td>';
           if(file_exists("images/profile/".$row['user'].".png"))
           {
-            echo '<td><img src="images/profile/'.$row['user'].'.png" class="profile_picture rounded-circle"></td>';
+            echo '<td><img src="images/profile/'.$row['user'].'.png" class="profile_picture rounded-circle w-25"></td>';
           }
           else if($row["user"] == "Guest")
           {
-            echo '<td><img src="../../StructureScripts/assets/defaultImg/Guest.png" class="profile_picture rounded-circle"></td>';
+            echo '<td><img src="../../StructureScripts/assets/defaultImg/Guest.png" class="profile_picture rounded-circle w-25"></td>';
           }
           else
           {
-            echo '<td><img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="profile_picture rounded-circle"></td>';
+            echo '<td><img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="profile_picture rounded-circle w-25"></td>';
           }
           echo '</tr>';
   }

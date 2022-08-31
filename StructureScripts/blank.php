@@ -3,16 +3,16 @@
   {
     $blank_id = 2;
   }
-  else if(isset($_GET["blank"]))
+  else if(isset($_GET["id"]))
   {
-    $blank_id = $_GET["blank"];
+    $blank_id = $_GET["id"];
   }
 
   if(isset($_GET["edit"]) && (isset($_SESSION["user"]) && $session_user["rol"] == "reader"))
   {
     if(isset($_GET["edit"]))
     {
-      header('location:index.php?page=blank&blank=' . $blank_id);
+      header('location:index.php?page=blank&id=' . $blank_id);
     }
     else
     {
@@ -35,42 +35,54 @@
     $sql->bind_param("si", $post, $blank_id);
     $sql->execute();
   }
-  if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
+  
+  $sql= $mySqli_db->prepare("SELECT * FROM blank_pages WHERE id = ?");
+  $sql->bind_param("i", $blank_id);
+  $sql->execute();
+  $result=$sql->get_result();
+  $blank=$result->fetch_assoc();
+  if($blank)
   {
-    if(!isset($_GET["edit"]))
+    if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
     {
-      echo '<div class="position-absolute end-0 d-flex mr-5">
-      <a type="button" class="btn btn-warning mb-5" href="index.php?page=blank';
-      if(isset($_GET["blank"]))
+      if(!isset($_GET["edit"]))
       {
-        echo '&blank='. $blank_id;
+        echo '<div class="position-absolute end-0 d-flex mr-5">
+        <a type="button" class="btn btn-warning mb-5" href="index.php?page=blank';
+        if(isset($_GET["id"]))
+        {
+          echo '&id='. $blank_id;
+        }
+        echo '&edit"><i class="bi bi-pencil-fill"></i></a>
+        </div>';
       }
-      echo '&edit"><i class="bi bi-pencil-fill"></i></a>
-      </div>';
-    }
-    else
-    {
-      echo '<a type="button" class="btn btn-warning mb-5" href="index.php?page=blank';
-      if(isset($_GET["blank"]))
+      else
       {
-        echo '&blank='. $blank_id;
+        echo '<a type="button" class="btn btn-warning mb-5" href="index.php?page=blank';
+        if(isset($_GET["id"]))
+        {
+          echo '&id='. $blank_id;
+        }
+        echo '" onclick="return confirm(\'You are going to return without save\nAre you sure?\')"><i class="bi bi-arrow-return-left"></i></a>';
       }
-      echo '" onclick="return confirm(\'You are going to return without save\nAre you sure?\')"><i class="bi bi-arrow-return-left"></i></a>';
     }
   }
+  else
+  {
+    echo '<p class="alert alert-danger">Invalid component ID</p>';
+  }
 ?>
+
 <main id="editor_content">
   <div class="centered my-2">
     <div class="row row-editor">
       <div class="editor-container">
         <div class="editor" id="<?php if(!isset($_GET["edit"])) echo 'editor-off'; else echo 'editor'; ?>">
           <?php
-            $sql= $mySqli_db->prepare("SELECT * FROM blank_pages WHERE id = ?");
-            $sql->bind_param("i", $blank_id);
-            $sql->execute();
-            $result=$sql->get_result();
-            $blank=$result->fetch_assoc();
-            echo str_replace("\'", "'",str_replace("\\\"", "\"", $blank["content"]));
+            if($blank)
+            {
+              echo str_replace("\'", "'",str_replace("\\\"", "\"", $blank["content"]));
+            }
           ?>
         </div>
       </div>
@@ -81,9 +93,9 @@
   {
     echo'<div class="position-absolute end-0 d-flex mr-4 mt-3 pb-5">
     <form action="index.php?page=blank';
-    if(isset($_GET["blank"]))
+    if(isset($_GET["id"]))
     {
-      echo '&blank='. $blank_id;
+      echo '&id='. $blank_id;
     }
     echo '" method="post" role="form">
       <input type="hidden" id="blank_page_content" name="blank_page_content">

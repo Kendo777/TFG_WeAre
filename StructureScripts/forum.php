@@ -37,7 +37,7 @@
     //*************************USER*****************************
     $user = $_SESSION["user"];
     $sql= $mySqli_db->prepare("INSERT INTO `forum_posts`(`content`, `forum_id`, `user`) VALUES (?, ?, ?)");
-    $sql->bind_param("sis",$post, $_GET["forum"], $user);
+    $sql->bind_param("sis",$post, $_GET["id"], $user);
     $sql->execute();
   }
   if(isset($_POST["response"]))
@@ -127,172 +127,178 @@
 
 
 
-  if(isset($_GET["forum"]))
+  if(isset($_GET["id"]))
   {
     $sql= $mySqli_db->prepare("SELECT * FROM forums WHERE id = ?");
-    $sql->bind_param("i",$_GET["forum"]);
+    $sql->bind_param("i",$_GET["id"]);
     $sql->execute();
     $result=$sql->get_result();
     $forum=$result->fetch_assoc();
 
-
-    $sql= $mySqli_db->prepare("SELECT * FROM forum_posts WHERE forum_id = ?");
-    $sql->bind_param("i",$_GET["forum"]);
-    $sql->execute();
-    $result=$sql->get_result();
-    $first = true;
-    //echo '<a href="index.php?page=forum"><button type="submit" class="btn btn-primary">Back</button></a>';
-
-    for($i=0; $i<$result->num_rows; $i++)
+    if($forum)
     {
-      $row=$result->fetch_assoc();
-      if($first)
-      {
-        echo '<div class="row mb-2 mt-3">';
-      }
-      else
-      {
-        echo '<div class="row mb-2" style="margin-left: 3%;">';
-      }
-      echo '<div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
-      <div class="card mb-2">
-        <div class="card-body">
-          <div class="media forum-item"> 
-            <a class="card-link">';
-      if(file_exists("images/profile/". $row["user"] . ".png"))
-      {
-        echo '<a href="index.php?page=user&user=' . $row["user"] . '">
-        <img src="images/profile/' . $row["user"] . '.png" class="rounded-circle" width="50" alt="User">
-        </a>';
-      }
-      else if($row["user"] == "Guest")
-      {
-        echo '<img src="../../StructureScripts/assets/defaultImg/Guest.png" class="rounded-circle" width="50" alt="User">';
-      }
-      else
-      {
-        echo '<a href="index.php?page=user&user=' . $row["user"] . '">
-        <img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">
-        </a>';
-      }
-      
-      echo '</a>
-            <div class="media-body ml-3"> 
-              <a ';
-      if($row["user"] != "Guest")
-      {
-        echo 'href="index.php?page=user&user=' . $row["user"] . '"';
-      }
-      echo '>' . $row["user"] . '</a> 
-              <small class="text-muted ml-2">';
+      $sql= $mySqli_db->prepare("SELECT * FROM forum_posts WHERE forum_id = ?");
+      $sql->bind_param("i",$_GET["id"]);
+      $sql->execute();
+      $result=$sql->get_result();
+      $first = true;
+      //echo '<a href="index.php?page=forum"><button type="submit" class="btn btn-primary">Back</button></a>';
 
-      echo time_ago($row['date']);
-
-
-      echo '</small>';
-      if(isset($_SESSION["user"])  && ($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin"))
+      for($i=0; $i<$result->num_rows; $i++)
       {
+        $row=$result->fetch_assoc();
         if($first)
         {
-          echo '<form action="index.php?page=forum" method="post" role="form">
-          <input type="hidden" name="delete_forum" value="' . $_GET["forum"] . '">
-          <button type="submit" class="btn btn-danger btn-sm position-absolute end-0" onclick="return confirm(\'You are going to delete the current forum\nAre you sure?\')"><i class="bi bi-trash-fill"></i></button>
-          </form>';
+          echo '<div class="row mb-2 mt-3">';
         }
         else
         {
-          echo '<form action="index.php?page=forum&forum=' . $_GET["forum"] . '" method="post" role="form">
-          <input type="hidden" name="delete_id" value="' . $row["id"] . '">
-          <button type="submit" class="btn btn-danger btn-sm position-absolute end-0" onclick="return confirm(\'You are going to delete the current post\nAre you sure?\')"><i class="bi bi-trash-fill"></i></button>
-          </form>';
+          echo '<div class="row mb-2" style="margin-left: 3%;">';
         }
-      }
-      if($first)
-      {
-        echo '<h1 class="mt-1">' . str_replace("\'", "'",str_replace("\\\"", "\"", $forum["title"])) . '</h1>';
-      }
-      echo'<div class="mt-3 font-size-sm">
-                <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"])) . '</p>
-              </div>';
-      if($first)
-      {
-        $sql= $mySqli_db->prepare("SELECT * FROM forum_categories fc INNER JOIN forum_categories_relation fcr ON fc.id = fcr.forum_category_id WHERE fcr.forum_id = ?");
-        $sql->bind_param("i",$_GET["forum"]);
-        $sql->execute();
-        $result_categories=$sql->get_result();
-        for($j=0; $j<$result_categories->num_rows; $j++)
+        echo '<div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="media forum-item"> 
+              <a class="card-link">';
+        if(file_exists("images/profile/". $row["user"] . ".png"))
         {
-          $row_categories=$result_categories->fetch_assoc();
-          echo '<a class="text-black mr-2 text-info" href="index.php?page=forum&filter=' . $row_categories["id"] . '">#' . $row_categories["name"] . '</a>';
+          echo '<a href="index.php?page=user&user=' . $row["user"] . '">
+          <img src="images/profile/' . $row["user"] . '.png" class="rounded-circle" width="50" alt="User">
+          </a>';
         }
-        echo '<br><br>';
-        if(isset($_SESSION["user"])  && (isset($_SESSION["user"]) && $session_user["rol"] != "reader"))
+        else if($row["user"] == "Guest")
         {
-          echo '<a href="#" class="text-muted small" data-bs-toggle="collapse" data-bs-target="#post">Reply</a>
-          <div id="post" class="accordion-collapse collapse">
+          echo '<img src="../../StructureScripts/assets/defaultImg/Guest.png" class="rounded-circle" width="50" alt="User">';
+        }
+        else
+        {
+          echo '<a href="index.php?page=user&user=' . $row["user"] . '">
+          <img src="../../StructureScripts/assets/defaultImg/userDefault.jpg" class="rounded-circle" width="50" alt="User">
+          </a>';
+        }
+        
+        echo '</a>
+              <div class="media-body ml-3"> 
+                <a ';
+        if($row["user"] != "Guest")
+        {
+          echo 'href="index.php?page=user&user=' . $row["user"] . '"';
+        }
+        echo '>' . $row["user"] . '</a> 
+                <small class="text-muted ml-2">';
+
+        echo time_ago($row['date']);
+
+
+        echo '</small>';
+        if(isset($_SESSION["user"])  && ($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin"))
+        {
+          if($first)
+          {
+            echo '<form action="index.php?page=forum" method="post" role="form">
+            <input type="hidden" name="delete_forum" value="' . $_GET["id"] . '">
+            <button type="submit" class="btn btn-danger btn-sm position-absolute end-0" onclick="return confirm(\'You are going to delete the current forum\nAre you sure?\')"><i class="bi bi-trash-fill"></i></button>
+            </form>';
+          }
+          else
+          {
+            echo '<form action="index.php?page=forum&id=' . $_GET["id"] . '" method="post" role="form">
+            <input type="hidden" name="delete_id" value="' . $row["id"] . '">
+            <button type="submit" class="btn btn-danger btn-sm position-absolute end-0" onclick="return confirm(\'You are going to delete the current post\nAre you sure?\')"><i class="bi bi-trash-fill"></i></button>
+            </form>';
+          }
+        }
+        if($first)
+        {
+          echo '<h1 class="mt-1">' . str_replace("\'", "'",str_replace("\\\"", "\"", $forum["title"])) . '</h1>';
+        }
+        echo'<div class="mt-3 font-size-sm">
+                  <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"])) . '</p>
+                </div>';
+        if($first)
+        {
+          $sql= $mySqli_db->prepare("SELECT * FROM forum_categories fc INNER JOIN forum_categories_relation fcr ON fc.id = fcr.forum_category_id WHERE fcr.forum_id = ?");
+          $sql->bind_param("i",$_GET["id"]);
+          $sql->execute();
+          $result_categories=$sql->get_result();
+          for($j=0; $j<$result_categories->num_rows; $j++)
+          {
+            $row_categories=$result_categories->fetch_assoc();
+            echo '<a class="text-black mr-2 text-info" href="index.php?page=forum&filter=' . $row_categories["id"] . '">#' . $row_categories["name"] . '</a>';
+          }
+          echo '<br><br>';
+          if(isset($_SESSION["user"])  && (isset($_SESSION["user"]) && $session_user["rol"] != "reader"))
+          {
+            echo '<a href="#" class="text-muted small" data-bs-toggle="collapse" data-bs-target="#post">Reply</a>
+            <div id="post" class="accordion-collapse collapse">
+              <form action="' . $url . '" method="post" role="form">
+                <div class="row">
+                <div class="form-group mt-3">
+                  <textarea class="form-control" name="post" rows="9" placeholder="Write the message of the post" required></textarea>
+                </div>
+                <div class="text-center"><button class="btn btn-primary" type="submit">Send Post</button></div>
+              </form>
+            </div>
+            </div>';
+          }
+        }
+        else if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
+        {
+          echo '<a href="#" class="text-muted small" data-bs-toggle="collapse" data-bs-target="#reply' . $row['id'] . '">Reply</a>
+          <div id="reply' . $row['id'] . '" class="accordion-collapse collapse">
             <form action="' . $url . '" method="post" role="form">
               <div class="row">
               <div class="form-group mt-3">
-                <textarea class="form-control" name="post" rows="9" placeholder="Write the message of the post" required></textarea>
+                <textarea class="form-control" name="response" rows="5" placeholder="Write the reply for the post above" required></textarea>
+                <input type="text" hidden class="form-control" name="post_id" value="' . $row['id'] . '">
               </div>
-              <div class="text-center"><button class="btn btn-primary" type="submit">Send Post</button></div>
+              <div class="text-center"><button class="btn btn-primary" type="submit">Send Response</button></div>
             </form>
           </div>
           </div>';
         }
-      }
-      else if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
-      {
-        echo '<a href="#" class="text-muted small" data-bs-toggle="collapse" data-bs-target="#reply' . $row['id'] . '">Reply</a>
-        <div id="reply' . $row['id'] . '" class="accordion-collapse collapse">
-          <form action="' . $url . '" method="post" role="form">
-            <div class="row">
-            <div class="form-group mt-3">
-              <textarea class="form-control" name="response" rows="5" placeholder="Write the reply for the post above" required></textarea>
-              <input type="text" hidden class="form-control" name="post_id" value="' . $row['id'] . '">
-            </div>
-            <div class="text-center"><button class="btn btn-primary" type="submit">Send Response</button></div>
-          </form>
-        </div>
-        </div>';
-      }
-      echo '<div class="responses">';
-      $sql_responses= $mySqli_db->prepare("SELECT * FROM forum_responses WHERE forum_post_id = ?");
-      $sql_responses->bind_param("i",$row["id"]);
-      $sql_responses->execute();
-      $result_responses=$sql_responses->get_result();
-      $first_response = true;
-      for($j=0; $j<$result_responses->num_rows; $j++)
-      {
-        $row_responses=$result_responses->fetch_assoc();
-        if($first_response)
+        echo '<div class="responses">';
+        $sql_responses= $mySqli_db->prepare("SELECT * FROM forum_responses WHERE forum_post_id = ?");
+        $sql_responses->bind_param("i",$row["id"]);
+        $sql_responses->execute();
+        $result_responses=$sql_responses->get_result();
+        $first_response = true;
+        for($j=0; $j<$result_responses->num_rows; $j++)
         {
-          echo '<hr>';
-          $first_response = false;
+          $row_responses=$result_responses->fetch_assoc();
+          if($first_response)
+          {
+            echo '<hr>';
+            $first_response = false;
+          }
+          $response_date = new DateTime($row_responses['date']);
+          echo '<div class="input-group"><small>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row_responses["content"])) . ' - <span class="bg-info text-white">'. $row_responses["user"] .'</span> <span class="text-secondary">' . date_format($response_date, 'g:ia \o\n l jS F Y') . '</span></small>';
+          if(isset($_SESSION["user"])  && ($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin"))
+          {
+            echo '<form action="index.php?page=forum&id=' . $_GET["id"] . '" method="post" role="form" class="mx-3">
+            <input type="hidden" name="delete_response_id" value="' . $row_responses["id"] . '">
+            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></button>
+            </form>';
+          }
+          echo '</div><hr>';
         }
-        $response_date = new DateTime($row_responses['date']);
-        echo '<div class="input-group"><small>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row_responses["content"])) . ' - <span class="bg-info text-white">'. $row_responses["user"] .'</span> <span class="text-secondary">' . date_format($response_date, 'g:ia \o\n l jS F Y') . '</span></small>';
-        if(isset($_SESSION["user"])  && ($_SESSION["user"] == $row["user"] || $session_user["rol"] == "admin"))
-        {
-          echo '<form action="index.php?page=forum&forum=' . $_GET["forum"] . '" method="post" role="form" class="mx-3">
-          <input type="hidden" name="delete_response_id" value="' . $row_responses["id"] . '">
-          <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></button>
-          </form>';
-        }
-        echo '</div><hr>';
-      }
-      echo '</div>
+        echo '</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      </div>
-      </div>';
+        </div>
+        </div>';
 
-      if($first)
-      {
-        $first = false;
+        if($first)
+        {
+          $first = false;
+        }
       }
+    }
+    else
+    {
+      echo '<p class="alert alert-danger">Invalid component ID</p>';
     }
   }
   else
@@ -352,7 +358,7 @@
         <div class="row align-items-center">
         <div class="col-md-8 mb-3 mb-sm-0">
           <h5> 
-            <a href="index.php?page=forum&forum=' . $row["id"] . '" class="text-primary">' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["title"])) . '</a>
+            <a href="index.php?page=forum&id=' . $row["id"] . '" class="text-primary">' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["title"])) . '</a>
           </h5>
           <p class="text-sm"><span class="op-6">Posted</span>';
       echo ' ' . strtolower(time_ago($date)) . ' by';

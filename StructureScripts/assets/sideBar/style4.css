@@ -234,3 +234,7 @@ a.article:hover {
 #sidebar a:hover{
     color: #007bff;
 }
+#sidebar a{
+    white-space: normal !important;
+    overflow: hidden;
+}

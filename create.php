@@ -185,10 +185,8 @@ require_once("mySqli.php");
     $user = $row["user"];
     $email = $row["email"];
     $password = $row["password"];
-    $rol = "admin";
-    $valid = 0;
     $db_name_low = strtolower($db_name);
-    $sql= $mySqli->prepare("INSERT INTO `web_pages`(`web_name`, `web_user`, `web_current_name`, `web_database`) VALUES (?, ?)");
+    $sql= $mySqli->prepare("INSERT INTO `web_pages`(`web_name`, `web_user`, `web_current_name`, `web_database`) VALUES (?, ?, ?, ?)");
     $sql->bind_param("ssss", $db_name, $_SESSION["weAre_user"], $db_name, $db_name_low);
     $sql->execute();
 
@@ -216,14 +214,15 @@ require_once("mySqli.php");
         {
           $column_name = mysql_fix_string($mySqlidb, $column);
           $column_type = mysql_fix_string($mySqlidb, $_POST["column_type"][$index]);
+          $column_name = str_replace(" ", "_", $column_name);
           $sql= $mySqlidb->prepare("ALTER TABLE users ADD ". strtolower($column_name) . " " . strtoupper($column_type));
           $sql->execute();
         }
       }
     }
 
-    $sql= $mySqlidb->prepare("INSERT INTO `users`(`user`, `email`, `user_name`, `password`, `rol`, `valid`) VALUES (?,?,?,?,?,?)");
-    $sql->bind_param("ssssi", $user, $email, $user, $password, $rol, $valid);
+    $sql= $mySqlidb->prepare("INSERT INTO `users`(`user`, `email`, `password`, `rol`, `valid`) VALUES (?,?,?, 'admin',0)");
+    $sql->bind_param("sss", $user, $email, $password);
     $sql->execute();
     
     $guest_key = password_hash($db_name . "_guest", PASSWORD_DEFAULT);
@@ -244,11 +243,9 @@ require_once("mySqli.php");
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
     title VARCHAR(60) NOT NULL,
     content VARCHAR(2000) NOT NULL, 
-    user VARCHAR(60) NOT NULL,
     blog_id INT(6) UNSIGNED NOT NULL,
     date DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    CONSTRAINT fk_blog_post_blog FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_blog_post_user FOREIGN KEY (user) REFERENCES users(user) ON DELETE SET NULL)");
+    CONSTRAINT fk_blog_post_blog FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE ON UPDATE CASCADE)");
     $sql->execute();
 
     if(isset($_POST["blog_enable"]) && isset($_POST["blog_title"]))
@@ -289,7 +286,7 @@ require_once("mySqli.php");
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(60) NOT NULL,
     user VARCHAR(60) NOT NULL,
-    CONSTRAINT fk_user_forum FOREIGN KEY (user) REFERENCES users(user) ON DELETE SET NULL)");
+    CONSTRAINT fk_user_forum FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE)");
     $sql->execute();
 
     $sql= $mySqlidb->prepare("CREATE TABLE forum_categories (
@@ -310,7 +307,7 @@ require_once("mySqli.php");
     date DATETIME DEFAULT CURRENT_TIMESTAMP,
     forum_id INT(6) UNSIGNED NOT NULL, 
     user VARCHAR(60) NOT NULL,
-    CONSTRAINT fk_user_forum_posts FOREIGN KEY (user) REFERENCES users(user) ON DELETE SET NULL,
+    CONSTRAINT fk_user_forum_posts FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE,
     CONSTRAINT fk_id_forum_posts FOREIGN KEY (forum_id) REFERENCES forums(id) ON DELETE CASCADE ON UPDATE CASCADE)");
     $sql->execute();
 
@@ -321,7 +318,7 @@ require_once("mySqli.php");
     forum_post_id INT(6) UNSIGNED NOT NULL, 
     user VARCHAR(60) NOT NULL,
     CONSTRAINT fk_user_forum_responses FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE,
-    CONSTRAINT fk_id_forum_posts_responses FOREIGN KEY (forum_post_id) REFERENCES forum_posts(id) ON DELETE CASCADE)");
+    CONSTRAINT fk_id_forum_posts_responses FOREIGN KEY (forum_post_id) REFERENCES forum_posts(id) ON DELETE CASCADE ON UPDATE CASCADE)");
     $sql->execute();
 
     if(isset($_POST["forum_enable"]) && isset($_POST["forum_title"]))
@@ -341,24 +338,158 @@ require_once("mySqli.php");
     
     $sql= $mySqlidb->prepare("CREATE TABLE galleries (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(60) NOT NULL,
+    title VARCHAR(60) NOT NULL,
+    type VARCHAR(60) DEFAULT 'Grid Gallery View',
     description VARCHAR(2000) DEFAULT '')");
     $sql->execute();
 
-    $sql= $mySqlidb->prepare("INSERT INTO `galleries`(`name`, `description`) VALUES ('Example', 'Description Example')");
+    $sql= $mySqlidb->prepare("INSERT INTO `galleries`(`title`, `description`) VALUES ('Example', 'Description Example')");
     $sql->execute();
 
     $sql= $mySqlidb->prepare("CREATE TABLE blank_pages (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    content LONGTEXT DEFAULT '')");
+    content LONGTEXT DEFAULT '<h1>BLANK PAGE EXAMPLE</h1><p>&nbsp;</p><p style=\"text-align:center;\"><u>Thank you for choosing</u><strong><u> WE ARE</u></strong></p><figure class=\"image image_resized image-style-side\" style=\"width:49.3%;\"><img src=\"https://blog.darwinbox.com/hubfs/MicrosoftTeams-image%20%2824%29-1.png\" alt=\"Our team\"></figure><p>We Are proposes generate a platform with which users can</p><p>&nbsp;create their own web page without programming knowledge. The platform will offer a series of components that can be added to the web. The resulting website will be highly customizable and can be modified by adding new information and sections, modifying them, deleting them and managing privacy.</p><p>We offer modern solutions to help you to make presence on the Internet</p><p>The main components are:</p><ul><li>Galleries</li><li>Blogs</li><li>Forums</li><li>Calendars</li><li>Blank pages</li><li>User administration</li></ul><h4>WE ARE has two plans for web pages</h4><figure class=\"table\" style=\"width:78.17%;\"><table><colgroup><col style=\"width:17.43%;\"><col style=\"width:13.11%;\"><col style=\"width:12.72%;\"><col style=\"width:11.3%;\"><col style=\"width:10.5%;\"><col style=\"width:23.07%;\"><col style=\"width:11.87%;\"></colgroup><thead><tr><th>Plan</th><th>Galleries</th><th>Blogs</th><th>Forums</th><th>Calendars</th><th>Blank pages</th><th>Users</th></tr></thead><tbody><tr><td><strong>Basic plan</strong></td><td>Only 1</td><td>Unlimited</td><td>Unlimited</td><td>Only 1</td><td>Only 1 (and Home page)</td><td>Unlimited</td></tr><tr><td><strong>Advanced plan</strong></td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr></tbody></table></figure><p>For more information you can always read our <a href=\"http://localhost/TFG/blog.html\">blog </a>with all the necessary information&nbsp;</p>')");
     $sql->execute();
 
     $sql= $mySqlidb->prepare("INSERT INTO `blank_pages`(`content`) VALUES ('<h1>HOME EXAMPLE</h1><p>&nbsp;</p><p style=\"text-align:center;\"><u>Thank you for choosing</u><strong><u> WE ARE</u></strong></p><figure class=\"image image_resized image-style-side\" style=\"width:49.3%;\"><img src=\"https://blog.darwinbox.com/hubfs/MicrosoftTeams-image%20%2824%29-1.png\" alt=\"Our team\"></figure><p>We Are proposes generate a platform with which users can</p><p>&nbsp;create their own web page without programming knowledge. The platform will offer a series of components that can be added to the web. The resulting website will be highly customizable and can be modified by adding new information and sections, modifying them, deleting them and managing privacy.</p><p>We offer modern solutions to help you to make presence on the Internet</p><p>The main components are:</p><ul><li>Galleries</li><li>Blogs</li><li>Forums</li><li>Calendars</li><li>Blank pages</li><li>User administration</li></ul><h4>WE ARE has two plans for web pages</h4><figure class=\"table\" style=\"width:78.17%;\"><table><colgroup><col style=\"width:17.43%;\"><col style=\"width:13.11%;\"><col style=\"width:12.72%;\"><col style=\"width:11.3%;\"><col style=\"width:10.5%;\"><col style=\"width:23.07%;\"><col style=\"width:11.87%;\"></colgroup><thead><tr><th>Plan</th><th>Galleries</th><th>Blogs</th><th>Forums</th><th>Calendars</th><th>Blank pages</th><th>Users</th></tr></thead><tbody><tr><td><strong>Basic plan</strong></td><td>Only 1</td><td>Unlimited</td><td>Unlimited</td><td>Only 1</td><td>Only 1 (and Home page)</td><td>Unlimited</td></tr><tr><td><strong>Advanced plan</strong></td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr></tbody></table></figure><p>For more information you can always read our <a href=\"http://localhost/TFG/blog.html\">blog </a>with all the necessary information&nbsp;</p>')");
     $sql->execute();
 
-    $sql= $mySqlidb->prepare("INSERT INTO `blank_pages`(`content`) VALUES ('<h1>BLANK PAGE EXAMPLE</h1><p>&nbsp;</p><p style=\"text-align:center;\"><u>Thank you for choosing</u><strong><u> WE ARE</u></strong></p><figure class=\"image image_resized image-style-side\" style=\"width:49.3%;\"><img src=\"https://blog.darwinbox.com/hubfs/MicrosoftTeams-image%20%2824%29-1.png\" alt=\"Our team\"></figure><p>We Are proposes generate a platform with which users can</p><p>&nbsp;create their own web page without programming knowledge. The platform will offer a series of components that can be added to the web. The resulting website will be highly customizable and can be modified by adding new information and sections, modifying them, deleting them and managing privacy.</p><p>We offer modern solutions to help you to make presence on the Internet</p><p>The main components are:</p><ul><li>Galleries</li><li>Blogs</li><li>Forums</li><li>Calendars</li><li>Blank pages</li><li>User administration</li></ul><h4>WE ARE has two plans for web pages</h4><figure class=\"table\" style=\"width:78.17%;\"><table><colgroup><col style=\"width:17.43%;\"><col style=\"width:13.11%;\"><col style=\"width:12.72%;\"><col style=\"width:11.3%;\"><col style=\"width:10.5%;\"><col style=\"width:23.07%;\"><col style=\"width:11.87%;\"></colgroup><thead><tr><th>Plan</th><th>Galleries</th><th>Blogs</th><th>Forums</th><th>Calendars</th><th>Blank pages</th><th>Users</th></tr></thead><tbody><tr><td><strong>Basic plan</strong></td><td>Only 1</td><td>Unlimited</td><td>Unlimited</td><td>Only 1</td><td>Only 1 (and Home page)</td><td>Unlimited</td></tr><tr><td><strong>Advanced plan</strong></td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr></tbody></table></figure><p>For more information you can always read our <a href=\"http://localhost/TFG/blog.html\">blog </a>with all the necessary information&nbsp;</p>')");
+    $sql= $mySqlidb->prepare("INSERT INTO `blank_pages`(`content`) VALUES (DEFAULT)");
     $sql->execute();
 
+  }
+ function advanced_navBar($db_name)
+  {
+    $mySqlidb = mysql_client_db($db_name);
+    $web_navBar = new WebNavBar();
+    $element_count = (object) [
+      "blog_count" => 0,
+      "forum_count" => 0,
+      "gallery_count" => 0,
+      "calendar_count" => 0
+    ];
+    $dropdown_count = 0;
+    if(empty($_POST["home_name"]))
+    {
+      $_POST["home_name"] = "Home";
+    }
+    $nav_bar[$_POST["home_name"]] = (object)[
+      "type" => "Home"
+    ];
+
+    if(isset($_POST["tab_name"]))
+    {
+      foreach($_POST["tab_name"] as $index => $value)
+      {
+        if(!empty($value) && $_POST["tab_type"][$index] != "Dropdown")
+        {
+          $inserted_id = insert_element_db($mySqlidb, $_POST["tab_type"][$index], $element_count);
+          if($inserted_id != -1)
+          {
+            $nav_bar[$value] = (object)[
+              "type" => $_POST["tab_type"][$index],
+              "index" => $inserted_id
+            ];
+          }
+        }
+        else if($_POST["tab_type"][$index] == "Dropdown")
+        {
+          $dropdown_id = $_POST["dropdown_id"][$dropdown_count];
+          $dropdown_count++;
+          $dropdown_list = array();
+          foreach($_POST["tab_dropdown_" . $dropdown_id . "_name"] as $dd_index => $dd_value)
+          {
+            if(!empty($dd_value))
+            {
+              $inserted_id = insert_element_db($mySqlidb, $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index], $element_count);
+              if($inserted_id != -1)
+              {
+                $dropdown_list[$dd_value] = (object)[
+                  "type" => $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index],
+                  "index" => $inserted_id
+                ];
+              }
+            }
+          }
+          $nav_bar[$value] = (object)[
+            "type" => $_POST["tab_type"][$index],
+            "tabs" => $dropdown_list
+          ];
+        }
+      }
+    }
+    $web_navBar->set($_POST["navBar_type"]);
+    $web_navBar->set_tabs($nav_bar);
+    return $web_navBar;
+  }
+
+  function insert_element_db($mySqlidb, $type, &$id)
+  {
+    if($type == "Blank")
+    {
+      $sql= $mySqlidb->prepare("INSERT INTO `blank_pages`(`content`) VALUES (DEFAULT)");
+      $sql->execute();
+      $inserted_id = $mySqlidb->insert_id;
+    }
+    else if($type == "Gallery")
+    {
+      $gallery_title = mysql_fix_string($mySqlidb, $_POST["gallery_title"][$id->gallery_count]);
+      if(!is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
+      {
+        $gallery_type = $_POST["gallery_type"][$id->gallery_count];
+        $gallery_description = mysql_fix_string($mySqlidb, $_POST["gallery_description"][$id->gallery_count]);
+
+        $sql= $mySqlidb->prepare("INSERT INTO `galleries`(`title`, `type`, `description`) VALUES (?,?,?)");
+        $sql->bind_param("sss",$gallery_title, $gallery_type, $gallery_description);
+        $sql->execute();
+        mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title, 0700, true);
+        $inserted_id = $mySqlidb->insert_id;
+      }
+      else
+      {
+        $inserted_id = -1;
+      }
+      $id->gallery_count++;
+    }
+    else if($type == "Blog")
+    {
+      $blog_title = mysql_fix_string($mySqlidb, $_POST["blog_title"][$id->blog_count]);
+      $blog_description = mysql_fix_string($mySqlidb, $_POST["blog_description"][$id->blog_count]);
+      $web_user = isset($_SESSION["weAre_user"]) ? $_SESSION["weAre_user"] : $_SESSION["user"];
+      $id->blog_count++;
+      $sql= $mySqlidb->prepare("INSERT INTO `blogs`(`title`, `description`, `user`) VALUES (?,?,?)");
+      $sql->bind_param("sss",$blog_title, $blog_description, $web_user);
+      $sql->execute();
+      $inserted_id = $mySqlidb->insert_id;
+    }
+    else if($type == "Forum")
+    {
+      $forum_title = mysql_fix_string($mySqlidb, $_POST["forum_title"][$id->forum_count]);
+      $forum_post = mysql_fix_string($mySqlidb, $_POST["post_content"][$id->forum_count]);
+      $web_user = isset($_SESSION["weAre_user"]) ? $_SESSION["weAre_user"] : $_SESSION["user"];
+      $id->forum_count++;
+
+      $sql= $mySqlidb->prepare("INSERT INTO `forums`(`title`, `user`) VALUES (?, ?)");
+      $sql->bind_param("ss",$forum_title, $web_user);
+      $sql->execute();
+      $inserted_id = $mySqlidb->insert_id;
+  
+      $forum_id = $mySqlidb->insert_id;
+      $sql= $mySqlidb->prepare("INSERT INTO `forum_posts`(`content`, `forum_id`, `user`) VALUES (?, ?, ?)");
+      $sql->bind_param("sis",$forum_post, $forum_id, $web_user);
+      $sql->execute();
+    }
+    else if($type == "Calendar")
+    {
+      $calendar_title = mysql_fix_string($mySqlidb, $_POST["calendar_title"][$id->calendar_count]);
+      $calendar_description = mysql_fix_string($mySqlidb, $_POST["calendar_description"][$id->calendar_count]);
+      $id->calendar_count++;
+      $sql= $mySqlidb->prepare("INSERT INTO `calendars`(`title`, `description`) VALUES (?,?)");
+      $sql->bind_param("ss",$calendar_title, $calendar_description);
+      $sql->execute();
+      $inserted_id = $mySqlidb->insert_id;
+    }
+    return $inserted_id;
   }
 /******************************************************************************/
 ?>
@@ -430,7 +561,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     // Import all scripts: PHP, CSS, JS,... for the structure of the web page
     copy("StructureScripts/index.php", "WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."index.php"); 
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery", 0700, true);
-    copy_folder("StructureScripts/assets/gallery", "WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery");
+    copy_folder("StructureScripts/assets/img/gallery", "WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery");
     mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "profile", 0700, true);
     //copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
 
@@ -455,41 +586,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
 
     if(isset($_POST["home_name"]))
     {
-      $dropdown_count = 0;
-      $nav_bar[$_POST["home_name"]] = (object)[
-        "type" => "Home"
-      ];
-      if(isset($_POST["tab_name"]))
-      {
-        foreach($_POST["tab_name"] as $index => $value)
-        {
-          if(!empty($value) && $_POST["tab_type"][$index] != "Dropdown")
-          {
-            $nav_bar[$value] = (object)[
-              "type" => $_POST["tab_type"][$index],
-              "index" => 1
-            ];
-          }
-          else if($_POST["tab_type"][$index] == "Dropdown Tab")
-          {
-            $dropdown_id = $_POST["dropdown_id"][$dropdown_count];
-            $dropdown_list = array();
-            foreach($_POST["tab_dropdown_" . $dropdown_id . "_name"] as $dd_index => $dd_value)
-            {
-              $dropdown_list[$dd_value] = (object)[
-                "type" => $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index],
-                "index" => 2
-              ];
-            }
-            $nav_bar[$value] = (object)[
-              "type" => $_POST["tab_type"][$index],
-              "dropdown" => $dropdown_list
-            ];
-          }
-        }
-      }
-      $web_navBar->set($_POST["navBar_type"]);
-      $web_navBar->set_tabs($nav_bar);
+      $web_navBar = advanced_navBar($_POST["web_name"]);
       $web_gallery->set();
       $web_blog->set();
       $web_forum->set();
@@ -497,6 +594,10 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     }
     else
     {
+      if(isset($_POST["navBar_type"]))
+      {
+          $web_gallery->set($_POST["navBar_type"]);
+      }
       if(isset($_POST["gallery_enable"]))
       {
           $web_gallery->set();
@@ -523,6 +624,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
         'web_data' => $web_data,
         'style' => $web_style,
         'user' => $web_users,
+        'navBar' => $web_navBar,
         'gallery' => $web_gallery,
         'blog' => $web_blog,
         'forum' => $web_forum,
@@ -551,6 +653,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
         {
           $column_name = mysql_fix_string($mySqlidb, $column);
           $column_type = mysql_fix_string($mySqlidb, $_POST["column_type"][$index]);
+          $column_name = str_replace(" ", "_", $column_name);
           $sql= $mySqlidb->prepare("ALTER TABLE users ADD ". strtolower($column_name) . " " . strtoupper($column_type));
           $sql->execute();
         }
@@ -563,6 +666,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     $web_data = new WebData($_GET["edit"], $_POST["web_name"], $_SESSION["user"], strtolower($_GET["edit"]), $_POST["web_privacity"], $_GET["form"]);
     $web_style = new WebStyle($_POST["style_bck_color"], $_POST["style_primary_color"], $_POST["style_secundary_color"]);
     $web_users = new WebUsers();
+    $web_navBar = new WebNavBar();
     $web_gallery = new WebGallery();
     $web_blog = new WebBlog();
     $web_forum = new WebForum();
@@ -578,21 +682,36 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     {
         $web_users->set();
     }
-    if(isset($_POST["gallery_enable"]))
+    if(isset($_POST["home_name"]))
     {
-        $web_gallery->set($_POST["gallery_type"]);
-    }
-    if(isset($_POST["blog_enable"]))
-    {
+      $web_navBar = advanced_navBar($_POST["web_name"]);
+      $web_gallery->set();
       $web_blog->set();
-    }
-    if(isset($_POST["forum_enable"]))
-    {
       $web_forum->set();
-    }
-    if(isset($_POST["calendar_enable"]))
-    {
       $web_calendar->set();
+    }
+    else
+    {
+      if(isset($_POST["navBar_type"]))
+      {
+          $web_gallery->set($_POST["navBar_type"]);
+      }
+      if(isset($_POST["gallery_enable"]))
+      {
+          $web_gallery->set();
+      }
+      if(isset($_POST["blog_enable"]))
+      {
+        $web_blog->set();
+      }
+      if(isset($_POST["forum_enable"]))
+      {
+        $web_forum->set();
+      }
+      if(isset($_POST["calendar_enable"]))
+      {
+        $web_calendar->set();
+      }
     }
     
     /**
@@ -604,6 +723,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
         'web_data' => $web_data,
         'style' => $web_style,
         'user' => $web_users,
+        'navBar' => $web_navBar,
         'gallery' => $web_gallery,
         'blog' => $web_blog,
         'forum' => $web_forum,
@@ -628,6 +748,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     {
       $old_column = mysql_fix_string($mySqlidb, $_POST["rename_column"]);
       $new_column = strtolower(mysql_fix_string($mySqlidb, $_POST["column_name"]));
+      $new_column = str_replace(" ", "_", $new_column);
       $column_type = mysql_fix_string($mySqlidb, $_POST["column_type"]);
   
       $sql= $mySqlidb->prepare("ALTER TABLE users CHANGE " . $old_column . " " . $new_column . " " . $column_type);
@@ -635,51 +756,8 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     }
   }
 
-  //var_dump($_POST);
+//var_dump($_POST);
 //PRUEBAS
-if(isset($_POST["home_name"]))
-{
-  $web_navBar = new WebNavBar();
-  $dropdown_count = 0;
-  $nav_bar[$_POST["home_name"]] = (object)[
-    "type" => "Home"
-  ];
-  if(isset($_POST["tab_name"]))
-  {
-    foreach($_POST["tab_name"] as $index => $value)
-    {
-      if(!empty($value) && $_POST["tab_type"][$index] != "Dropdown")
-      {
-        $nav_bar[$value] = (object)[
-          "type" => $_POST["tab_type"][$index],
-          "index" => 1
-        ];
-      }
-      else if($_POST["tab_type"][$index] == "Dropdown Tab")
-      {
-        $dropdown_id = $_POST["dropdown_id"][$dropdown_count];
-        $dropdown_list = array();
-        foreach($_POST["tab_dropdown_" . $dropdown_id . "_name"] as $dd_index => $dd_value)
-        {
-          $dropdown_list[$dd_value] = (object)[
-            "type" => $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index],
-            "index" => 2
-          ];
-        }
-        $nav_bar[$value] = (object)[
-          "type" => $_POST["tab_type"][$index],
-          "dropdown" => $dropdown_list
-        ];
-      }
-    }
-  }
-  $web_navBar->set($_POST["navBar_type"]);
-  $web_navBar->set_tabs($nav_bar);
-
-  var_dump($web_navBar);
-}
-
-
   /**********************************/
   if(!empty($_POST) && !isset($_GET["edit"]))
   {

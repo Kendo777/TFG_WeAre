@@ -3,9 +3,9 @@
   {
     $calendar_id = 1;
   }
-  else if(isset($_GET["calendar"]))
+  else if(isset($_GET["id"]))
   {
-    $calendar_id = $_GET["calendar"];
+    $calendar_id = $_GET["id"];
   }
 if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
 {
@@ -236,8 +236,15 @@ $(document).ready(function() {
   $sql->execute();
   $result=$sql->get_result();
   $calendar=$result->fetch_assoc();
-  echo '<h2><i>' . str_replace("\'", "'",str_replace("\\\"", "\"", $calendar["title"])) . '</i></h2>
-  <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $calendar["description"])) . '</p>';
+  if($calendar)
+  {
+    echo '<h2><i>' . str_replace("\'", "'",str_replace("\\\"", "\"", $calendar["title"])) . '</i></h2>
+    <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $calendar["description"])) . '</p>';
+  }
+  else
+  {
+    echo '<p class="alert alert-danger">Invalid component ID</p>';
+  }
 ?>
 </div>
 </div>

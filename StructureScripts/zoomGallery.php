@@ -4,7 +4,7 @@ function create_zoom_gallery($columns, $album)
 {
   $zoom_gallery_code = "";
 
-  $folder = $album["name"];
+  $folder = $album["title"];
 
   $zoom_gallery_code.= '<section id="portfolio" class="portfolio" data-aos="fade-up">
     <div class="container">

@@ -55,7 +55,7 @@
             html += '<div id="inputFormRow">';
             html += '<div class="input-group mb-3">';
             html += '<select class="btn btn-outline-info" name="tab_type[]" onchange="tab_type_form(this, ' + tab_id +')">';
-            html += '<option>Blank Page</option>';
+            html += '<option value="Blank">Blank Page</option>';
             html += '<option>Gallery</option>';
             html += '<option>Blog</option>';
             html += '<option>Forum</option>';
@@ -78,12 +78,11 @@
             html += '<div id="inputFormRow">';
             html += '<div class="input-group mb-3">';
             html += '<select class="btn btn-outline-info" name="tab_dropdown_' + id + '_type[]" onchange="tab_type_form(this, ' + tab_id +')">';
-            html += '<option>Blank Page</option>';
+            html += '<option value="Blank">Blank Page</option>';
             html += '<option>Gallery</option>';
             html += '<option>Blog</option>';
             html += '<option>Forum</option>';
             html += '<option>Calendar</option>';
-            html += '<option>Dropdown Tab</option>';
             html += '</select>';
             html += '<input type="text" name="tab_dropdown_' + id + '_name[]" class="form-control m-input" placeholder="Tab Name">';
             html += '<div class="input-group-append">';
@@ -152,7 +151,13 @@
             html += '<div class="form-group my-3">';
             html += '<input type="text" class="form-control" name="gallery_title[]" placeholder="Gallery title" required>';
             html += '<hr>';
-            html += '<textarea class="form-control" name="gallery_description[]" rows="5" placeholder="Write the description" required></textarea>';
+            html += '<label class="mb-2"><b> Gallery type</b></label>';
+            html += '<select class="form-control mb-2" name="gallery_type[]">';
+            html += '<option>Grid Gallery View</option>';
+            html += '<option>Zoom Gallery View</option>';
+            html += '</select>';
+            html += '<hr>';
+            html += '<textarea class="form-control" name="gallery_description[]" rows="5" placeholder="Write the description"></textarea>';
             html += '</div></div></div>';
             document.getElementById("tab_form_" + id).innerHTML = html;
         }
@@ -170,7 +175,7 @@
             html += '<div class="form-group my-3">';
             html += '<input type="text" class="form-control" name="calendar_title[]" placeholder="Calendar title" required>';
             html += '<hr>';
-            html += '<textarea class="form-control" name="calendar_description[]" rows="5" placeholder="Write the description" required></textarea>';
+            html += '<textarea class="form-control" name="calendar_description[]" rows="5" placeholder="Write the description"></textarea>';
             html += '</div></div></div>';
             document.getElementById("tab_form_" + id).innerHTML = html;
         }
@@ -190,17 +195,6 @@
             html += '<hr>';
             html += '<textarea class="form-control" name="post_content[]" rows="5" placeholder="Write the post" required></textarea>';
             html += '<hr>';
-            html += '<div id="inputFormRow">';
-            html += '<div class="input-group mb-3">';
-            html += '<button class="btn btn-info disabled">#</button>';
-            html += '<input type="text" name="categorie_title[]" class="form-control m-input" placeholder="Categorie name" autocomplete="off">';
-            html += '<div class="input-group-append">';
-            html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
-            html += '</div>';
-            html += '</div>';
-            html += '</div>';
-            html += '<div id="categorienewRow_' + id + '"></div>';
-            html += '<button onclick="addForumCategorieRow(' + id + ')" type="button" class="btn btn-info">Add Row</button>';
             html += '</div></div></div>';
             document.getElementById("tab_form_" + id).innerHTML = html;
         }
@@ -208,7 +202,7 @@
         {
             var html = '';
             html += '<div class="shadow-sm rounded">';
-            html += '<input type="hidden" name="dropdown_id" value="' + id + '">';
+            html += '<input type="hidden" name="dropdown_id[]" value="' + id + '">';
             html += '<h3 class="accordion-header">';
             html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
             html += '<i class="bi bi-menu-button-wide-fill"></i>';

@@ -7,13 +7,17 @@
         </div>
 
         <ul class="list-unstyled components">
-            <li>
+        <?php
+
+        if($json_data["web_data"]["web_structure"] == "basic")
+        {
+          echo '<li>
                 <a href="index.php">
                   <i class="bi bi-house-fill"></i>
                     Home
                 </a>
             </li>
-            <li><!-- CAMBIAR DINAMICO-->
+            <li>
                 <a href="index.php?page=gallery">
                   <i class="bi bi-images"></i>
                     Gallery
@@ -42,40 +46,93 @@
                   <i class="bi bi-journal-bookmark-fill"></i>
                     Blank
                 </a>
-            </li>
-            <?php
-              if($_SESSION["user"] != "Guest")
+            </li>';
+        }
+        else if($json_data["web_data"]["web_structure"] == "advanced")
+        {
+          foreach($json_data["navBar"]["tabs"] as $tab_name => $value)
+          {
+            //var_dump($value);
+            if($value["type"] == "Home")
+            {
+              echo '<li>
+                  <a href="index.php">
+                    <i class="bi bi-house-fill"></i>
+                      ' . $tab_name . '
+                  </a>
+              </li>';
+            }
+            else if($value["type"] == "Dropdown")
+            {
+              echo '<li>
+              <a class="accordion-button collapsed dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#' . str_replace(" ", "", $tab_name) . '" style="background: none;">
+                <i class="bi bi-globe2 question-icon"></i>
+                  ' . $tab_name . '
+            </a>
+              <div id="' . str_replace(" ", "", $tab_name) . '" class="accordion-collapse collapse">
+              <ul class="list-unstyled">';
+              foreach($value["tabs"] as $dropdown_tab => $dropdown_value)
               {
                 echo '<li>
-                    <a href="index.php?page=user">
-                      <i class="bi bi-person-circle"></i>
-                        User
-                    </a>
-                </li>';
+                  <a href="index.php?page=' . strtolower($dropdown_value["type"]) . '&id=' . $dropdown_value["index"] . '">';
+                switch($dropdown_value["type"])
+                {
+                  case "Gallery":
+                    echo '<i class="bi bi-images"></i>';
+                    break;
+                  case "Blog":
+                    echo '<i class="bi bi-newspaper"></i>';
+                    break;
+                  case "Forum":
+                    echo '<i class="bi bi-bar-chart-steps"></i>';
+                    break;
+                  case "Blank":
+                    echo '<i class="bi bi-journal-bookmark-fill"></i>';
+                    break;
+                  case "Calendar":
+                    echo '<i class="bi bi-calendar-week"></i>';
+                    break;
+
+                }
+                echo $dropdown_tab . '
+                  </a>
+              </li>';
               }
-            ?>
-            <li>
-              <a class="accordion-button collapsed dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#general" style="background: none;">
-                <i class="bi bi-globe2 question-icon"></i>
-                  General
-            </a>
-              <div id="general" class="accordion-collapse collapse">
-              <ul class="list-unstyled">
-                <li>
-                    <a href="index.php">
-                      <i class="bi bi-house-fill"></i>
-                        Home
-                    </a>
-                </li>
-                <li>
-                    <a href="index.php">
-                      <i class="bi bi-house-fill"></i>
-                        Home
-                    </a>
-                </li>
-              </ul>
-              </div>
-          </li>
+              echo '</ul>
+                  </div>
+              </li>';
+
+            }
+            else
+            {
+              echo '<li>
+                  <a href="index.php?page=' . strtolower($value["type"]) . '&id=' . $value["index"] . '">';
+              switch($value["type"])
+              {
+                case "Gallery":
+                  echo '<i class="bi bi-images"></i>';
+                  break;
+                case "Blog":
+                  echo '<i class="bi bi-newspaper"></i>';
+                  break;
+                case "Forum":
+                  echo '<i class="bi bi-bar-chart-steps"></i>';
+                  break;
+                case "Blank":
+                  echo '<i class="bi bi-journal-bookmark-fill"></i>';
+                  break;
+                case "Calendar":
+                  echo '<i class="bi bi-calendar-week"></i>';
+                  break;
+
+              }
+              echo $tab_name . '
+                  </a>
+              </li>';
+            }
+          }
+        }
+          ?>
         </ul>
     </nav>
 
