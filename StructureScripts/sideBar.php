@@ -50,7 +50,7 @@
         }
         else if($json_data["web_data"]["web_structure"] == "advanced")
         {
-          foreach($json_data["navBar"]["tabs"] as $tab_name => $value)
+          foreach($json_data["navBar"]["tabs"] as $index => $value)
           {
             //var_dump($value);
             if($value["type"] == "Home")
@@ -58,20 +58,20 @@
               echo '<li>
                   <a href="index.php">
                     <i class="bi bi-house-fill"></i>
-                      ' . $tab_name . '
+                      ' . $value["name"] . '
                   </a>
               </li>';
             }
             else if($value["type"] == "Dropdown")
             {
               echo '<li>
-              <a class="accordion-button collapsed dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#' . str_replace(" ", "", $tab_name) . '" style="background: none;">
+              <a class="accordion-button collapsed dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#dropdown_' . $index . '" style="background: none; color: var(--color-links);">
                 <i class="bi bi-globe2 question-icon"></i>
-                  ' . $tab_name . '
+                  ' . $value["type"] . '
             </a>
-              <div id="' . str_replace(" ", "", $tab_name) . '" class="accordion-collapse collapse">
+              <div id="dropdown_' . $index . '" class="accordion-collapse collapse">
               <ul class="list-unstyled">';
-              foreach($value["tabs"] as $dropdown_tab => $dropdown_value)
+              foreach($value["tabs"] as $dropdown_value)
               {
                 echo '<li>
                   <a href="index.php?page=' . strtolower($dropdown_value["type"]) . '&id=' . $dropdown_value["index"] . '">';
@@ -94,7 +94,7 @@
                     break;
 
                 }
-                echo $dropdown_tab . '
+                echo $dropdown_value["name"] . '
                   </a>
               </li>';
               }
@@ -126,7 +126,7 @@
                   break;
 
               }
-              echo $tab_name . '
+              echo $value["name"] . '
                   </a>
               </li>';
             }

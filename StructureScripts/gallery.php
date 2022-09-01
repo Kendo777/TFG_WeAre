@@ -135,7 +135,14 @@ $album=$result->fetch_assoc();
   if(isset($_FILES["upload"]) && isset($_POST["tag_new_images"]))
   {
     for( $i=0 ; $i < count($_FILES['upload']['name']) ; $i++ ) {
-      move_uploaded_file($_FILES['upload']['tmp_name'][$i], "images/gallery" . DIRECTORY_SEPARATOR. $album["title"] . DIRECTORY_SEPARATOR . $_POST["tag_new_images"] . DIRECTORY_SEPARATOR . $_FILES['upload']['name'][$i]);
+      $count = 1;
+      $image_name = $_FILES['upload']['name'][$i];
+      while(file_exists("images/gallery" . DIRECTORY_SEPARATOR. $album["title"] . DIRECTORY_SEPARATOR . $_POST["tag_new_images"] . DIRECTORY_SEPARATOR . $image_name))
+      {
+        $image_name = substr($_FILES['upload']['name'][$i], 0, strrpos($_FILES['upload']['name'][$i], ".")) . "(" . $count . ")" . substr($_FILES['upload']['name'][$i], strrpos($_FILES['upload']['name'][$i], "."));
+        $count++;
+      }
+      move_uploaded_file($_FILES['upload']['tmp_name'][$i], "images/gallery" . DIRECTORY_SEPARATOR. $album["title"] . DIRECTORY_SEPARATOR . $_POST["tag_new_images"] . DIRECTORY_SEPARATOR . $image_name);
     }
   }
   if(isset($_POST['new_tag']))
@@ -217,7 +224,7 @@ if($album)
         <form method="post" action="index.php?page=gallery&id=' . $album_id . '&edit">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <label class="input-group-text" for="album_name">Name</label>
+              <label class="input-group-text" for="album_name">Title</label>
             </div>
                 <input type="text" class="form-control" id="album_name" name="new_folder_name" value="' . $album["title"] . '"><hr>
             </div>

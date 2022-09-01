@@ -174,6 +174,28 @@ require_once("mySqli.php");
     } 
     closedir($dir);
   }
+  function deleteDir($dirPath) {
+    if (! is_dir($dirPath)) {
+        throw new InvalidArgumentException("$dirPath must be a directory");
+    }
+    $dir = opendir($dirPath);   
+    while( $file = readdir($dir) ) 
+    { 
+        if (( $file != '.' ) && ( $file != '..' ))
+        { 
+            if (is_dir($dirPath.DIRECTORY_SEPARATOR.$file) ) 
+            { 
+                deleteDir($dirPath.DIRECTORY_SEPARATOR.$file);
+            } 
+            else
+            {
+                unlink($dirPath.DIRECTORY_SEPARATOR.$file); 
+            }
+        } 
+    } 
+    closedir($dir);
+    rmdir($dirPath);
+  }
   function create_DB($mySqli, $db_name)
   {
     $sql= $mySqli->prepare("SELECT * FROM users WHERE user = ?");
@@ -362,6 +384,7 @@ require_once("mySqli.php");
   {
     $mySqlidb = mysql_client_db($db_name);
     $web_navBar = new WebNavBar();
+    $nav_bar = array();
     $element_count = (object) [
       "blog_count" => 0,
       "forum_count" => 0,
@@ -373,9 +396,10 @@ require_once("mySqli.php");
     {
       $_POST["home_name"] = "Home";
     }
-    $nav_bar[$_POST["home_name"]] = (object)[
+    array_push($nav_bar, (object)[
+      "name" => $_POST["home_name"],
       "type" => "Home"
-    ];
+    ]);
 
     if(isset($_POST["tab_name"]))
     {
@@ -386,10 +410,11 @@ require_once("mySqli.php");
           $inserted_id = insert_element_db($mySqlidb, $_POST["tab_type"][$index], $element_count);
           if($inserted_id != -1)
           {
-            $nav_bar[$value] = (object)[
+            array_push($nav_bar, (object)[
+              "name" => $value,
               "type" => $_POST["tab_type"][$index],
               "index" => $inserted_id
-            ];
+            ]);
           }
         }
         else if($_POST["tab_type"][$index] == "Dropdown")
@@ -404,17 +429,19 @@ require_once("mySqli.php");
               $inserted_id = insert_element_db($mySqlidb, $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index], $element_count);
               if($inserted_id != -1)
               {
-                $dropdown_list[$dd_value] = (object)[
+                array_push($dropdown_list, (object)[
+                  "name" => $dd_value,
                   "type" => $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index],
                   "index" => $inserted_id
-                ];
+                ]);
               }
             }
           }
-          $nav_bar[$value] = (object)[
+          array_push($nav_bar, (object)[
+            "name" => $value,
             "type" => $_POST["tab_type"][$index],
             "tabs" => $dropdown_list
-          ];
+          ]);
         }
       }
     }
@@ -490,6 +517,49 @@ require_once("mySqli.php");
       $inserted_id = $mySqlidb->insert_id;
     }
     return $inserted_id;
+  }
+  function delete_element_db($mySqlidb, $type, $id)
+  {
+    if($type == "Blank")
+    {
+      $sql= $mySqlidb->prepare("DELETE FROM `blank_pages` WHERE id = ?");
+      $sql->bind_param("i",$id);
+      $sql->execute();
+    }
+    else if($type == "Gallery")
+    {
+      if(!is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
+      {
+        $sql= $mySqlidb->prepare("SELECT * FROM `galleries` WHERE id = ?");
+        $sql->bind_param("s",$id);
+        $sql->execute();
+        $result=$sql->get_result();
+        $row=$result->fetch_assoc();
+
+        $sql= $mySqlidb->prepare("DELETE FROM `galleries` WHERE id = ?");
+        $sql->bind_param("i",$id);
+        $sql->execute();
+        deleteDir("images/gallery" . DIRECTORY_SEPARATOR . $row["title"]);
+      }
+    }
+    else if($type == "Blog")
+    {
+      $sql= $mySqlidb->prepare("DELETE FROM `blogs` WHERE id = ?");
+      $sql->bind_param("i",$id);
+      $sql->execute();
+    }
+    else if($type == "Forum")
+    {
+      $sql= $mySqlidb->prepare("DELETE FROM `forums` WHERE id = ?");
+      $sql->bind_param("i",$id);
+      $sql->execute();
+    }
+    else if($type == "Calendar")
+    {
+      $sql= $mySqlidb->prepare("DELETE FROM `calendars` WHERE id = ?");
+      $sql->bind_param("i",$id);
+      $sql->execute();
+    }
   }
 /******************************************************************************/
 ?>
@@ -663,7 +733,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     $sql= $mySqli->prepare("UPDATE `web_pages` SET `web_current_name`= ? WHERE `web_name` = ? AND `web_user` = ?");
     $sql->bind_param("sss", $web_name , $_GET["edit"], $web_user);
     $sql->execute();
-    $web_data = new WebData($_GET["edit"], $_POST["web_name"], $_SESSION["user"], strtolower($_GET["edit"]), $_POST["web_privacity"], $_GET["form"]);
+    $web_data = new WebData($_GET["edit"], $_POST["web_name"], $_SESSION["user"], strtolower($_GET["edit"]), $_POST["web_privacity"], $json_data["web_data"]["web_structure"]);
     $web_style = new WebStyle($_POST["style_bck_color"], $_POST["style_primary_color"], $_POST["style_secundary_color"]);
     $web_users = new WebUsers();
     $web_navBar = new WebNavBar();
@@ -684,7 +754,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     }
     if(isset($_POST["home_name"]))
     {
-      $web_navBar = advanced_navBar($_POST["web_name"]);
+      $web_navBar = $json_data["navBar"];
       $web_gallery->set();
       $web_blog->set();
       $web_forum->set();
@@ -753,6 +823,83 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
   
       $sql= $mySqlidb->prepare("ALTER TABLE users CHANGE " . $old_column . " " . $new_column . " " . $column_type);
       $sql->execute();
+    }
+    if(isset($json_data) && isset($_POST["delete_tab_name"]))
+    {
+      if(isset($_POST["delete_dropdown_tab_name"]))
+      {
+        delete_element_db($mySqlidb, $json_data["navBar"]["tabs"][$_POST["delete_dropdown_tab_name"]]["tabs"][$_POST["delete_tab_name"]]["type"], $json_data["navBar"]["tabs"][$_POST["delete_dropdown_tab_name"]]["tabs"][$_POST["delete_tab_name"]]["index"]);
+        array_splice($json_data["navBar"]["tabs"][$_POST["delete_dropdown_tab_name"]]["tabs"], $_POST["delete_tab_name"], 1);
+      }
+      else
+      {
+        delete_element_db($mySqlidb, $json_data["navBar"]["tabs"][$_POST["delete_tab_name"]]["type"], $json_data["navBar"]["tabs"][$_POST["delete_tab_name"]]["index"]);
+        array_splice($json_data["navBar"]["tabs"], $_POST["delete_tab_name"], 1);
+      }
+
+      file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
+      $json = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "WebPages" . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "webConfig.json");
+      $json_data = json_decode($json, true);
+    }
+    if(isset($json_data) && isset($_POST["edit_tab_name"]))
+    {
+      $new_tab_name = mysql_fix_string($mySqlidb, $_POST["edit_tab_name"]);
+      if(isset($_POST["edit_dropdown_tab_index"]))
+      {
+        $json_data["navBar"]["tabs"][$_POST["edit_dropdown_tab_index"]]["tabs"][$_POST["edit_tab_index"]]["name"] = $new_tab_name;
+      }
+      else
+      {
+        $json_data["navBar"]["tabs"][$_POST["edit_tab_index"]]["name"] = $new_tab_name;
+      }
+
+      file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
+      $json = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "WebPages" . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "webConfig.json");
+      $json_data = json_decode($json, true);
+    }
+    if(isset($json_data) && isset($_POST["up_tab"]))
+    {
+      if($_POST["up_tab"] > 1 || (isset($_POST["up_dropdown"]) && $_POST["up_tab"] > 0))
+      {
+        if(isset($_POST["up_dropdown"]))
+        {
+          $tmp = $json_data["navBar"]["tabs"][$_POST["up_dropdown"]]["tabs"][$_POST["up_tab"] - 1];
+          $json_data["navBar"]["tabs"][$_POST["up_dropdown"]]["tabs"][$_POST["up_tab"] - 1] = $json_data["navBar"]["tabs"][$_POST["up_dropdown"]]["tabs"][$_POST["up_tab"]];
+          $json_data["navBar"]["tabs"][$_POST["up_dropdown"]]["tabs"][$_POST["up_tab"]] = $tmp;
+        }
+        else
+        {
+          $tmp = $json_data["navBar"]["tabs"][$_POST["up_tab"] - 1];
+          $json_data["navBar"]["tabs"][$_POST["up_tab"] - 1] = $json_data["navBar"]["tabs"][$_POST["up_tab"]];
+          $json_data["navBar"]["tabs"][$_POST["up_tab"]] = $tmp;
+        }
+
+        file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
+        $json = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "WebPages" . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "webConfig.json");
+        $json_data = json_decode($json, true);
+      }
+    }
+    if(isset($json_data) && isset($_POST["down_tab"]))
+    {
+      if($_POST["down_tab"] < count($json_data["navBar"]["tabs"]) - 1 || (isset($_POST["down_dropdown"]) && $_POST["down_tab"] < count($json_data["navBar"]["tabs"][$_POST["down_dropdown"]]["tabs"]) - 1))
+      {
+        if(isset($_POST["down_dropdown"]) && $_POST["down_tab"] < count($json_data["navBar"]["tabs"][$_POST["down_dropdown"]]["tabs"]) - 1)
+        {
+          $tmp = $json_data["navBar"]["tabs"][$_POST["down_dropdown"]]["tabs"][$_POST["down_tab"] + 1];
+          $json_data["navBar"]["tabs"][$_POST["down_dropdown"]]["tabs"][$_POST["down_tab"] + 1] = $json_data["navBar"]["tabs"][$_POST["down_dropdown"]]["tabs"][$_POST["down_tab"]];
+          $json_data["navBar"]["tabs"][$_POST["down_dropdown"]]["tabs"][$_POST["down_tab"]] = $tmp;
+        }
+        else
+        {
+          $tmp = $json_data["navBar"]["tabs"][$_POST["down_tab"] + 1];
+          $json_data["navBar"]["tabs"][$_POST["down_tab"] + 1] = $json_data["navBar"]["tabs"][$_POST["down_tab"]];
+          $json_data["navBar"]["tabs"][$_POST["down_tab"]] = $tmp;
+        }
+
+        file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
+        $json = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "WebPages" . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "webConfig.json");
+        $json_data = json_decode($json, true);
+      }
     }
   }
 

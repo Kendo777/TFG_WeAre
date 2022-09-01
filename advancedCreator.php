@@ -194,14 +194,154 @@
                     <label for="style_bck_color" class="mb-2"><b>2. Make your own custom web page</b></label>
                     <div id="inputFormRow">
                       <div class="input-group mb-3">
-                        <select class="btn btn-outline-info" id="add_event_color" disabled>
+                        <select class="btn btn-outline-info" disabled>
                           <option>Home</option>
                         </select>
-                        <input type="text" name="home_name" class="form-control m-input" placeholder="Home Tab Name">
+                        <?php
+                        if(isset($json_data))
+                        {
+                          foreach($json_data["navBar"]["tabs"] as $index => $value)
+                          {
+                            if($value["type"] == "Home")
+                            {
+                              echo '<input type="text" name="home_name" class="form-control m-input" placeholder="Home Tab Name" value="' . $value["name"] . '">';
+                            }
+                          }
+                        }
+                        else
+                        {
+                          echo '<input type="text" name="home_name" class="form-control m-input" placeholder="Home Tab Name">';
+                        }
+                      ?>
                       </div>
                     </div>
-                      <div id="tab_new_row"></div>
-                      <button onclick="add_tab_row()" type="button" class="btn btn-info">Add New Tab</button>
+                    <hr>
+                      <div id="tab_new_row">
+                        <?php
+                          if(isset($json_data))
+                          {
+                            foreach($json_data["navBar"]["tabs"] as $index => $value)
+                            {
+                              if($value["type"] != "Home")
+                              {
+                                echo '<div id="inputFormRow">
+                                <div class="input-group mb-3">
+                                <div class="input-group-append">
+                                  <div class="col">
+                                  <div class="row">';
+                                  if($index == 1)
+                                  {
+                                    echo '<form></form>';
+                                  }
+                                  echo '<form action="' . $url . '" method="post" role="form">
+                                      <input type="hidden" name="up_tab" value="' . $index . '">
+                                      <button type="submit" class="btn btn-link btn-sm"><i class="bi bi-caret-up-fill"></i></button>
+                                    </form>
+                                    </div>
+                                  <div class="row">
+                                    <form action="' . $url . '" method="post" role="form">
+                                      <input type="hidden" name="down_tab" value="' . $index . '">
+                                      <button type="submit" class="btn btn-link btn-sm"><i class="bi bi-caret-down-fill"></i></button>
+                                    </form>
+                                  </div>
+                                  </div>
+                                </div>
+                                <form action="' . $url . '" method="post" role="form" style="flex: 1 1 auto;">
+                                <div class="input-group my-3">
+                                <select class="btn btn-outline-info" disabled>
+                                    <option>' . $value["type"] . '</option>
+                                  </select>
+                                  <input type="hidden" name="edit_tab_index" value="' . $index . '">
+                                  <input type="text" name="edit_tab_name" class="form-control m-input" placeholder="Tab Name" value="' . $value["name"] . '">
+                                  <div class="input-group-append">
+                                  <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-pencil-fill"></i></button>
+                                  </div>
+                                  </form>
+                                  <div class="input-group-append d-flex">
+                                    <form action="' . $url . '" method="post" role="form">
+                                      <input type="hidden" name="delete_tab_name" value="' . $index . '">
+                                      <button type="submit" class="btn btn-danger" onclick="return confirm(\'You are going to delete a full page\nOnce deleted it cannot be recovered. Are you sure?\')"><i class="bi bi-trash-fill"></i></button>
+                                    </form>
+                                  </div>
+                                </div>
+                                </div>';
+                                if($value["type"] == "Dropdown")
+                                {
+                                  echo '<div style="margin-left: 2%;">
+                                  <div class="shadow-sm rounded">
+                                  <h4 class="accordion-header p-3">
+                                  <i class="bi bi-menu-button-wide-fill"></i>
+                                  ' . $value["name"] . '
+                                  </h4>
+                                  <div class="form-group my-3">';
+                                  foreach($value["tabs"] as $dd_index => $dd_value)
+                                  {
+                                    echo '<div id="inputFormRow">
+                                    <div class="input-group mb-3">
+                                    <div class="input-group-append">
+                                      <div class="col">
+                                      <div class="row">';
+                                      if($index == 1)
+                                      {
+                                        echo '<form></form>';
+                                      }
+                                      echo '<form action="' . $url . '" method="post" role="form">
+                                          <input type="hidden" name="up_dropdown" value="' . $index . '">
+                                          <input type="hidden" name="up_tab" value="' . $dd_index . '">
+                                          <button type="submit" class="btn btn-link btn-sm"><i class="bi bi-caret-up-fill"></i></button>
+                                        </form>
+                                        </div>
+                                      <div class="row">
+                                        <form action="' . $url . '" method="post" role="form">
+                                          <input type="hidden" name="down_dropdown" value="' . $index . '">
+                                          <input type="hidden" name="down_tab" value="' . $dd_index . '">
+                                          <button type="submit" class="btn btn-link btn-sm"><i class="bi bi-caret-down-fill"></i></button>
+                                        </form>
+                                      </div>
+                                      </div>
+                                      </div>
+                                    <form action="' . $url . '" method="post" role="form" style="flex: 1 1 auto; margin-left: 2%;">
+                                    <div class="input-group my-3">
+                                    <select class="btn btn-outline-info" disabled>
+                                        <option>' . $dd_value["type"] . '</option>
+                                      </select>
+                                      <input type="hidden" name="edit_dropdown_tab_index" value="' . $index . '">
+                                      <input type="hidden" name="edit_tab_index" value="' . $dd_index . '">
+                                      <input type="text" name="edit_tab_name" class="form-control m-input" placeholder="Tab Name" value="' . $dd_value["name"] . '">
+                                      <div class="input-group-append">
+                                      <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-pencil-fill"></i></button>
+                                      </div>
+                                      </form>
+                                      <div class="input-group-append d-flex">
+                                        <form action="' . $url . '" method="post" role="form">
+                                          <input type="hidden" name="delete_dropdown_tab_name" value="' . $index . '">
+                                          <input type="hidden" name="delete_tab_name" value="' . $dd_index . '">
+                                          <button type="submit" class="btn btn-danger" onclick="return confirm(\'You are going to delete a full page\nOnce deleted it cannot be recovered. Are you sure?\')"><i class="bi bi-trash-fill"></i></button>
+                                        </form>
+                                      </div>
+                                    </div>
+                                    </div>
+                                    <hr></div>';
+                                  }
+                                  if(!isset($_GET["edit"]))
+                                  {
+                                    echo '<div id="tab_new_row_' . $index . '" style="margin-left: 2%;"></div>
+                                    <button onclick="add_tab_dropdown_row(' . $index . ')" type="button" class="btn btn-info m-3">Add New Dropdown Tab</button>';
+                                  }
+                                  echo '</div></div></div>';
+                                }
+                                echo '<hr></div>';
+                              }
+                            }
+                          }
+                        ?>
+                      </div>
+                      <?php
+                      if(!isset($_GET["edit"]))
+                      {
+                        echo '<button onclick="add_tab_row()" type="button" class="btn btn-info">Add New Tab</button>';
+                      }
+                      ?>
                   </div>
                 </div>
               </div><!-- End Component item-->
