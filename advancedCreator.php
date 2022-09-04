@@ -139,7 +139,7 @@
                                             <input type="text" name="column_name" class="form-control m-input" placeholder="User Attribute" value="' . ucfirst($column["Field"]) . '">
                                             <input type="hidden" name="rename_column" value="' . $column["Field"] . '">
                                             <input type="hidden" name="column_type" value="' . $column["Type"] . '">
-                                            <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-pencil-fill"></i></button>
+                                            <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-save"></i></button>
                                           </div>
                                         </form>
                                         <div class="input-group-append d-flex">
@@ -254,7 +254,7 @@
                                   <input type="hidden" name="edit_tab_index" value="' . $index . '">
                                   <input type="text" name="edit_tab_name" class="form-control m-input" placeholder="Tab Name" value="' . $value["name"] . '">
                                   <div class="input-group-append">
-                                  <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-pencil-fill"></i></button>
+                                  <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-save"></i></button>
                                   </div>
                                   </form>
                                   <div class="input-group-append d-flex">
@@ -309,7 +309,7 @@
                                       <input type="hidden" name="edit_tab_index" value="' . $dd_index . '">
                                       <input type="text" name="edit_tab_name" class="form-control m-input" placeholder="Tab Name" value="' . $dd_value["name"] . '">
                                       <div class="input-group-append">
-                                      <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-pencil-fill"></i></button>
+                                      <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-save"></i></button>
                                       </div>
                                       </form>
                                       <div class="input-group-append d-flex">

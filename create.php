@@ -69,12 +69,8 @@ require_once("mySqli.php");
   {
       public $type;
       public $tabs;
-      function __construct() {
-        
-    }
-    function set(string $type)
-    {
-      $this->type = $type;
+      function __construct(string $type) {
+      $this->type = $type;  
     }
     function set_tabs($tabs)
     {
@@ -207,16 +203,16 @@ require_once("mySqli.php");
     $user = $row["user"];
     $email = $row["email"];
     $password = $row["password"];
-    $db_name_low = strtolower($db_name);
+    $db_name_low = str_replace(" ", "", strtolower($db_name));
     $sql= $mySqli->prepare("INSERT INTO `web_pages`(`web_name`, `web_user`, `web_current_name`, `web_database`) VALUES (?, ?, ?, ?)");
-    $sql->bind_param("ssss", $db_name, $_SESSION["weAre_user"], $db_name, $db_name_low);
+    $sql->bind_param("ssss", $db_name_low, $_SESSION["weAre_user"], $db_name, $db_name_low);
     $sql->execute();
 
-    $sql= $mySqli->prepare("CREATE DATABASE " . $db_name);
+    $sql= $mySqli->prepare("CREATE DATABASE " . $db_name_low);
     $sql->execute();
 
     //create tables
-    $mySqlidb = mysql_client_db($db_name);
+    $mySqlidb = mysql_client_db($db_name_low);
     
     // sql to create table
     $sql= $mySqlidb->prepare("CREATE TABLE users (
@@ -234,9 +230,8 @@ require_once("mySqli.php");
       {
         if(!empty($column))
         {
-          $column_name = mysql_fix_string($mySqlidb, $column);
+          $column_name = str_replace(" ", "_", strtolower(mysql_fix_string($mySqlidb, $column)));
           $column_type = mysql_fix_string($mySqlidb, $_POST["column_type"][$index]);
-          $column_name = str_replace(" ", "_", $column_name);
           $sql= $mySqlidb->prepare("ALTER TABLE users ADD ". strtolower($column_name) . " " . strtoupper($column_type));
           $sql->execute();
         }
@@ -383,7 +378,7 @@ require_once("mySqli.php");
  function advanced_navBar($db_name)
   {
     $mySqlidb = mysql_client_db($db_name);
-    $web_navBar = new WebNavBar();
+    $web_navBar = new WebNavBar($_POST["navBar_type"]);
     $nav_bar = array();
     $element_count = (object) [
       "blog_count" => 0,
@@ -445,7 +440,6 @@ require_once("mySqli.php");
         }
       }
     }
-    $web_navBar->set($_POST["navBar_type"]);
     $web_navBar->set_tabs($nav_bar);
     return $web_navBar;
   }
@@ -624,25 +618,27 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
    */
   if(!isset($_GET["edit"]) && isset($_POST["web_name"]) && !empty($_POST["web_name"]) && !is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]))
   {
+    $web_str_name = str_replace(" ", "", $_POST["web_name"]);
     //NOT FOR THE MOMENT
     create_DB($mySqli, $_POST["web_name"]);
     // Create web page folder
-    mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"], 0700);
+    mkdir("WebPages".DIRECTORY_SEPARATOR. $web_str_name, 0700);
     // Import all scripts: PHP, CSS, JS,... for the structure of the web page
-    copy("StructureScripts/index.php", "WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."index.php"); 
-    mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery", 0700, true);
-    copy_folder("StructureScripts/assets/img/gallery", "WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery");
-    mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "profile", 0700, true);
+    copy("StructureScripts/index.php", "WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."index.php"); 
+    mkdir("WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery", 0700, true);
+    copy_folder("StructureScripts/assets/img/gallery", "WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery");
+    mkdir("WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "profile", 0700, true);
     //copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
 
-    $web_data = new WebData($_POST["web_name"], $_POST["web_name"], $_SESSION["weAre_user"], strtolower($_POST["web_name"]), $_POST["web_privacity"], $_GET["form"]);
+    $web_data = new WebData($web_str_name, $_POST["web_name"], $_SESSION["weAre_user"], $web_str_name, $_POST["web_privacity"], $_GET["form"]);
     $web_style = new WebStyle($_POST["style_bck_color"], $_POST["style_primary_color"], $_POST["style_secundary_color"]);
+    $web_navBar = new WebNavBar($_POST["navBar_type"]);
     $web_users = new WebUsers();
     $web_gallery = new WebGallery();
     $web_blog = new WebBlog();
     $web_forum = new WebForum();
     $web_calendar = new WebCalendar();
-    $web_navBar = new WebNavBar();
+
     
     /**
      * Set the configuration of all the components of the result web page
@@ -656,7 +652,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
 
     if(isset($_POST["home_name"]))
     {
-      $web_navBar = advanced_navBar($_POST["web_name"]);
+      $web_navBar = advanced_navBar(str_replace(" ", "", strtolower($_POST["web_name"])));
       $web_gallery->set();
       $web_blog->set();
       $web_forum->set();
@@ -664,10 +660,6 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     }
     else
     {
-      if(isset($_POST["navBar_type"]))
-      {
-          $web_gallery->set($_POST["navBar_type"]);
-      }
       if(isset($_POST["gallery_enable"]))
       {
           $web_gallery->set();
@@ -700,7 +692,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
         'forum' => $web_forum,
         'calendar' => $web_calendar
     ];
-    file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($webConfig));
+    file_put_contents("WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."webConfig.json", json_encode($webConfig));
     
     /**
      * Another possibility to generate the JSON 
@@ -733,7 +725,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     $sql= $mySqli->prepare("UPDATE `web_pages` SET `web_current_name`= ? WHERE `web_name` = ? AND `web_user` = ?");
     $sql->bind_param("sss", $web_name , $_GET["edit"], $web_user);
     $sql->execute();
-    $web_data = new WebData($_GET["edit"], $_POST["web_name"], $_SESSION["user"], strtolower($_GET["edit"]), $_POST["web_privacity"], $json_data["web_data"]["web_structure"]);
+    $web_data = new WebData($_GET["edit"], $_POST["web_name"], $_SESSION["user"], str_replace(" ", "_", strtolower($_POST["web_name"])), $_POST["web_privacity"], $json_data["web_data"]["web_structure"]);
     $web_style = new WebStyle($_POST["style_bck_color"], $_POST["style_primary_color"], $_POST["style_secundary_color"]);
     $web_users = new WebUsers();
     $web_navBar = new WebNavBar();

@@ -126,7 +126,7 @@
             html += '<h3 class="accordion-header">';
             html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
             html += '<i class="bi bi-newspaper question-icon"></i>';
-            html += tab_id + ' Blog';
+            html += ' Blog';
             html += '</button>';
             html += '</h3>';
             html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';
@@ -144,7 +144,7 @@
             html += '<h3 class="accordion-header">';
             html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
             html += '<i class="bi bi-images question-icon"></i>';
-            html += tab_id + ' Gallery';
+            html += ' Gallery';
             html += '</button>';
             html += '</h3>';
             html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';
@@ -168,7 +168,7 @@
             html += '<h3 class="accordion-header">';
             html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
             html += '<i class="bi bi-calendar-week question-icon"></i>';
-            html += tab_id + 'Calendar';
+            html += 'Calendar';
             html += '</button>';
             html += '</h3>';
             html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';
@@ -186,7 +186,7 @@
             html += '<h3 class="accordion-header">';
             html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
             html += '<i class="bi bi-bar-chart-steps question-icon"></i>';
-            html += tab_id + 'Forum';
+            html += 'Forum';
             html += '</button>';
             html += '</h3>';
             html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';
@@ -206,7 +206,7 @@
             html += '<h3 class="accordion-header">';
             html += '<button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_tab_' + tab_id + '">';
             html += '<i class="bi bi-menu-button-wide-fill"></i>';
-            html += tab_id + ' Dropdown';
+            html += ' Dropdown';
             html += '</button>';
             html += '</h3>';
             html += '<div id="collapse_tab_' + tab_id + '" class="accordion-collapse collapse show p-3">';

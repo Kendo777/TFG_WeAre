@@ -278,15 +278,15 @@ if(isset($_GET['edit']))
   <div class="col col-lg-5">
   <div class="row">
   <h2><u>Edit main information</u></h2>
-    <form method="post" action="index.php?page=user&edit">
-      <div class="input-group mb-3 mt-3">
+    <form method="post" action="index.php?page=user&edit">';
+    /*  <div class="input-group mb-3 mt-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">User</span>
         </div>
         <input type="text" class="form-control" placeholder="Enter your new Username" aria-label="Username" aria-describedby="basic-addon1" name="user">
       </div>
-      <hr>
-      <div class="input-group mb-3">
+      <hr>*/
+  echo '<div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">Name</span>
         </div>

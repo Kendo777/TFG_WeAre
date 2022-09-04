@@ -90,19 +90,19 @@
           </li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           <?php
-            if(!isset($_SESSION['weAre_user']))
+            if(isset($_SESSION['weAre_user']))
             {
-              echo '<li><a class="getstarted scrollto" href="index.php?page=login">Get Started</a></li>';
-            }
-            else
-            {
-              echo '<li class="dropdown"><a class="getstarted scrollto" href="index.php?page=create"><i class="bi bi-person-circle"></i>Get Started</a>
+              echo '<li class="dropdown"><a class="getstarted scrollto"><i class="bi bi-person-circle"></i>' . $_SESSION['weAre_user'] . '</a>
               <ul>
                   <li><a href="index.php?page=myWebs">My Webs</a></li>
                   <li><a href="index.php?page=create">Create web</a></li>
                   <li><a href="index.php?page=logout">Logout</a></li>
               </ul>
               </li>';
+            }
+            else
+            {
+              echo '<li><a class="getstarted scrollto" href="index.php?page=login">Get Started</a></li>';
             }
           ?>
         </ul>

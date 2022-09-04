@@ -82,6 +82,24 @@
                   </div>
                 </div>
               </div><!-- End Component item-->
+              <!-- Navbar Configuration -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="accordion-header form-check form-switch">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navBar">
+                      <i class="bi bi-segmented-nav question-icon"></i>
+                        Navigation Bar
+                    </button>
+                </h3>
+                <div id="navBar" class="accordion-collapse collapse show"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
+                  <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
+                    <label for="navBar_type" class="mb-2"><b>1. Navigation bar type</b></label>
+                    <select class="form-control mb-2" id="navBar_type" name="navBar_type">
+                      <option>Clasic Navigation Bar</option>
+                      <option>Side Collapser Bar</option>
+                    </select>
+                  </div>
+                </div>
+              </div><!-- End Component item-->
               <!-- Blog Configuration -->
               <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
                 <h3 class="accordion-header form-check form-switch">
@@ -133,7 +151,7 @@
                                             <input type="text" name="column_name" class="form-control m-input" placeholder="User Attribute" value="' . ucfirst($column["Field"]) . '">
                                             <input type="hidden" name="rename_column" value="' . $column["Field"] . '">
                                             <input type="hidden" name="column_type" value="' . $column["Type"] . '">
-                                            <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-pencil-fill"></i></button>
+                                            <button type="submit" class="btn btn-warning mx-2"><i class="bi bi-save"></i></button>
                                           </div>
                                         </form>
                                         <div class="input-group-append d-flex">
@@ -167,24 +185,6 @@
                         <button onclick="addUserRow()" type="button" class="btn btn-info">Add Attribute</button>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div><!-- End Component item-->
-              <!-- Navbar Configuration -->
-            <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
-                <h3 class="accordion-header form-check form-switch">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navBar">
-                      <i class="bi bi-segmented-nav question-icon"></i>
-                        Navigation Bar
-                    </button>
-                </h3>
-                <div id="navBar" class="accordion-collapse collapse"> <!-- Add: data-bs-parent="#faqlist" for collaps when click on other-->
-                  <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
-                    <label for="navBar_type" class="mb-2"><b>1. Navigation bar type</b></label>
-                    <select class="form-control mb-2" id="navBar_type" name="navBar_type">
-                      <option>Clasic Navigation Bar</option>
-                      <option>Side Collapser Bar</option>
-                    </select>
                   </div>
                 </div>
               </div><!-- End Component item-->

@@ -479,9 +479,9 @@
                   <i class="bi bi-activity"></i>
                 </div>
                 <a href="#" class="stretched-link">
-                  <h3>Nesciunt Mete</h3>
+                  <h3>Your own web page</h3>
                 </a>
-                <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis.</p>
+                <p></p>
               </div>
             </div>
           </div><!-- End Service Item -->
@@ -493,12 +493,12 @@
               </div>
               <div class="details position-relative">
                 <div class="icon">
-                  <i class="bi bi-broadcast"></i>
+                  <i class="bi bi-bar-chart-steps"></i>
                 </div>
                 <a href="#" class="stretched-link">
-                  <h3>Eosle Commodi</h3>
+                  <h3>Forum</h3>
                 </a>
-                <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut nesciunt dolorem.</p>
+                <p>Interact with other members and share opinions on the same topic</p>
               </div>
             </div>
           </div><!-- End Service Item -->
@@ -530,9 +530,9 @@
                   <i class="bi bi-bounding-box-circles"></i>
                 </div>
                 <a href="#" class="stretched-link">
-                  <h3>Asperiores Commodit</h3>
+                  <h3>Blog</h3>
                 </a>
-                <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
+                <p>Write with posts the narration of a topic</p>
                 <a href="#" class="stretched-link"></a>
               </div>
             </div>
@@ -548,9 +548,9 @@
                   <i class="bi bi-calendar4-week"></i>
                 </div>
                 <a href="#" class="stretched-link">
-                  <h3>Velit Doloremque</h3>
+                  <h3>Calendar</h3>
                 </a>
-                <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem alias eius labore.</p>
+                <p>Divides time by days, weeks, months and years to which you can add events with a title and a date with time</p>
                 <a href="#" class="stretched-link"></a>
               </div>
             </div>
@@ -566,9 +566,9 @@
                   <i class="bi bi-chat-square-text"></i>
                 </div>
                 <a href="#" class="stretched-link">
-                  <h3>Dolori Architecto</h3>
+                  <h3>Blank pages</h3>
                 </a>
-                <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti recusandae ducimus enim.</p>
+                <p>Create a page as you wish</p>
                 <a href="#" class="stretched-link"></a>
               </div>
             </div>

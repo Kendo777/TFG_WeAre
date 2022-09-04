@@ -88,9 +88,6 @@
     #sidebar {
       background-color: <?php echo $json_data["style"]["secundary_color"] ?>;
     }
-    #sidebar a{
-      color: <?php echo $json_data["style"]["primary_color"] ?>;
-    }
   </style>
 </head>
 
@@ -122,7 +119,7 @@
     ob_start();
     if(isset($_SESSION["user"]) && $session_user["rol"] == "admin" && isset($_GET["admin"]) && isset($_GET["web"]))
     {
-      header('location:..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'index.php?page=create&form=' . $json_data["web_data"]["web_structure"] . '&edit='. $json_data["web_data"]["web_name"]);
+      header('location:..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'index.php?page=create&edit='. $json_data["web_data"]["web_name"]);
     }
     $page="home";
     include_once("../../StructureScripts/sideBar.php");
@@ -132,10 +129,6 @@
         {
             session_destroy();
             header('location:index.php');
-        }
-        else if(!isset($_SESSION["user"]) && ($json_data["web_data"]["web_privacity"] == "Private" || $json_data["web_data"]["web_privacity"] == "Invitation"))
-        {
-          $page = "login";
         }
         else
         {

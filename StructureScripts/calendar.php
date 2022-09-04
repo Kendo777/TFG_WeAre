@@ -226,7 +226,7 @@ $(document).ready(function() {
 	
 });
 </script>
-
+<div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
 <div class="row mt-4">
     <div data-aos="fade-up" data-aos-delay="200">
     <div class="section-header">
@@ -253,7 +253,7 @@ $(document).ready(function() {
 	<div id='calendar'></div>
 	<div style='clear:both'></div>
 </div>
-
+</div>
 <!-- Modal FORM PARA MANDAR PETICION SQL-->
 <div class="modal fade" id="add_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
