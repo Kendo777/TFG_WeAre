@@ -282,6 +282,88 @@ if($json_data["navBar"]["type"] == "Clasic Navigation Bar")
     </nav>
     <nav class="navbar">';
   }
+  else if($json_data["web_data"]["web_structure"] == "advanced")
+  {
+    foreach($json_data["navBar"]["tabs"] as $index => $value)
+    {
+      //var_dump($value);
+      if($value["type"] == "Home")
+      {
+        echo '<li>
+        <a class="nav-link scrollto active" href="index.php">
+          <i class="bi bi-house-fill"></i>
+          ' . $value["name"] . '
+        </a>
+      </li>';
+      }
+      else if($value["type"] == "Dropdown")
+      {
+        echo '<li class="dropdown"><a href="#">
+        <i class="bi bi-globe2 question-icon"></i>
+        <span>' . $value["type"] . '</span>
+         <i class="bi bi-chevron-down"></i></a>
+        <ul>';
+        foreach($value["tabs"] as $dropdown_value)
+        {
+          echo '<li>
+            <a href="index.php?page=' . strtolower($dropdown_value["type"]) . '&id=' . $dropdown_value["index"] . '">';
+          switch($dropdown_value["type"])
+          {
+            case "Gallery":
+              echo '<i class="bi bi-images"></i>';
+              break;
+            case "Blog":
+              echo '<i class="bi bi-newspaper"></i>';
+              break;
+            case "Forum":
+              echo '<i class="bi bi-bar-chart-steps"></i>';
+              break;
+            case "Blank":
+              echo '<i class="bi bi-journal-bookmark-fill"></i>';
+              break;
+            case "Calendar":
+              echo '<i class="bi bi-calendar-week"></i>';
+              break;
+
+          }
+          echo $dropdown_value["name"] . '
+            </a>
+        </li>';
+        }
+        echo '</ul>
+        </li>';
+
+      }
+      else
+      {
+        echo '        
+        <li>
+            <a class="nav-link scrollto active" href="index.php?page=' . strtolower($value["type"]) . '&id=' . $value["index"] . '">';
+        switch($value["type"])
+        {
+          case "Gallery":
+            echo '<i class="bi bi-images"></i>';
+            break;
+          case "Blog":
+            echo '<i class="bi bi-newspaper"></i>';
+            break;
+          case "Forum":
+            echo '<i class="bi bi-bar-chart-steps"></i>';
+            break;
+          case "Blank":
+            echo '<i class="bi bi-journal-bookmark-fill"></i>';
+            break;
+          case "Calendar":
+            echo '<i class="bi bi-calendar-week"></i>';
+            break;
+
+        }
+        echo $value["name"] . '
+            </a>
+        </li>';
+      }
+    }
+  }
   if(!isset($_SESSION['user']) && $json_data["user"]["enable"])
   {
       echo'<div class="login ml-auto">

@@ -26,7 +26,7 @@ function create_grid_gallery($columns, $album)
     {
       if(is_dir("images/gallery" . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $value))
       {
-        $grid_gallery_code.= '<li data-filter=".filter-' . $value . '">' . ucfirst($value) . '</li>';
+        $grid_gallery_code.= '<li data-filter=".filter-' . str_replace(" ", "", $value) . '">' . ucfirst($value) . '</li>';
       }
     }
   }
@@ -45,7 +45,7 @@ function create_grid_gallery($columns, $album)
           if($image!="." && $image!="..")
           {
             $grid_gallery_code.= '
-        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-' . $tag . '" style="pointer-events: none !important; padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">
+        <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-' . str_replace(" ", "", $tag) . '" style="pointer-events: none !important; padding-left: 2px; padding-right: 0px; padding-bottom: 2px;">
           <img src="images/gallery' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $tag . DIRECTORY_SEPARATOR . $image . '" class="img-fluid" alt="">
         </div><!-- End Portfolio Item -->';
           }
