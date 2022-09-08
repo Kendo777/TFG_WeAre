@@ -21,7 +21,7 @@ if(!empty($_POST))
 		if($password==$password2)
 		{
 			$password = password_hash($password, PASSWORD_DEFAULT);
-			//No funciona mail de google
+			//No funciona mail de google por lo tanto valid user
 			$validationCode = 0; //intval($validationCode);
 			$sql= $mySqli->prepare("INSERT INTO users(user, email, password, valid) VALUES (?,?,?,?)");
 			$sql->bind_param("sssi",$user,$email,$password,$validationCode);

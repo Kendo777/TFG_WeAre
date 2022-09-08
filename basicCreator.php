@@ -94,8 +94,22 @@
                   <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
                     <label for="navBar_type" class="mb-2"><b>1. Navigation bar type</b></label>
                     <select class="form-control mb-2" id="navBar_type" name="navBar_type">
-                      <option>Clasic Navigation Bar</option>
-                      <option>Side Collapser Bar</option>
+                      <?php
+
+                      echo '<option ';
+                        if(isset($json_data) && $json_data["navBar"]["type"] == "Clasic Navigation Bar") 
+                        {
+                          echo 'selected';
+                        }
+                          echo '>Clasic Navigation Bar</option>
+                                <option ';
+                        if(isset($json_data) && $json_data["navBar"]["type"] == "Side Collapser Bar") 
+                        {
+                          echo 'selected';
+                        }
+                        echo '>Side Collapser Bar</option>';
+                        
+                        ?>
                     </select>
                   </div>
                 </div>
@@ -216,40 +230,40 @@
                           <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
                             <div class="row g-0">
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/app-1.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/app-1.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/product-1.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/product-1.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/branding-1.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-1.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/books-1.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/books-1.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/app-2.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/app-2.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/product-2.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/product-2.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/branding-2.jpg" class="img-fluid glightbox" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-2.jpg" class="img-fluid glightbox" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/books-2.jpg" class="img-fluid glightbox" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/books-2.jpg" class="img-fluid glightbox" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/app-3.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/app-3.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/product-3.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/product-3.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/branding-3.jpg" class="img-fluid" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-3.jpg" class="img-fluid" alt="">
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item" style="pointer-events: none !important;">
-                              <img src="assets/img/portfolio/books-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/books-3.jpg" class="img-fluid glightbox preview-link" alt="">
                             </div><!-- End Portfolio Item -->
                             
                           </div><!-- End Portfolio Container -->
@@ -270,97 +284,97 @@
                           <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
                             <div class="row g-0">
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/app-1.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/app-1.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/app-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/app-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/product-1.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/product-1.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/product-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/product-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/branding-1.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-1.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/branding-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/branding-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/books-1.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/books-1.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/books-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/books-1.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/app-2.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/app-2.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/app-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/app-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/product-2.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/product-2.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/product-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/product-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/branding-2.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-2.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/branding-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/branding-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/books-2.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/books-2.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/books-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/books-2.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/app-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/app-3.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/app-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/app-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/product-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/product-3.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/product-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/product-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/branding-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-3.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/branding-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/branding-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
                             </div><!-- End Portfolio Item -->
                             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item">
-                              <img src="assets/img/portfolio/books-3.jpg" class="img-fluid glightbox preview-link" alt="">
+                              <img src="StructureScripts/assets/img-WeAre/portfolio/books-3.jpg" class="img-fluid glightbox preview-link" alt="">
                               <div class="portfolio-info" style="top: 0 !important;">
-                                <a href="assets/img/portfolio/books-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
+                                <a href="StructureScripts/assets/img-WeAre/portfolio/books-3.jpg" class="glightbox preview-link" style="left: 45% !important;">
                                   <i class="bi bi-zoom-in" style="font-size: 3vw !important;"></i>
                                 </a>
                               </div>
@@ -375,14 +389,21 @@
                       <label for="gallery_type" class="mb-2"><b>1. Gallery type</b></label>
                       <select class="form-control mb-2" id="gallery_type" name="gallery_type">
                         <?php
+                        if(isset($json_data))
+                        {
+                          $sql= $mySqlidb->prepare("SELECT  * FROM galleries WHERE id = 1");
+                          $sql->execute();
+                          $result=$sql->get_result();
+                          $gallery=$result->fetch_assoc();
+                        }
                         echo '<option ';
-                        if(isset($json_data) && $json_data["gallery"]["type"] == "Grid Gallery View") 
+                        if(isset($json_data) && $gallery["type"] == "Grid Gallery View") 
                         {
                           echo 'selected';
                         }
                           echo '>Grid Gallery View</option>
                                 <option ';
-                        if(isset($json_data) && $json_data["gallery"]["type"] == "Zoom Gallery View") 
+                        if(isset($json_data) && $gallery["type"] == "Zoom Gallery View") 
                         {
                           echo 'selected';
                         }

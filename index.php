@@ -19,18 +19,18 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/WeLogo.PNG" rel="icon">
+  <link href="StructureScripts/assets/img/WeLogo.PNG" rel="icon">
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="StructureScripts/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="StructureScripts/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="StructureScripts/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="StructureScripts/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="StructureScripts/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Variables CSS Files. Uncomment your preferred color scheme -->
   <!-- <link href="assets/css/variables.css" rel="stylesheet"> -->
-  <link href="assets/css/variables-blue.css" rel="stylesheet">
+  <link href="StructureScripts/assets/css/variables-blue.css" rel="stylesheet">
   <!-- <link href="assets/css/variables-green.css" rel="stylesheet"> -->
   <!-- <link href="assets/css/variables-orange.css" rel="stylesheet"> -->
   <!-- <link href="assets/css/variables-purple.css" rel="stylesheet"> -->
@@ -38,7 +38,7 @@
   <!-- <link href="assets/css/variables-pink.css" rel="stylesheet"> -->
 
   <!-- Template Main CSS File -->
-  <link href="assets/css/main.css" rel="stylesheet">
+  <link href="StructureScripts/assets/css/main.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: HeroBiz - v2.1.0
@@ -55,17 +55,22 @@
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <a href="index.php" class="logo d-flex align-items-center">
-        <img src="assets/img/WeArelogo.png" alt="">
+        <img src="StructureScripts/assets/img/WeArelogo.png" alt="">
         <span>ARE</span>
       </a>
 
       <nav id="navbar" class="navbar">
         <ul>
           <?php
+            // If is set page, the home button will return to index.php
             if(isset($_GET["page"]))
+            {
               echo '<li><a class="nav-link scrollto active" href="index.php">Home</a></li>';
+            }
             else
-              echo '<li><a class="nav-link scrollto active" href="#home">Home</a></li>'
+            {
+              echo '<li><a class="nav-link scrollto active" href="#home">Home</a></li>';
+            }
           ?>
           <li><a class="nav-link scrollto" href="#about">About</a></li>
           <li><a class="nav-link scrollto" href="#services">Services</a></li>
@@ -90,6 +95,9 @@
           </li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           <?php
+            /* If the user is log in, display the user dropdown with all the needed elements
+             * If not, the button get started will redirect the user to the log in page
+             */
             if(isset($_SESSION['weAre_user']))
             {
               echo '<li class="dropdown"><a class="getstarted scrollto"><i class="bi bi-person-circle"></i>' . $_SESSION['weAre_user'] . '</a>
@@ -114,7 +122,7 @@
 
   <?php
     /**
-     * Check the current page, if exists it includes to the index
+     * Check the current page, if exists it displais to the index
      */
     $page="home";
     if(isset($_GET["page"]))
@@ -224,14 +232,14 @@
   <div id="preloader"></div>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="StructureScripts/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="StructureScripts/assets/vendor/aos/aos.js"></script>
+  <script src="StructureScripts/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="StructureScripts/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="StructureScripts/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="StructureScripts/assets/vendor/php-email-form/validate.js"></script>
   <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script src="StructureScripts/assets/js/main.js"></script>
 
 </body>
 

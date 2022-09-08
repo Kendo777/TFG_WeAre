@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200">
-          <img src="assets/img/hero-img.png" class="img-fluid" alt="">
+          <img src="StructureScripts/assets/img-WeAre/hero-img.png" class="img-fluid" alt="">
         </div>
       </div>
     </div>
@@ -81,7 +81,7 @@
 
           <div class="col-lg-5">
             <div class="about-img">
-              <img src="assets/img/about1.jpeg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/about1.jpeg" class="img-fluid" alt="">
             </div>
           </div>
 
@@ -185,14 +185,14 @@
 
         <div class="clients-slider swiper">
           <div class="swiper-wrapper align-items-center">
-            <div class="swiper-slide"><img src="assets/img/clients/client-1.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide"><img src="assets/img/clients/client-2.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide"><img src="assets/img/clients/client-3.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide"><img src="assets/img/clients/client-4.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide"><img src="assets/img/clients/client-5.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide"><img src="assets/img/clients/client-6.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide"><img src="assets/img/clients/client-7.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide"><img src="assets/img/clients/client-8.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="StructureScripts/assets/img-WeAre/clients/client-1.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="StructureScripts/assets/img-WeAre/clients/client-2.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="StructureScripts/assets/img-WeAre/clients/client-3.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="StructureScripts/assets/img-WeAre/clients/client-4.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="StructureScripts/assets/img-WeAre/clients/client-5.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="StructureScripts/assets/img-WeAre/clients/client-6.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="StructureScripts/assets/img-WeAre/clients/client-7.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="StructureScripts/assets/img-WeAre/clients/client-8.png" class="img-fluid" alt=""></div>
           </div>
         </div>
 
@@ -213,7 +213,7 @@
 
           <div class="col-lg-4 col-md-6 order-first order-md-last d-flex align-items-center">
             <div class="img">
-              <img src="assets/img/cta.jpg" alt="" class="img-fluid">
+              <img src="StructureScripts/assets/img-WeAre/cta.jpg" alt="" class="img-fluid">
             </div>
           </div>
 
@@ -322,7 +322,7 @@
                 </p>
               </div>
               <div class="col-lg-4 order-1 order-lg-2 text-center" data-aos="fade-up" data-aos-delay="200">
-                <img src="assets/img/features-1.svg" alt="" class="img-fluid">
+                <img src="StructureScripts/assets/img-WeAre/features-1.svg" alt="" class="img-fluid">
               </div>
             </div>
           </div><!-- End Tab Content 1 -->
@@ -348,7 +348,7 @@
                 </ul>
               </div>
               <div class="col-lg-4 order-1 order-lg-2 text-center">
-                <img src="assets/img/features-2.svg" alt="" class="img-fluid">
+                <img src="StructureScripts/assets/img-WeAre/features-2.svg" alt="" class="img-fluid">
               </div>
             </div>
           </div><!-- End Tab Content 2 -->
@@ -373,7 +373,7 @@
                 </p>
               </div>
               <div class="col-lg-4 order-1 order-lg-2 text-center">
-                <img src="assets/img/features-3.svg" alt="" class="img-fluid">
+                <img src="StructureScripts/assets/img-WeAre/features-3.svg" alt="" class="img-fluid">
               </div>
             </div>
           </div><!-- End Tab Content 3 -->
@@ -398,7 +398,7 @@
                 </ul>
               </div>
               <div class="col-lg-4 order-1 order-lg-2 text-center">
-                <img src="assets/img/features-4.svg" alt="" class="img-fluid">
+                <img src="StructureScripts/assets/img-WeAre/features-4.svg" alt="" class="img-fluid">
               </div>
             </div>
           </div><!-- End Tab Content 4 -->
@@ -423,7 +423,7 @@
                 </ul>
               </div>
               <div class="col-lg-4 order-1 order-lg-2 text-center">
-                <img src="assets/img/features-5.svg" alt="" class="img-fluid">
+                <img src="StructureScripts/assets/img-WeAre/features-5.svg" alt="" class="img-fluid">
               </div>
             </div>
           </div><!-- End Tab Content 5 -->
@@ -448,7 +448,7 @@
                 </ul>
               </div>
               <div class="col-lg-4 order-1 order-lg-2 text-center">
-                <img src="assets/img/features-6.svg" alt="" class="img-fluid">
+                <img src="StructureScripts/assets/img-WeAre/features-6.svg" alt="" class="img-fluid">
               </div>
             </div>
           </div><!-- End Tab Content 6 -->
@@ -472,7 +472,7 @@
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
             <div class="service-item">
               <div class="img">
-                <img src="assets/img/services-1.jpg" class="img-fluid" alt="">
+                <img src="StructureScripts/assets/img-WeAre/services-1.jpg" class="img-fluid" alt="">
               </div>
               <div class="details position-relative">
                 <div class="icon">
@@ -489,7 +489,7 @@
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
             <div class="service-item">
               <div class="img">
-                <img src="assets/img/services-2.jpg" class="img-fluid" alt="">
+                <img src="StructureScripts/assets/img-WeAre/services-2.jpg" class="img-fluid" alt="">
               </div>
               <div class="details position-relative">
                 <div class="icon">
@@ -506,7 +506,7 @@
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
             <div class="service-item">
               <div class="img">
-                <img src="assets/img/services-3.jpg" class="img-fluid" alt="">
+                <img src="StructureScripts/assets/img-WeAre/services-3.jpg" class="img-fluid" alt="">
               </div>
               <div class="details position-relative">
                 <div class="icon">
@@ -523,7 +523,7 @@
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="500">
             <div class="service-item">
               <div class="img">
-                <img src="assets/img/services-4.jpg" class="img-fluid" alt="">
+                <img src="StructureScripts/assets/img-WeAre/services-4.jpg" class="img-fluid" alt="">
               </div>
               <div class="details position-relative">
                 <div class="icon">
@@ -541,7 +541,7 @@
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="600">
             <div class="service-item">
               <div class="img">
-                <img src="assets/img/services-5.jpg" class="img-fluid" alt="">
+                <img src="StructureScripts/assets/img-WeAre/services-5.jpg" class="img-fluid" alt="">
               </div>
               <div class="details position-relative">
                 <div class="icon">
@@ -559,7 +559,7 @@
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="700">
             <div class="service-item">
               <div class="img">
-                <img src="assets/img/services-6.jpg" class="img-fluid" alt="">
+                <img src="StructureScripts/assets/img-WeAre/services-6.jpg" class="img-fluid" alt="">
               </div>
               <div class="details position-relative">
                 <div class="icon">
@@ -588,7 +588,7 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+                <img src="StructureScripts/assets/img-WeAre/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
                 <h3>Tomas Larson</h3>
                 <h4>Ceo &amp; Founder</h4>
                 <div class="stars">
@@ -604,7 +604,7 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
+                <img src="StructureScripts/assets/img-WeAre/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
                 <h3>Gonzalo Gracia</h3>
                 <h4>Student</h4>
                 <div class="stars">
@@ -620,7 +620,7 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
+                <img src="StructureScripts/assets/img-WeAre/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
                 <h3>Maria Niko</h3>
                 <h4>Grandma</h4>
                 <div class="stars">
@@ -801,7 +801,7 @@
 
           </div>
 
-          <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img" style='background-image: url("assets/img/faq.jpg");'>&nbsp;</div>
+          <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img" style='background-image: url("StructureScripts/assets/img-WeAre/faq.jpg");'>&nbsp;</div>
         </div>
 
       </div>
@@ -834,109 +834,109 @@
           <div class="row g-0 portfolio-container">
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-app">
-              <img src="assets/img/portfolio/app-1.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/app-1.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>App 1</h4>
-                <a href="assets/img/portfolio/app-1.jpg" title="App 1" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/app-1.jpg" title="App 1" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-product">
-              <img src="assets/img/portfolio/product-1.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/product-1.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Product 1</h4>
-                <a href="assets/img/portfolio/product-1.jpg" title="Product 1" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/product-1.jpg" title="Product 1" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-branding">
-              <img src="assets/img/portfolio/branding-1.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-1.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Branding 1</h4>
-                <a href="assets/img/portfolio/branding-1.jpg" title="Branding 1" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/branding-1.jpg" title="Branding 1" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-books">
-              <img src="assets/img/portfolio/books-1.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/books-1.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Books 1</h4>
-                <a href="assets/img/portfolio/books-1.jpg" title="Branding 1" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/books-1.jpg" title="Branding 1" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-app">
-              <img src="assets/img/portfolio/app-2.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/app-2.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>App 2</h4>
-                <a href="assets/img/portfolio/app-2.jpg" title="App 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/app-2.jpg" title="App 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-product">
-              <img src="assets/img/portfolio/product-2.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/product-2.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Product 2</h4>
-                <a href="assets/img/portfolio/product-2.jpg" title="Product 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/product-2.jpg" title="Product 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-branding">
-              <img src="assets/img/portfolio/branding-2.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-2.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Branding 2</h4>
-                <a href="assets/img/portfolio/branding-2.jpg" title="Branding 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/branding-2.jpg" title="Branding 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-books">
-              <img src="assets/img/portfolio/books-2.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/books-2.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Books 2</h4>
-                <a href="assets/img/portfolio/books-2.jpg" title="Branding 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/books-2.jpg" title="Branding 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-app">
-              <img src="assets/img/portfolio/app-3.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/app-3.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>App 3</h4>
-                <a href="assets/img/portfolio/app-3.jpg" title="App 3" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/app-3.jpg" title="App 3" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-product">
-              <img src="assets/img/portfolio/product-3.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/product-3.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Product 3</h4>
-                <a href="assets/img/portfolio/product-3.jpg" title="Product 3" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/product-3.jpg" title="Product 3" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-branding">
-              <img src="assets/img/portfolio/branding-3.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/branding-3.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Branding 3</h4>
-                <a href="assets/img/portfolio/branding-3.jpg" title="Branding 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/branding-3.jpg" title="Branding 2" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-xl-3 col-lg-4 col-md-6 portfolio-item filter-books">
-              <img src="assets/img/portfolio/books-3.jpg" class="img-fluid" alt="">
+              <img src="StructureScripts/assets/img-WeAre/portfolio/books-3.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Books 3</h4>
-                <a href="assets/img/portfolio/books-3.jpg" title="Branding 3" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="StructureScripts/assets/img-WeAre/portfolio/books-3.jpg" title="Branding 3" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
@@ -962,7 +962,7 @@
           <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="200">
             <div class="team-member">
               <div class="member-img">
-                <img src="assets/img/team/perfil1.png" class="img-fluid" alt="">
+                <img src="StructureScripts/assets/img-WeAre/team/perfil1.png" class="img-fluid" alt="">
               </div>
               <div class="member-info">
                 <div class="social">
@@ -980,7 +980,7 @@
           <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="400">
             <div class="team-member">
               <div class="member-img">
-                <img src="assets/img/team/perfil2.jpg" class="img-fluid" alt="">
+                <img src="StructureScripts/assets/img-WeAre/team/perfil2.jpg" class="img-fluid" alt="">
               </div>
               <div class="member-info">
                 <div class="social">
@@ -1014,7 +1014,7 @@
 
           <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
             <div class="post-box">
-              <div class="post-img"><img src="assets/img/blog/blog-1.jpg" class="img-fluid" alt=""></div>
+              <div class="post-img"><img src="StructureScripts/assets/img-WeAre/blog/blog-1.jpg" class="img-fluid" alt=""></div>
               <div class="meta">
                 <span class="post-date">Tue, December 12</span>
                 <span class="post-author"> / Julia Parker</span>
@@ -1027,7 +1027,7 @@
 
           <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
             <div class="post-box">
-              <div class="post-img"><img src="assets/img/blog/blog-2.jpg" class="img-fluid" alt=""></div>
+              <div class="post-img"><img src="StructureScripts/assets/img-WeAre/blog/blog-2.jpg" class="img-fluid" alt=""></div>
               <div class="meta">
                 <span class="post-date">Fri, September 05</span>
                 <span class="post-author"> / Mario Douglas</span>
@@ -1040,7 +1040,7 @@
 
           <div class="col-lg-4" data-aos="fade-up" data-aos-delay="600">
             <div class="post-box">
-              <div class="post-img"><img src="assets/img/blog/blog-3.jpg" class="img-fluid" alt=""></div>
+              <div class="post-img"><img src="StructureScripts/assets/img-WeAre/blog/blog-3.jpg" class="img-fluid" alt=""></div>
               <div class="meta">
                 <span class="post-date">Tue, July 27</span>
                 <span class="post-author"> / Lisa Hunter</span>

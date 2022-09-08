@@ -188,8 +188,22 @@
                   <div class="accordion-body" data-aos="fade-up" data-aos-delay="200">
                     <label for="navBar_type" class="mb-2"><b>1. Navigation bar type</b></label>
                     <select class="form-control mb-2" id="navBar_type" name="navBar_type">
-                      <option>Clasic Navigation Bar</option>
-                      <option>Side Collapser Bar</option>
+                    <?php
+
+                    echo '<option ';
+                      if(isset($json_data) && $json_data["navBar"]["type"] == "Clasic Navigation Bar") 
+                      {
+                        echo 'selected';
+                      }
+                        echo '>Clasic Navigation Bar</option>
+                              <option ';
+                      if(isset($json_data) && $json_data["navBar"]["type"] == "Side Collapser Bar") 
+                      {
+                        echo 'selected';
+                      }
+                      echo '>Side Collapser Bar</option>';
+                      
+                      ?>
                     </select>
                     <label for="style_bck_color" class="mb-2"><b>2. Make your own custom web page</b></label>
                     <div id="inputFormRow">

@@ -215,6 +215,8 @@ if($album)
     <button type="submit" class="btn btn-warning">Edit</button></a>';
   }
 
+//EDIT REGION
+/******************************************************************************/
   if(isset($_GET["edit"]))
   {
     $dir = scandir("images/gallery" . DIRECTORY_SEPARATOR . $album["title"]);
@@ -392,7 +394,7 @@ if($album)
         </table>
         </div>';
   }
-  else
+  else //GALLERY REGION/******************************************************************************/
   {
     if($album["type"] == "Zoom Gallery View")
     {
@@ -406,11 +408,11 @@ if($album)
     }
     else if($album["type"] == "Carousel View")
     {
-      include_once("carouselGallery.php");
+      //include_once("carouselGallery.php");
     }
     else if($album["type"] == "Basic Carousel View")
     {
-      include_once("basicCarouselGallery_v2.php");
+      //include_once("basicCarouselGallery_v2.php");
     }
   }
 }

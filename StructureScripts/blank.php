@@ -1,4 +1,5 @@
 <?php
+  //Dedault id (1 = home)
   if($json_data["web_data"]["web_structure"] == "basic")
   {
     $blank_id = 2;
@@ -8,6 +9,7 @@
     $blank_id = $_GET["id"];
   }
 
+  //If user trys to edit when is reader redirect
   if(isset($_GET["edit"]) && (isset($_SESSION["user"]) && $session_user["rol"] == "reader"))
   {
     if(isset($_GET["edit"]))
@@ -121,6 +123,7 @@ InlineEditor
 				.then( editor => {
 					window.editor = editor;
           <?php
+          //Disable edition mode
             if(!isset($_GET["edit"]))
             {
               echo "window.editor.enableReadOnlyMode( 'editor' );";

@@ -1,4 +1,11 @@
 <?php
+  /**
+   * Calculate string format ago
+   * 
+   * @access public
+   * @param date $date date to transform
+   * @return int the last inserted id
+   */
 function time_ago($date)
 {
     $orderDate = new DateTime($date);
@@ -116,6 +123,8 @@ if(isset($_POST["post_title"]) && isset($_POST["post_content"]))
     $sql->execute();
   }
 
+//BLOG POST LIST
+/******************************************************************************/
 if(isset($_GET["id"]))
   {
     $sql= $mySqli_db->prepare("SELECT * FROM blogs WHERE id = ?");
@@ -198,6 +207,7 @@ if(isset($_GET["id"]))
             <div class="card-body">
             <div class="media forum-item my-2"> 
                 <a class="card-link">';
+          //Insert image of the user, if it has no one then put a default
           if(file_exists("images/profile/". $blog["user"] . ".png"))
           {
             echo '<img src="images/profile/' . $blog["user"] . '.png" class="rounded-circle" width="50" alt="User">';
@@ -249,6 +259,7 @@ if(isset($_GET["id"]))
             echo '<h1 class="mt-1">' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["title"])) . '</h1>
               <div class="media forum-item my-2"> 
                 <a class="card-link">';
+          //Insert image of the user, if it has no one then put a default
           if(file_exists("images/profile/". $blog["user"] . ".png"))
           {
             echo '<a href="index.php?page=user&user=' . $blog["user"] . '">
@@ -282,7 +293,7 @@ if(isset($_GET["id"]))
   {
     echo '<p class="alert alert-danger">Invalid component ID</p>';
   }
-  }
+  }//BLOG LIST/******************************************************************************/
   else
   {
     if(isset($_GET["filter"]))
@@ -324,10 +335,6 @@ if(isset($_GET["id"]))
       $result_last_date=$sql->get_result();
       $last_date = $result_last_date->fetch_assoc()["date"];
 
-     /* $sql= $mySqli_db->prepare("SELECT * FROM forum_categories fc INNER JOIN forum_categories_relation fcr ON fc.id = fcr.forum_category_id WHERE fcr.blog_id = ?");
-      $sql->bind_param("i",$row["id"]);
-      $sql->execute();
-      $result_categories=$sql->get_result();*/
       echo '<div class="col-md-6 mb-3">
       <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
       <div class="card flex-md-row mb-4 box-shadow h-md-250">
@@ -338,6 +345,7 @@ if(isset($_GET["id"]))
           </strong></h2>
           <div class="mb-1 text-muted">
           <a class="card-link mr-2">';
+        //Insert image of the user, if it has no one then put a default
         if(file_exists("images/profile/". $row["user"] . ".png"))
         {
           echo '<a href="index.php?page=user&user=' . $row["user"] . '">

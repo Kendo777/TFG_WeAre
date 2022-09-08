@@ -7,7 +7,12 @@ require_once("mySqli.php");
   /**
    * WebData
    *
-   * 
+   * @atribute string $web_name Name of the web 
+   * @atribute string $web_current_name Current name of the web, when creates web page is the same as $web_name
+   * @atribute string $web_user Creator of the web page user name 
+   * @atribute string $web_database Name of the database of the web page 
+   * @atribute string $web_privacity Privacity type (Public / Private / Invitation)
+   * @atribute string $web_structure Structure of the web page created (Basic / Advanced) 
    */
   class WebData 
   {
@@ -31,7 +36,9 @@ require_once("mySqli.php");
   /**
    * WebStyle
    *
-   * 
+   * @atribute string $bck_color Background color of the web page
+   * @atribute string $primary_color Text color of the web page
+   * @atribute string $secundary_color Margin and Navigation bar color of the web page
    */
   class WebStyle 
   {
@@ -45,9 +52,9 @@ require_once("mySqli.php");
     }
   }
   /**
-   * WebNabBar
+   * WebUsers
    *
-   * 
+   * @atribute bool $enable Active state of the component
    */
   class WebUsers 
   {
@@ -61,9 +68,10 @@ require_once("mySqli.php");
       }
   }
   /**
-   * WebNabBar
+   * WebNavBar
    *
-   * 
+   * @atribute string $type Type of the Navigation bar (Classic / Side collapser)
+   * @atribute object[] $tabs All the tabs that has the Navigation bar
    */
   class WebNavBar 
   {
@@ -80,7 +88,7 @@ require_once("mySqli.php");
   /**
    * WebBlog
    *
-   * 
+   * @atribute bool $enable Active state of the component
    */
   class WebBlog
   {
@@ -96,7 +104,7 @@ require_once("mySqli.php");
   /**
    * WebBlog
    *
-   * 
+   * @atribute bool $enable Active state of the component
    */
   class WebForum
   {
@@ -112,7 +120,7 @@ require_once("mySqli.php");
   /**
    * WebBlog
    *
-   * 
+   * @atribute bool $enable Active state of the component
    */
   class WebCalendar
   {
@@ -128,7 +136,7 @@ require_once("mySqli.php");
   /**
    * WebGallery
    *
-   * 
+   * @atribute bool $enable Active state of the component
    */
   class WebGallery 
   {
@@ -157,19 +165,26 @@ require_once("mySqli.php");
     { 
         if (( $file != '.' ) && ( $file != '..' ))
         { 
-            if (is_dir($src.DIRECTORY_SEPARATOR.$file) ) 
+            if (is_dir($src .  DIRECTORY_SEPARATOR . $file) ) 
             { 
-                mkdir($dst.DIRECTORY_SEPARATOR.$file, 0700);
-                copy_folder($src.DIRECTORY_SEPARATOR.$file, $dst.DIRECTORY_SEPARATOR.$file);
+                mkdir($dst .  DIRECTORY_SEPARATOR . $file, 0700);
+                copy_folder($src .  DIRECTORY_SEPARATOR . $file, $dst . DIRECTORY_SEPARATOR . $file);
             } 
             else
             {
-                copy($src.DIRECTORY_SEPARATOR.$file, $dst.DIRECTORY_SEPARATOR.$file); 
+                copy($src . DIRECTORY_SEPARATOR . $file, $dst . DIRECTORY_SEPARATOR . $file); 
             }
         } 
     } 
     closedir($dir);
   }
+  /**
+   * Delete all files from one folder
+   * 
+   * @access public
+   * @param string $dirPath Folder path
+   * @return void
+   */
   function deleteDir($dirPath) {
     if (! is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");
@@ -179,19 +194,27 @@ require_once("mySqli.php");
     { 
         if (( $file != '.' ) && ( $file != '..' ))
         { 
-            if (is_dir($dirPath.DIRECTORY_SEPARATOR.$file) ) 
+            if (is_dir($dirPath . DIRECTORY_SEPARATOR . $file) ) 
             { 
-                deleteDir($dirPath.DIRECTORY_SEPARATOR.$file);
+                deleteDir($dirPath . DIRECTORY_SEPARATOR . $file);
             } 
             else
             {
-                unlink($dirPath.DIRECTORY_SEPARATOR.$file); 
+                unlink($dirPath . DIRECTORY_SEPARATOR . $file); 
             }
         } 
     } 
     closedir($dir);
     rmdir($dirPath);
   }
+  /**
+   * Create the web page database
+   * 
+   * @access public
+   * @param object $mySqli mySqli object that conects to the db
+   * @param string $db_name new db name
+   * @return void
+   */
   function create_DB($mySqli, $db_name)
   {
     $sql= $mySqli->prepare("SELECT * FROM users WHERE user = ?");
@@ -203,18 +226,21 @@ require_once("mySqli.php");
     $user = $row["user"];
     $email = $row["email"];
     $password = $row["password"];
-    $db_name_low = str_replace(" ", "", strtolower($db_name));
+    $db_name_low = str_replace(" ", "_", strtolower($db_name));
+
+    //Insert the new web page in the table of web pages of We Are to have a register
     $sql= $mySqli->prepare("INSERT INTO `web_pages`(`web_name`, `web_user`, `web_current_name`, `web_database`) VALUES (?, ?, ?, ?)");
     $sql->bind_param("ssss", $db_name_low, $_SESSION["weAre_user"], $db_name, $db_name_low);
     $sql->execute();
 
+    //Create new database without spaces and all in lowcase
     $sql= $mySqli->prepare("CREATE DATABASE " . $db_name_low);
     $sql->execute();
 
-    //create tables
+    //Create conection to the new db
     $mySqlidb = mysql_client_db($db_name_low);
     
-    // sql to create table
+    //Create table of user
     $sql= $mySqlidb->prepare("CREATE TABLE users (
     user VARCHAR(60) NOT NULL UNIQUE PRIMARY KEY,
     email VARCHAR(60) NOT NULL UNIQUE,
@@ -224,6 +250,7 @@ require_once("mySqli.php");
     valid INT(4) NOT NULL)");
     $sql->execute();
 
+    //Insert new columns of data in users if the user has introduced some
     if(isset($_POST["users_enable"]) && isset($_POST["column_name"]))
     {
       foreach($_POST["column_name"] as $index => $column)
@@ -232,30 +259,33 @@ require_once("mySqli.php");
         {
           $column_name = str_replace(" ", "_", strtolower(mysql_fix_string($mySqlidb, $column)));
           $column_type = mysql_fix_string($mySqlidb, $_POST["column_type"][$index]);
-          $sql= $mySqlidb->prepare("ALTER TABLE users ADD ". strtolower($column_name) . " " . strtoupper($column_type));
+          $sql= $mySqlidb->prepare("ALTER TABLE users ADD " . strtolower($column_name) . " " . strtoupper($column_type));
           $sql->execute();
         }
       }
     }
 
+    //Insert into users table the creator user with the rol admin
     $sql= $mySqlidb->prepare("INSERT INTO `users`(`user`, `email`, `password`, `rol`, `valid`) VALUES (?,?,?, 'admin',0)");
     $sql->bind_param("sss", $user, $email, $password);
     $sql->execute();
     
+    //Insert into users table the guest user
     $guest_key = password_hash($db_name . "_guest", PASSWORD_DEFAULT);
     $sql= $mySqlidb->prepare("INSERT INTO `users`(`user`, `email`, `password`, `rol`, `valid`) VALUES ('Guest','',?,'reader',0)");
     $sql->bind_param("s", $guest_key);
     $sql->execute();
 
+    //Create table of blogs
     $sql= $mySqlidb->prepare("CREATE TABLE blogs (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(60) NOT NULL,
     description VARCHAR(2000) DEFAULT '',
     user VARCHAR(60) NOT NULL,
     CONSTRAINT fk_blog_user FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION)");
-    
     $sql->execute();
 
+    //Create table of blog posts
     $sql= $mySqlidb->prepare("CREATE TABLE blog_posts (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
     title VARCHAR(60) NOT NULL,
@@ -265,29 +295,18 @@ require_once("mySqli.php");
     CONSTRAINT fk_blog_post_blog FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE ON UPDATE CASCADE)");
     $sql->execute();
 
-    if(isset($_POST["blog_enable"]) && isset($_POST["blog_title"]))
-    {
-      foreach($_POST["blog_title"] as $blog_title)
-      {
-        if(!empty($blog_title))
-        {
-          $blog_title = mysql_fix_string($mySqlidb, $blog_title);
-          $sql= $mySqlidb->prepare("INSERT INTO `blogs` (`name`) VALUES (?)");
-          $sql->bind_param("s", $blog_title);
-          $sql->execute();
-        }
-      }
-    }
-
+    //Create table of calendars
     $sql= $mySqlidb->prepare("CREATE TABLE calendars (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
     description VARCHAR(2000) NOT NULL)");
     $sql->execute();
 
+    //Create the default calendar
     $sql= $mySqlidb->prepare("INSERT INTO `calendars`(`title`, `description`) VALUES ('Calendar Example', 'Description Example')");
     $sql->execute();
   
+    //Create table of calendar events
     $sql= $mySqlidb->prepare("CREATE TABLE calendar_events (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     calendar_id INT(6) UNSIGNED NOT NULL,
@@ -299,6 +318,7 @@ require_once("mySqli.php");
     CONSTRAINT fk_event_calendar FOREIGN KEY (calendar_id) REFERENCES calendars(id) ON DELETE CASCADE ON UPDATE CASCADE)");
     $sql->execute();
   
+    //Create table of forums
     $sql= $mySqlidb->prepare("CREATE TABLE forums (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(60) NOT NULL,
@@ -306,11 +326,13 @@ require_once("mySqli.php");
     CONSTRAINT fk_user_forum FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE)");
     $sql->execute();
 
+    //Create table of forum categories
     $sql= $mySqlidb->prepare("CREATE TABLE forum_categories (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(60) NOT NULL UNIQUE)");
     $sql->execute();
 
+    //Create table of relations between forum and categories
     $sql= $mySqlidb->prepare("CREATE TABLE forum_categories_relation (
     forum_id INT(6) UNSIGNED NOT NULL,
     forum_category_id INT(6) UNSIGNED NOT NULL,
@@ -318,6 +340,7 @@ require_once("mySqli.php");
     CONSTRAINT fk_forum_category_id FOREIGN KEY (forum_category_id) REFERENCES forum_categories(id) ON DELETE CASCADE)");
     $sql->execute();
   
+    //Create table of forum posts
     $sql= $mySqlidb->prepare("CREATE TABLE forum_posts (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
     content VARCHAR(2000) NOT NULL,
@@ -328,6 +351,7 @@ require_once("mySqli.php");
     CONSTRAINT fk_id_forum_posts FOREIGN KEY (forum_id) REFERENCES forums(id) ON DELETE CASCADE ON UPDATE CASCADE)");
     $sql->execute();
 
+    //Create table of forum responses
     $sql= $mySqlidb->prepare("CREATE TABLE forum_responses (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
     content VARCHAR(2000) NOT NULL,
@@ -337,22 +361,8 @@ require_once("mySqli.php");
     CONSTRAINT fk_user_forum_responses FOREIGN KEY (user) REFERENCES users(user) ON DELETE NO ACTION ON UPDATE CASCADE,
     CONSTRAINT fk_id_forum_posts_responses FOREIGN KEY (forum_post_id) REFERENCES forum_posts(id) ON DELETE CASCADE ON UPDATE CASCADE)");
     $sql->execute();
-
-    if(isset($_POST["forum_enable"]) && isset($_POST["forum_title"]))
-    {
-      foreach($_POST["forum_title"] as $forum_title)
-      {
-        if(!empty($forum_title))
-        {
-          $forum_title = mysql_fix_string($mySqlidb, $forum_title);
-          $sql= $mySqlidb->prepare("INSERT INTO `forums` (`name`, `user`) VALUES (?,?)");
-          $sql->bind_param("si", $forum_title, $user);
-          $sql->execute();
-        }
-      }
-    }
-
     
+    //Create table of galleries
     $sql= $mySqlidb->prepare("CREATE TABLE galleries (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(60) NOT NULL,
@@ -360,90 +370,34 @@ require_once("mySqli.php");
     description VARCHAR(2000) DEFAULT '')");
     $sql->execute();
 
+    //Create the default gallery
     $sql= $mySqlidb->prepare("INSERT INTO `galleries`(`title`, `description`) VALUES ('Example', 'Description Example')");
     $sql->execute();
 
+    //Create table of blank pages
     $sql= $mySqlidb->prepare("CREATE TABLE blank_pages (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     content LONGTEXT DEFAULT '<h1>BLANK PAGE EXAMPLE</h1><p>&nbsp;</p><p style=\"text-align:center;\"><u>Thank you for choosing</u><strong><u> WE ARE</u></strong></p><figure class=\"image image_resized image-style-side\" style=\"width:49.3%;\"><img src=\"https://blog.darwinbox.com/hubfs/MicrosoftTeams-image%20%2824%29-1.png\" alt=\"Our team\"></figure><p>We Are proposes generate a platform with which users can</p><p>&nbsp;create their own web page without programming knowledge. The platform will offer a series of components that can be added to the web. The resulting website will be highly customizable and can be modified by adding new information and sections, modifying them, deleting them and managing privacy.</p><p>We offer modern solutions to help you to make presence on the Internet</p><p>The main components are:</p><ul><li>Galleries</li><li>Blogs</li><li>Forums</li><li>Calendars</li><li>Blank pages</li><li>User administration</li></ul><h4>WE ARE has two plans for web pages</h4><figure class=\"table\" style=\"width:78.17%;\"><table><colgroup><col style=\"width:17.43%;\"><col style=\"width:13.11%;\"><col style=\"width:12.72%;\"><col style=\"width:11.3%;\"><col style=\"width:10.5%;\"><col style=\"width:23.07%;\"><col style=\"width:11.87%;\"></colgroup><thead><tr><th>Plan</th><th>Galleries</th><th>Blogs</th><th>Forums</th><th>Calendars</th><th>Blank pages</th><th>Users</th></tr></thead><tbody><tr><td><strong>Basic plan</strong></td><td>Only 1</td><td>Unlimited</td><td>Unlimited</td><td>Only 1</td><td>Only 1 (and Home page)</td><td>Unlimited</td></tr><tr><td><strong>Advanced plan</strong></td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr></tbody></table></figure><p>For more information you can always read our <a href=\"http://localhost/TFG/blog.html\">blog </a>with all the necessary information&nbsp;</p>')");
     $sql->execute();
 
+    //Create home page
     $sql= $mySqlidb->prepare("INSERT INTO `blank_pages`(`content`) VALUES ('<h1>HOME EXAMPLE</h1><p>&nbsp;</p><p style=\"text-align:center;\"><u>Thank you for choosing</u><strong><u> WE ARE</u></strong></p><figure class=\"image image_resized image-style-side\" style=\"width:49.3%;\"><img src=\"https://blog.darwinbox.com/hubfs/MicrosoftTeams-image%20%2824%29-1.png\" alt=\"Our team\"></figure><p>We Are proposes generate a platform with which users can</p><p>&nbsp;create their own web page without programming knowledge. The platform will offer a series of components that can be added to the web. The resulting website will be highly customizable and can be modified by adding new information and sections, modifying them, deleting them and managing privacy.</p><p>We offer modern solutions to help you to make presence on the Internet</p><p>The main components are:</p><ul><li>Galleries</li><li>Blogs</li><li>Forums</li><li>Calendars</li><li>Blank pages</li><li>User administration</li></ul><h4>WE ARE has two plans for web pages</h4><figure class=\"table\" style=\"width:78.17%;\"><table><colgroup><col style=\"width:17.43%;\"><col style=\"width:13.11%;\"><col style=\"width:12.72%;\"><col style=\"width:11.3%;\"><col style=\"width:10.5%;\"><col style=\"width:23.07%;\"><col style=\"width:11.87%;\"></colgroup><thead><tr><th>Plan</th><th>Galleries</th><th>Blogs</th><th>Forums</th><th>Calendars</th><th>Blank pages</th><th>Users</th></tr></thead><tbody><tr><td><strong>Basic plan</strong></td><td>Only 1</td><td>Unlimited</td><td>Unlimited</td><td>Only 1</td><td>Only 1 (and Home page)</td><td>Unlimited</td></tr><tr><td><strong>Advanced plan</strong></td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr></tbody></table></figure><p>For more information you can always read our <a href=\"http://localhost/TFG/blog.html\">blog </a>with all the necessary information&nbsp;</p>')");
     $sql->execute();
 
+    //Create the default blank page
     $sql= $mySqlidb->prepare("INSERT INTO `blank_pages`(`content`) VALUES (DEFAULT)");
     $sql->execute();
 
   }
- function advanced_navBar($db_name)
-  {
-    $mySqlidb = mysql_client_db($db_name);
-    $web_navBar = new WebNavBar($_POST["navBar_type"]);
-    $nav_bar = array();
-    $element_count = (object) [
-      "blog_count" => 0,
-      "forum_count" => 0,
-      "gallery_count" => 0,
-      "calendar_count" => 0
-    ];
-    $dropdown_count = 0;
-    if(empty($_POST["home_name"]))
-    {
-      $_POST["home_name"] = "Home";
-    }
-    array_push($nav_bar, (object)[
-      "name" => $_POST["home_name"],
-      "type" => "Home"
-    ]);
-
-    if(isset($_POST["tab_name"]))
-    {
-      foreach($_POST["tab_name"] as $index => $value)
-      {
-        if(!empty($value) && $_POST["tab_type"][$index] != "Dropdown")
-        {
-          $inserted_id = insert_element_db($mySqlidb, $_POST["tab_type"][$index], $element_count);
-          if($inserted_id != -1)
-          {
-            array_push($nav_bar, (object)[
-              "name" => $value,
-              "type" => $_POST["tab_type"][$index],
-              "index" => $inserted_id
-            ]);
-          }
-        }
-        else if($_POST["tab_type"][$index] == "Dropdown")
-        {
-          $dropdown_id = $_POST["dropdown_id"][$dropdown_count];
-          $dropdown_count++;
-          $dropdown_list = array();
-          foreach($_POST["tab_dropdown_" . $dropdown_id . "_name"] as $dd_index => $dd_value)
-          {
-            if(!empty($dd_value))
-            {
-              $inserted_id = insert_element_db($mySqlidb, $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index], $element_count);
-              if($inserted_id != -1)
-              {
-                array_push($dropdown_list, (object)[
-                  "name" => $dd_value,
-                  "type" => $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index],
-                  "index" => $inserted_id
-                ]);
-              }
-            }
-          }
-          array_push($nav_bar, (object)[
-            "name" => $value,
-            "type" => $_POST["tab_type"][$index],
-            "tabs" => $dropdown_list
-          ]);
-        }
-      }
-    }
-    $web_navBar->set_tabs($nav_bar);
-    return $web_navBar;
-  }
-
+  /**
+   * Create an element in a specific table
+   * 
+   * @access public
+   * @param object $mySqli mySqli object that conects to the db
+   * @param string $type name of the table to insert
+   * @param array $id array of counts of each of the component
+   * @return int the last inserted id
+   */
   function insert_element_db($mySqlidb, $type, &$id)
   {
     if($type == "Blank")
@@ -455,7 +409,9 @@ require_once("mySqli.php");
     else if($type == "Gallery")
     {
       $gallery_title = mysql_fix_string($mySqlidb, $_POST["gallery_title"][$id->gallery_count]);
-      if(!is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
+
+      //If it does not exists the gallery it must to create the folder
+      if(!is_dir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"].  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
       {
         $gallery_type = $_POST["gallery_type"][$id->gallery_count];
         $gallery_description = mysql_fix_string($mySqlidb, $_POST["gallery_description"][$id->gallery_count]);
@@ -463,7 +419,7 @@ require_once("mySqli.php");
         $sql= $mySqlidb->prepare("INSERT INTO `galleries`(`title`, `type`, `description`) VALUES (?,?,?)");
         $sql->bind_param("sss",$gallery_title, $gallery_type, $gallery_description);
         $sql->execute();
-        mkdir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title, 0700, true);
+        mkdir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"].  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title, 0700, true);
         $inserted_id = $mySqlidb->insert_id;
       }
       else
@@ -512,6 +468,14 @@ require_once("mySqli.php");
     }
     return $inserted_id;
   }
+  /**
+   * Delete an element in a specific table
+   * 
+   * @access public
+   * @param object $mySqli mySqli object that conects to the db
+   * @param string $type name of the table to insert
+   * @param array $id array of counts of each of the component
+   */
   function delete_element_db($mySqlidb, $type, $id)
   {
     if($type == "Blank")
@@ -522,7 +486,7 @@ require_once("mySqli.php");
     }
     else if($type == "Gallery")
     {
-      if(!is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
+      if(!is_dir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"].  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
       {
         $sql= $mySqlidb->prepare("SELECT * FROM `galleries` WHERE id = ?");
         $sql->bind_param("s",$id);
@@ -555,6 +519,90 @@ require_once("mySqli.php");
       $sql->execute();
     }
   }
+  /**
+   * Buid the advanced navigation bar
+   * 
+   * @access public
+   * @param string $db_name new db name
+   * @return WebNavBar $web_navBar advanced navigation bar
+   */
+ function advanced_navBar($db_name)
+  {
+    $mySqlidb = mysql_client_db($db_name);
+    $web_navBar = new WebNavBar($_POST["navBar_type"]);
+    $nav_bar = array();
+    $element_count = (object) [
+      "blog_count" => 0,
+      "forum_count" => 0,
+      "gallery_count" => 0,
+      "calendar_count" => 0
+    ];
+    $dropdown_count = 0;
+
+    //First element is alwys the home page
+    if(empty($_POST["home_name"]))
+    {
+      $_POST["home_name"] = "Home";
+    }
+    array_push($nav_bar, (object)[
+      "name" => $_POST["home_name"],
+      "type" => "Home"
+    ]);
+
+    if(isset($_POST["tab_name"]))
+    {
+      foreach($_POST["tab_name"] as $index => $value)
+      {
+        /*If its not the dropdown insert the element into tabs with the type of the tab and the index of the element in the database
+         * If not get all the tabs inside the current dropdown and insert it to the tabs
+         */
+        if(!empty($value) && $_POST["tab_type"][$index] != "Dropdown")
+        {
+          //Create the element into the determinate table
+          $inserted_id = insert_element_db($mySqlidb, $_POST["tab_type"][$index], $element_count);
+          if($inserted_id != -1)
+          {
+            array_push($nav_bar, (object)[
+              "name" => $value,
+              "type" => $_POST["tab_type"][$index],
+              "index" => $inserted_id
+            ]);
+          }
+        }
+        else if($_POST["tab_type"][$index] == "Dropdown")
+        {
+          $dropdown_id = $_POST["dropdown_id"][$dropdown_count];
+          $dropdown_count++;
+          $dropdown_list = array();
+          foreach($_POST["tab_dropdown_" . $dropdown_id . "_name"] as $dd_index => $dd_value)
+          {
+            if(!empty($dd_value))
+            {
+              //Create the element into the determinate table
+              $inserted_id = insert_element_db($mySqlidb, $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index], $element_count);
+              if($inserted_id != -1)
+              {
+                array_push($dropdown_list, (object)[
+                  "name" => $dd_value,
+                  "type" => $_POST["tab_dropdown_" . $dropdown_id . "_type"][$dd_index],
+                  "index" => $inserted_id
+                ]);
+              }
+            }
+          }
+          //Once created all the tabs of the dropdown we insert it to the tabs atribute
+          array_push($nav_bar, (object)[
+            "name" => $value,
+            "type" => $_POST["tab_type"][$index],
+            "tabs" => $dropdown_list
+          ]);
+        }
+      }
+    }
+    $web_navBar->set_tabs($nav_bar);
+    return $web_navBar;
+  }
+
 /******************************************************************************/
 ?>
 
@@ -562,6 +610,9 @@ require_once("mySqli.php");
 <html>
 <?php
 
+/*If the user is trying to edit a web page without log in then redirect
+ *If the user is logged then we will check if its an admin, and get the JSON config
+ */
 if(isset($_GET["edit"]) && !isset($_SESSION["user"]) && !isset($_SESSION["weAre_user"]))
 {
   header('location:index.php');
@@ -589,46 +640,33 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
   }
   
 }
-/**
- * Web creation
- */
+
   $errorMsg="";
   $page="home";
   $url= substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "index.php"));   
 
-  /*
-   * For the moment is not needed 
-  if(isset($_GET["page"]))
-  {
-      if($_GET['page']=="logeOut")
-      {
-          session_destroy();
-          header('location:index.php');
-      }
-      else
-      {
-          $page = $_GET["page"];
-      }
-  }*/
-
+//CREATE WEB REGION
+/******************************************************************************/
   /**
    * Creates the user page based on the selected configuration  checking that all the data entered is valid
    * If the web page name is correct and doesn't exist already, it creates it
    * Else it will show a error message
    */
-  if(!isset($_GET["edit"]) && isset($_POST["web_name"]) && !empty($_POST["web_name"]) && !is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]))
+  if(!isset($_GET["edit"]) && isset($_POST["web_name"]) && !empty($_POST["web_name"]) && !is_dir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"]))
   {
-    $web_str_name = str_replace(" ", "", $_POST["web_name"]);
-    //NOT FOR THE MOMENT
+    $web_str_name = str_replace(" ", "_", $_POST["web_name"]);
     create_DB($mySqli, $_POST["web_name"]);
+
     // Create web page folder
-    mkdir("WebPages".DIRECTORY_SEPARATOR. $web_str_name, 0700);
-    // Import all scripts: PHP, CSS, JS,... for the structure of the web page
-    copy("StructureScripts/index.php", "WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."index.php"); 
-    mkdir("WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery", 0700, true);
-    copy_folder("StructureScripts/assets/img/gallery", "WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery");
-    mkdir("WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "profile", 0700, true);
-    //copy_folder("StructureScripts/assets/img","WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."images");
+    mkdir("WebPages".  DIRECTORY_SEPARATOR. $web_str_name, 0700);
+
+    //Import index.php
+    copy("StructureScripts/index.php", "WebPages".  DIRECTORY_SEPARATOR. $web_str_name.  DIRECTORY_SEPARATOR."index.php"); 
+
+    //Create default gallery folder and copy all the example images 
+    mkdir("WebPages".  DIRECTORY_SEPARATOR. $web_str_name.  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery", 0700, true);
+    copy_folder("StructureScripts/assets/img/gallery", "WebPages".  DIRECTORY_SEPARATOR. $web_str_name.  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery");
+    mkdir("WebPages".  DIRECTORY_SEPARATOR. $web_str_name.  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "profile", 0700, true);
 
     $web_data = new WebData($web_str_name, $_POST["web_name"], $_SESSION["weAre_user"], $web_str_name, $_POST["web_privacity"], $_GET["form"]);
     $web_style = new WebStyle($_POST["style_bck_color"], $_POST["style_primary_color"], $_POST["style_secundary_color"]);
@@ -649,7 +687,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     {
         $web_users->set();
     }
-
+    //Check if its an advance web, if not then check each component enability
     if(isset($_POST["home_name"]))
     {
       $web_navBar = advanced_navBar(str_replace(" ", "", strtolower($_POST["web_name"])));
@@ -692,21 +730,24 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
         'forum' => $web_forum,
         'calendar' => $web_calendar
     ];
-    file_put_contents("WebPages".DIRECTORY_SEPARATOR.$web_str_name.DIRECTORY_SEPARATOR."webConfig.json", json_encode($webConfig));
+    file_put_contents("WebPages".  DIRECTORY_SEPARATOR. $web_str_name.  DIRECTORY_SEPARATOR."webConfig.json", json_encode($webConfig));
     
     /**
      * Another possibility to generate the JSON 
-     * $webJSON = fopen("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"].DIRECTORY_SEPARATOR."webConfig.json", "w") or die("Unable to open file!");
+     * $webJSON = fopen("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"].  DIRECTORY_SEPARATOR."webConfig.json", "w") or die("Unable to open file!");
      * fwrite($webJSON, json_encode($webConfig));
     */
     // If everything goes well, show a success message
-    $errorMsg.='<p class="alert alert-success">Web page: '.$_POST["web_name"].' is created correctly</p>';
+    $errorMsg.='<p class="alert alert-success">Web page: '. $_POST["web_name"].' is created correctly</p>';
     header('location:index.php?page=myWebs');
   }
-
-  //EDIT WEB REGION
+  
+//EDIT WEB REGION
+/******************************************************************************/
+  
   if(isset($_GET["edit"]) && isset($_POST["save"]))
   {
+    //Add new columns to the users table
     if(isset($_POST["users_enable"]) && isset($_POST["column_name"]))
     {
       foreach($_POST["column_name"] as $index => $column)
@@ -728,7 +769,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     $web_data = new WebData($_GET["edit"], $_POST["web_name"], $_SESSION["user"], str_replace(" ", "_", strtolower($_POST["web_name"])), $_POST["web_privacity"], $json_data["web_data"]["web_structure"]);
     $web_style = new WebStyle($_POST["style_bck_color"], $_POST["style_primary_color"], $_POST["style_secundary_color"]);
     $web_users = new WebUsers();
-    $web_navBar = new WebNavBar();
+    $web_navBar = new WebNavBar($_POST["navBar_type"]);
     $web_gallery = new WebGallery();
     $web_blog = new WebBlog();
     $web_forum = new WebForum();
@@ -792,13 +833,14 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
         'calendar' => $web_calendar
     ];
 
-    file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($webConfig));
+    file_put_contents("WebPages".  DIRECTORY_SEPARATOR. $_GET["edit"].  DIRECTORY_SEPARATOR."webConfig.json", json_encode($webConfig));
     
     header('location:WebPages' . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "index.php");
 
   }
   else if(isset($_GET["edit"]))
   {
+    //Delete users attribute
     if(isset($_POST["delete_column"]))
     {
       $column = mysql_fix_string($mySqlidb, $_POST["delete_column"]);
@@ -806,6 +848,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
       $sql= $mySqlidb->prepare("ALTER TABLE users DROP COLUMN " . $column);
       $sql->execute();
     }
+    //Rename attribute
     if(isset($_POST["rename_column"]))
     {
       $old_column = mysql_fix_string($mySqlidb, $_POST["rename_column"]);
@@ -816,6 +859,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
       $sql= $mySqlidb->prepare("ALTER TABLE users CHANGE " . $old_column . " " . $new_column . " " . $column_type);
       $sql->execute();
     }
+    //Delete a tab from the navigation bar
     if(isset($json_data) && isset($_POST["delete_tab_name"]))
     {
       if(isset($_POST["delete_dropdown_tab_name"]))
@@ -829,10 +873,11 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
         array_splice($json_data["navBar"]["tabs"], $_POST["delete_tab_name"], 1);
       }
 
-      file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
+      file_put_contents("WebPages".  DIRECTORY_SEPARATOR. $_GET["edit"].  DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
       $json = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "WebPages" . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "webConfig.json");
       $json_data = json_decode($json, true);
     }
+    //Edit tab name
     if(isset($json_data) && isset($_POST["edit_tab_name"]))
     {
       $new_tab_name = mysql_fix_string($mySqlidb, $_POST["edit_tab_name"]);
@@ -845,10 +890,11 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
         $json_data["navBar"]["tabs"][$_POST["edit_tab_index"]]["name"] = $new_tab_name;
       }
 
-      file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
+      file_put_contents("WebPages".  DIRECTORY_SEPARATOR. $_GET["edit"].  DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
       $json = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "WebPages" . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "webConfig.json");
       $json_data = json_decode($json, true);
     }
+    //Move the selected tab one up
     if(isset($json_data) && isset($_POST["up_tab"]))
     {
       if($_POST["up_tab"] > 1 || (isset($_POST["up_dropdown"]) && $_POST["up_tab"] > 0))
@@ -866,11 +912,12 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
           $json_data["navBar"]["tabs"][$_POST["up_tab"]] = $tmp;
         }
 
-        file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
+        file_put_contents("WebPages".  DIRECTORY_SEPARATOR. $_GET["edit"].  DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
         $json = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "WebPages" . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "webConfig.json");
         $json_data = json_decode($json, true);
       }
     }
+    //Move the selected tab one down
     if(isset($json_data) && isset($_POST["down_tab"]))
     {
       if($_POST["down_tab"] < count($json_data["navBar"]["tabs"]) - 1 || (isset($_POST["down_dropdown"]) && $_POST["down_tab"] < count($json_data["navBar"]["tabs"][$_POST["down_dropdown"]]["tabs"]) - 1))
@@ -888,28 +935,30 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
           $json_data["navBar"]["tabs"][$_POST["down_tab"]] = $tmp;
         }
 
-        file_put_contents("WebPages".DIRECTORY_SEPARATOR.$_GET["edit"].DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
+        file_put_contents("WebPages".  DIRECTORY_SEPARATOR. $_GET["edit"].  DIRECTORY_SEPARATOR."webConfig.json", json_encode($json_data));
         $json = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "WebPages" . DIRECTORY_SEPARATOR . $_GET["edit"] . DIRECTORY_SEPARATOR . "webConfig.json");
         $json_data = json_decode($json, true);
       }
     }
   }
 
-//var_dump($_POST);
-//PRUEBAS
-  /**********************************/
+//FEEDBACK REGION
+/******************************************************************************/
   if(!empty($_POST) && !isset($_GET["edit"]))
   {
       if(!isset($_POST["web_name"]) || empty($_POST["web_name"]))
       {
           $errorMsg.='<p class="alert alert-danger">Web Name is not set</p>';
       }
-      else if(is_dir("WebPages".DIRECTORY_SEPARATOR.$_POST["web_name"]))
+      else if(is_dir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"]))
       {
           $errorMsg.='<p class="alert alert-danger">Web page already exists</p>';
       }
   }
+
+//FORM WEB PAGE
 /******************************************************************************/
+//Show the two web page creation options, once selected display the choosen one
 if((isset($_GET["form"]) && $_GET["form"] == "basic") || (isset($_GET["edit"]) && $json_data["web_data"]["web_structure"] == "basic"))
 {
   include_once("basicCreator.php");

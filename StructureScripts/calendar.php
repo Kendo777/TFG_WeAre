@@ -23,6 +23,7 @@ if(isset($_SESSION["user"]) && $session_user["rol"] != "reader")
     $start = $_POST["add_event_start"];
     $end = $_POST["add_event_end"];
 
+    //Check if the date is correct (the end must be later then the start)
     if($start < $end)
     {    
       $sql= $mySqli_db->prepare("INSERT INTO `calendar_events`(`calendar_id`, `title`, `description`, `color`, `start`, `end`) VALUES (?, ?, ?, ?, ?, ?)");
@@ -150,19 +151,9 @@ $(document).ready(function() {
       document.getElementById("add_event_start").value = datetime_local_format(start);
       document.getElementById("add_event_end").value = datetime_local_format(end);
 
+      //Show the modal to insert event
       $('#add_event_modal').modal('show');
-			/*var title = prompt('Event Title:');
-			if (title) {
-				calendar.fullCalendar('renderEvent',
-					{
-						title: title,
-						start: start,
-						end: end,
-						allDay: allDay
-					},
-					true // make the event "stick"
-				);
-			}*/
+
 			calendar.fullCalendar('unselect');
 		},
 		droppable: true, // this allows things to be dropped onto the calendar !!!
@@ -189,7 +180,7 @@ $(document).ready(function() {
 			}
 			
 		},
-		//FOR CON TODOS LOS EVENTOS PHP
+		//Event array
 		events: [
       <?php
         $sql= $mySqli_db->prepare("SELECT * FROM calendar_events WHERE calendar_id = ?");
@@ -254,7 +245,7 @@ $(document).ready(function() {
 	<div style='clear:both'></div>
 </div>
 </div>
-<!-- Modal FORM PARA MANDAR PETICION SQL-->
+<!-- Modal add event-->
 <div class="modal fade" id="add_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -292,7 +283,7 @@ $(document).ready(function() {
   </div>
 </div>
 
-<!-- Modal AQUI FOR CON TODOS LOS MODALS DE CADA UNO DE LOS EVENTOS -->
+<!-- Modal edit event -->
 <div class="modal fade" id="edit_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">

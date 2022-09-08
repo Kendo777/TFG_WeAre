@@ -1,4 +1,11 @@
 <?php
+  /**
+   * Calculate string format ago
+   * 
+   * @access public
+   * @param date $date date to transform
+   * @return int the last inserted id
+   */
   function time_ago($date)
   {
       $orderDate = new DateTime($date);
