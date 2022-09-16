@@ -226,11 +226,11 @@ require_once("mySqli.php");
     $user = $row["user"];
     $email = $row["email"];
     $password = $row["password"];
-    $db_name_low = str_replace(" ", "_", strtolower($db_name));
+    $db_name_low = str_replace(" ", "_", $db_name);
 
     //Insert the new web page in the table of web pages of We Are to have a register
     $sql= $mySqli->prepare("INSERT INTO `web_pages`(`web_name`, `web_user`, `web_current_name`, `web_database`) VALUES (?, ?, ?, ?)");
-    $sql->bind_param("ssss", $db_name_low, $_SESSION["weAre_user"], $db_name, $db_name_low);
+    $sql->bind_param("ssss", $db_name_low, $_SESSION["weAre_user"], $db_name, strtolower($db_name_low));
     $sql->execute();
 
     //Create new database without spaces and all in lowcase
@@ -411,7 +411,7 @@ require_once("mySqli.php");
       $gallery_title = mysql_fix_string($mySqlidb, $_POST["gallery_title"][$id->gallery_count]);
 
       //If it does not exists the gallery it must to create the folder
-      if(!is_dir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"].  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
+      if(!is_dir("WebPages".  DIRECTORY_SEPARATOR. str_replace(" ", "_", $_POST["web_name"]).  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
       {
         $gallery_type = $_POST["gallery_type"][$id->gallery_count];
         $gallery_description = mysql_fix_string($mySqlidb, $_POST["gallery_description"][$id->gallery_count]);
@@ -419,7 +419,7 @@ require_once("mySqli.php");
         $sql= $mySqlidb->prepare("INSERT INTO `galleries`(`title`, `type`, `description`) VALUES (?,?,?)");
         $sql->bind_param("sss",$gallery_title, $gallery_type, $gallery_description);
         $sql->execute();
-        mkdir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"].  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title, 0700, true);
+        mkdir("WebPages".  DIRECTORY_SEPARATOR. str_replace(" ", "_", $_POST["web_name"]).  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title, 0700, true);
         $inserted_id = $mySqlidb->insert_id;
       }
       else
@@ -486,7 +486,7 @@ require_once("mySqli.php");
     }
     else if($type == "Gallery")
     {
-      if(!is_dir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"].  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
+      if(!is_dir("WebPages".  DIRECTORY_SEPARATOR. str_replace(" ", "_", $_POST["web_name"]).  DIRECTORY_SEPARATOR."images". DIRECTORY_SEPARATOR . "gallery" . DIRECTORY_SEPARATOR . $gallery_title))
       {
         $sql= $mySqlidb->prepare("SELECT * FROM `galleries` WHERE id = ?");
         $sql->bind_param("s",$id);
@@ -652,7 +652,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
    * If the web page name is correct and doesn't exist already, it creates it
    * Else it will show a error message
    */
-  if(!isset($_GET["edit"]) && isset($_POST["web_name"]) && !empty($_POST["web_name"]) && !is_dir("WebPages".  DIRECTORY_SEPARATOR. $_POST["web_name"]))
+  if(!isset($_GET["edit"]) && isset($_POST["web_name"]) && !empty($_POST["web_name"]) && !is_dir("WebPages".  DIRECTORY_SEPARATOR. str_replace(" ", "_", $_POST["web_name"])))
   {
     $web_str_name = str_replace(" ", "_", $_POST["web_name"]);
     create_DB($mySqli, $_POST["web_name"]);
@@ -690,7 +690,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     //Check if its an advance web, if not then check each component enability
     if(isset($_POST["home_name"]))
     {
-      $web_navBar = advanced_navBar(str_replace(" ", "", strtolower($_POST["web_name"])));
+      $web_navBar = advanced_navBar(str_replace(" ", "_", strtolower($_POST["web_name"])));
       $web_gallery->set();
       $web_blog->set();
       $web_forum->set();

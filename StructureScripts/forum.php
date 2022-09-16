@@ -220,7 +220,7 @@
           echo '<h1 class="mt-1">' . str_replace("\'", "'",str_replace("\\\"", "\"", $forum["title"])) . '</h1>';
         }
         echo'<div class="mt-3 font-size-sm">
-                  <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"])) . '</p>
+                  <p>' . str_replace("\\n", "<br>", str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"]))) . '</p>
                 </div>';
         if($first)
         {

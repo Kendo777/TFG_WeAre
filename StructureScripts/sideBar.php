@@ -81,7 +81,7 @@ if($json_data["navBar"]["type"] == "Side Collapser Bar")
             echo '<li>
             <a class="accordion-button collapsed dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#dropdown_' . $index . '" style="background: none; color: var(--color-links);">
               <i class="bi bi-globe2 question-icon"></i>
-                ' . $value["type"] . '
+                ' . $value["name"] . '
           </a>
             <div id="dropdown_' . $index . '" class="accordion-collapse collapse">
             <ul class="list-unstyled">';
@@ -234,7 +234,7 @@ if($json_data["navBar"]["type"] == "Clasic Navigation Bar")
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
     <a href="index.php" class="logo d-flex align-items-center">
         <img src="../../StructureScripts/assets/img/WeArelogo.png" alt="">
-        <span>ARE ' . $json_data["web_data"]["web_current_name"] . '</span>
+        <span style="line-height: normal;">ARE ' . $json_data["web_data"]["web_current_name"] . '</span>
       </a>';
 
   echo '<nav class="navbar">
@@ -300,7 +300,7 @@ if($json_data["navBar"]["type"] == "Clasic Navigation Bar")
       {
         echo '<li class="dropdown"><a href="#">
         <i class="bi bi-globe2 question-icon"></i>
-        <span>' . $value["type"] . '</span>
+        <span>' . $value["name"] . '</span>
          <i class="bi bi-chevron-down"></i></a>
         <ul>';
         foreach($value["tabs"] as $dropdown_value)

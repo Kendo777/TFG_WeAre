@@ -226,7 +226,7 @@ if(isset($_GET["id"]))
                     <input type="hidden" name="edit_post_id" value="' . $row["id"] . '">
                       <input type="text" class="form-control" name="edit_post_title" placeholder="Post title" value="' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["title"])) . '" required>
                       <hr>
-                      <textarea class="form-control" name="edit_post_content" rows="5" placeholder="Write the post" required>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"])) . '</textarea>
+                      <textarea class="form-control" name="edit_post_content" rows="5" placeholder="Write the post" required>' . str_replace("\\n", "<br>", str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"]))) . '</textarea>
                     </div>
                     <div class="text-center"><button class="btn btn-primary" type="submit">Send</button></div>
                   </form>
@@ -278,7 +278,7 @@ if(isset($_GET["id"]))
                   <a href="index.php?page=user&user=' . $blog["user"] . '">' . $blog["user"] . '</a><br>
                   <small class="text-muted">' . substr($row['date'], 0, strpos($row["date"], " ")) . '</small>';
           echo '<div class="mt-4 font-size-sm">
-                <p>' . str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"])) . '</p>
+                <p>' . str_replace("\\n", "<br>", str_replace("\'", "'",str_replace("\\\"", "\"", $row["content"]))) . '</p>
               </div>';
           
           echo '</div>

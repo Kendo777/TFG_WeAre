@@ -167,8 +167,7 @@
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="../../StructureScripts/assets/js/dynamicForm.js"></script>
   <script src="../../StructureScripts/assets/js/calendar.js"></script>
-  <?php
-  ?>
+
 </body>
 
 </html>
