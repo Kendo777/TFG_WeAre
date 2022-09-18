@@ -787,6 +787,7 @@ else if(isset($_GET["edit"]) && (isset($_SESSION["user"]) || isset($_SESSION["we
     }
     if(isset($_POST["home_name"]))
     {
+      $json_data["navBar"]["type"] = $_POST["navBar_type"];
       $web_navBar = $json_data["navBar"];
       $web_gallery->set();
       $web_blog->set();

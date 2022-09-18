@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-09-2022 a las 07:07:58
+-- Tiempo de generación: 19-09-2022 a las 00:27:03
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.11
 
@@ -63,7 +63,12 @@ CREATE TABLE `web_pages` (
 INSERT INTO `web_pages` (`id`, `web_name`, `web_current_name`, `web_database`, `web_user`, `date_creation`) VALUES
 (1, 'Marc', 'Marc', 'marc', 'Marc', '2022-08-19'),
 (18, 'test', 'test', 'test', 'Marc', '2022-08-31'),
-(35, 'reinodelterror', 'Reino del terror ', 'reinodelterror', 'Marc', '2022-09-01');
+(37, 'marc_2', 'Marc 2', 'marc_2', 'Marc', '2022-09-07'),
+(43, 'El_Rincon_de_la_Yaya', 'El Rincon de la Yaya', 'el_rincon_de_la_yaya', 'Marc', '2022-09-13'),
+(44, 'Agrupamm_Spain', 'Agrupamm Spain', 'agrupamm_spain', 'Marc', '2022-09-14'),
+(46, 'El_Reino_del_terror', 'El Reino del terror', 'el_reino_del_terror', 'Marc', '2022-09-18'),
+(47, 'TFG_Marc', 'TFG Marc', 'tfg_marc', 'Marc', '2022-09-19'),
+(48, 'TFG_Marc_Adv', 'TFG Marc Adv', 'tfg_marc_adv', 'Marc', '2022-09-19');
 
 --
 -- Índices para tablas volcadas
@@ -91,7 +96,7 @@ ALTER TABLE `web_pages`
 -- AUTO_INCREMENT de la tabla `web_pages`
 --
 ALTER TABLE `web_pages`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- Restricciones para tablas volcadas
