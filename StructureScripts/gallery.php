@@ -106,7 +106,7 @@ $album=$result->fetch_assoc();
       copy_folder("images/gallery" . DIRECTORY_SEPARATOR . $album["title"], "images/gallery" . DIRECTORY_SEPARATOR . $_POST['new_folder_name']);
       deleteDir("images/gallery" . DIRECTORY_SEPARATOR . $album["title"]);
 
-      $sql= $mySqli_db->prepare("UPDATE `galleries` SET `name`=? WHERE id = ?");
+      $sql= $mySqli_db->prepare("UPDATE `galleries` SET `title`=? WHERE id = ?");
       $sql->bind_param("si", $title, $album_id);
       $sql->execute();
 
